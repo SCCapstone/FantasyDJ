@@ -1,0 +1,19 @@
+<!--Author/Editor: Daniel Harper-->
+<ion-view view-title="Account">
+  <ion-content class="grad">
+    <ion-list>
+        <div>
+            <img class="profile_pic" width="150" src="{{ accountInfo.images[0].url }}" >
+            <h3 class="accountInfo">{{ accountInfo.display_name }}</h3>
+            <h4 class="accountInfo">{{ accountInfo.email }}</h4>
+            <h5 class="accountInfo">Subscriber Count:</h5>
+            <p class="accountInfo">{{ accountInfo.followers.total }}</p>
+            <h5 class="accountInfo">Championships:</h5>
+            <p class="accountInfo"> {{ firebaseInfo.championships }}</p>
+            <h5 class="accountInfo">Bracket Record:</h5>
+            <p class="accountInfo">{{ firebaseInfo.bracketWins }}-{{ firebaseInfo.bracketLosses }}</p>
+            <h5 class="accountInfo">DJ Points:</h5>
+            <p class="accountInfo">{{ firebaseInfo.djPoints }}</p>
+        </div>
+  </ion-content>
+</ion-view>

@@ -26,7 +26,7 @@ Welcome to fantasyDJ
 * Tom Brower: tomtombrower555@gmail.com
 * Julia Strout jstrout@email.sc.edu
 * Sydney Larson: slarson@email.sc.edu
-* Phillip Oliver-Paull: oliverpa@email.sc.edu
+* Philip Oliver-Paull: oliverpa@email.sc.edu
 * Steve Rubin: KonstantinRubin@engineer.com
 * Trey Gordner: trey@koios.co
 * John Dixon: johnryandixon@gmail.com

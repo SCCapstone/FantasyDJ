@@ -1,1 +1,1 @@
-# League entitity
+// League entitity

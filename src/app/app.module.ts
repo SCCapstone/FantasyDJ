@@ -10,6 +10,16 @@ import { PlayerDetails } from '../pages/player-details/player-details';
 import { CreateLeague } from '../pages/create-league/create-league';
 import { Search } from '../pages/search/search';
 
+import { AngularFireModule } from 'angularfire2';
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyC4Xau60ozT0UheZIqPGPw5aJCvprWk_lw",
+  authDomain: "expenses-test-3b15f.firebaseapp.com",
+  databaseURL: "https://expenses-test-3b15f.firebaseio.com",
+  storageBucket: "expenses-test-3b15f.appspot.com",
+  messagingSenderId: "636757877321"
+};
+
 @NgModule({
   declarations: [
     FantasyDjApp,
@@ -23,7 +33,8 @@ import { Search } from '../pages/search/search';
     Search
   ],
   imports: [
-    IonicModule.forRoot(FantasyDjApp)
+    IonicModule.forRoot(FantasyDjApp),
+    AngularFireModule.initializeApp(firebaseConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -5,6 +5,9 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { League } from '../pages/league/league';
+import { PlayerDetails } from '../pages/player-details/player-details';
+import { CreateLeague } from '../pages/create-league/create-league';
 
 @NgModule({
   declarations: [
@@ -12,7 +15,10 @@ import { TabsPage } from '../pages/tabs/tabs';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    League,
+    PlayerDetails,
+    CreateLeague
   ],
   imports: [
     IonicModule.forRoot(FantasyDjApp)
@@ -23,7 +29,10 @@ import { TabsPage } from '../pages/tabs/tabs';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    League,
+    PlayerDetails,
+    CreateLeague
   ],
   providers: []
 })

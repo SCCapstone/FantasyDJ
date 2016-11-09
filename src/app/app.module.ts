@@ -8,6 +8,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { League } from '../pages/league/league';
 import { PlayerDetails } from '../pages/player-details/player-details';
 import { CreateLeague } from '../pages/create-league/create-league';
+import { Search } from '../pages/search/search';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { CreateLeague } from '../pages/create-league/create-league';
     TabsPage,
     League,
     PlayerDetails,
-    CreateLeague
+    CreateLeague,
+    Search
   ],
   imports: [
     IonicModule.forRoot(FantasyDjApp)
@@ -32,7 +34,8 @@ import { CreateLeague } from '../pages/create-league/create-league';
     TabsPage,
     League,
     PlayerDetails,
-    CreateLeague
+    CreateLeague,
+    Search
   ],
   providers: []
 })

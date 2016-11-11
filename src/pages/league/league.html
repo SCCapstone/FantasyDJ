@@ -7,14 +7,16 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>League</ion-title>
+    <ion-title>{{league.Name}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-Overview of league info
+<p>Players: {{league.UserIDs}}</p>
+<p>Endtime: {{league.Endtime}}
+
 <br>
 <button [navPush] = "playerDetailsPage">Go To Player Details</button>
 </ion-content>

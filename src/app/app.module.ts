@@ -8,16 +8,15 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { League } from '../pages/league/league';
 import { PlayerDetails } from '../pages/player-details/player-details';
 import { CreateLeague } from '../pages/create-league/create-league';
-
 import { AngularFireModule } from 'angularfire2';
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyC4Xau60ozT0UheZIqPGPw5aJCvprWk_lw",
-  authDomain: "expenses-test-3b15f.firebaseapp.com",
-  databaseURL: "https://expenses-test-3b15f.firebaseio.com",
-  storageBucket: "expenses-test-3b15f.appspot.com",
-  messagingSenderId: "636757877321"
+  apiKey: "AIzaSyB9Zq_1L_j0AR3aiMphTPUbDqVAWxe9yiE",
+  authDomain: "fantasydj-cb3b4.firebaseapp.com",
+  databaseURL: "https://fantasydj-cb3b4.firebaseio.com",
+  storageBucket: "fantasydj-cb3b4.appspot.com"
 };
+
 
 @NgModule({
   declarations: [

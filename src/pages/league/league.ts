@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { PlayerDetails } from '../player-details/player-details';
 
 /*
@@ -14,9 +14,12 @@ import { PlayerDetails } from '../player-details/player-details';
 })
 export class League {
 
+  league = null;
   playerDetailsPage = PlayerDetails;
 
-  constructor(public navCtrl: NavController) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.league = this.navParams.get('league');
+  }
 
   ionViewDidLoad() {
     console.log('Hello League Page');

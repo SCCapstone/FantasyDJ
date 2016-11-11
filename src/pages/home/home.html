@@ -6,6 +6,15 @@
 
 <ion-content padding>
   <h2>Leagues</h2>
+ 
+ <ion-card *ngFor="let league of leagues | async" (click)="goToLeague(league)">
+
+    <ion-item text-wrap>
+      <h2>{{ league.Name }}</h2>
+    </ion-item>
+
+  </ion-card> 
+
   <button [navPush] = "leaguePage">Go To League</button>
   <br>
   <button [navPush] = "createLeaguePage">Create a League</button>

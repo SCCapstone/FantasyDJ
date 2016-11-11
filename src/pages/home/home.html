@@ -1,10 +1,11 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>FantasyDJ</ion-title>
+    <ion-title align="center">FantasyDJ</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+
   <h2>Leagues</h2>
  
  <ion-card *ngFor="let league of leagues | async" (click)="goToLeague(league)">
@@ -16,6 +17,60 @@
   </ion-card> 
 
   <button [navPush] = "leaguePage">Go To League</button>
+
+<div class ="homepg" align=center>
+  <ion-grid>
+
+
+    <ion-row>
+      <ion-col width-33>
+        <ion-card [navPush] = "leaguePage">
+          <img src="https://image.freepik.com/free-icon/equalizer-converging-sound-bars_318-41454.jpg"/>
+          <ion-card-content>
+            <ion-card-title>
+              Go to Leagues
+              </ion-card-title>
+          </ion-card-content>
+        </ion-card>
+        <!-- <button [navPush] = "leaguePage">Go To League</button> -->
+      </ion-col>
+ 
+
+
+      <ion-col width-33>
+              <ion-card [navPush] = "createLeaguePage">
+                <img src="http://www.freeiconspng.com/uploads/plus-icon-21.png"/>
+                <ion-card-content>
+                  <ion-card-title>
+                    Create League
+                    </ion-card-title>
+                </ion-card-content>
+              </ion-card>
+<!--           <button [navPush] = "createLeaguePage">Create a League</button>
+ -->      </ion-col>
+
+      <ion-col width-33>
+              <ion-card [navPush] = "searchPage">
+                <img src="http://4.bp.blogspot.com/-S2jIMtRFLdw/VAKun6O51EI/AAAAAAAAPYc/wYDbxj7UECU/s1600/Search-Png-Image%2B(4).png"/>
+                <ion-card-content>
+                  <ion-card-title>
+                    Find new music!
+                    </ion-card-title>
+                </ion-card-content>
+              </ion-card>
+<!--         <button [navPush] = "searchPage">Find new music!</button>
+ -->      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</div>
+
+<!--   <button [navPush] = "leaguePage">Go To League</button>
+>>>>>>> c4106f6be3775694c5e81f0650184c492dc0697e
   <br>
   <button [navPush] = "createLeaguePage">Create a League</button>
+  <br>
+  <button [navPush] = "searchPage">Find new music!</button> 
+
+  -->
 </ion-content>

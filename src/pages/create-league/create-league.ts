@@ -11,7 +11,7 @@ import { NavController } from 'ionic-angular';
   selector: 'page-create-league',
   templateUrl: 'create-league.html'
 })
-export class CreateLeague {
+export class CreateLeaguePage {
 
   constructor(public navCtrl: NavController) {}
 

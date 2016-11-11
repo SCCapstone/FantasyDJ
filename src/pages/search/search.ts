@@ -2,21 +2,21 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 /*
-  Generated class for the PlayerDetails page.
+  Generated class for the Search page.
 
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 */
 @Component({
-  selector: 'page-player-details',
-  templateUrl: 'player-details.html'
+  selector: 'page-search',
+  templateUrl: 'search.html'
 })
-export class PlayerDetailsPage {
+export class SearchPage {
 
   constructor(public navCtrl: NavController) {}
 
   ionViewDidLoad() {
-    console.log('Hello PlayerDetails Page');
+    console.log('Hello Search Page');
   }
 
 }

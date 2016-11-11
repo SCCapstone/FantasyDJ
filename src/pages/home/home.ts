@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-
 import { NavController } from 'ionic-angular';
-
-import { League } from '../league/league';
-
-import { CreateLeague } from '../create-league/create-league';
+import { LeaguePage } from '../league/league';
+import { CreateLeaguePage } from '../create-league/create-league';
+import { SearchPage } from '../search/search';
 
 import { AngularFire, FirebaseListObservable} from 'angularfire2';
 
@@ -14,8 +12,10 @@ import { AngularFire, FirebaseListObservable} from 'angularfire2';
 })
 export class HomePage {
 
-  leaguePage = League;
-  createLeaguePage = CreateLeague;
+  leaguePage = LeaguePage;
+  createLeaguePage = CreateLeaguePage;
+  searchPage = SearchPage;
+
 
   // Refs
   leagues: FirebaseListObservable<any[]>;
@@ -25,7 +25,7 @@ export class HomePage {
   }
 
   goToLeague(league){
-		this.navCtrl.push(League, {
+		this.navCtrl.push(LeaguePage, {
       	league: league
     });
 	}

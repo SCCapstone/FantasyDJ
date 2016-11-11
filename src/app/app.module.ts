@@ -5,10 +5,10 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
-import { League } from '../pages/league/league';
-import { PlayerDetails } from '../pages/player-details/player-details';
-import { CreateLeague } from '../pages/create-league/create-league';
-import { Search } from '../pages/search/search';
+import { LeaguePage } from '../pages/league/league';
+import { PlayerDetailsPage } from '../pages/player-details/player-details';
+import { CreateLeaguePage } from '../pages/create-league/create-league';
+import { SearchPage } from '../pages/search/search';
 
 import { AngularFireModule } from 'angularfire2';
 
@@ -27,10 +27,10 @@ export const firebaseConfig = {
     ContactPage,
     HomePage,
     TabsPage,
-    League,
-    PlayerDetails,
-    CreateLeague,
-    Search
+    LeaguePage,
+    PlayerDetailsPage,
+    CreateLeaguePage,
+    SearchPage
   ],
   imports: [
     IonicModule.forRoot(FantasyDjApp),
@@ -43,10 +43,10 @@ export const firebaseConfig = {
     ContactPage,
     HomePage,
     TabsPage,
-    League,
-    PlayerDetails,
-    CreateLeague,
-    Search
+    LeaguePage,
+    PlayerDetailsPage,
+    CreateLeaguePage,
+    SearchPage
   ],
   providers: []
 })

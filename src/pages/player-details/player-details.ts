@@ -11,7 +11,7 @@ import { NavController } from 'ionic-angular';
   selector: 'page-player-details',
   templateUrl: 'player-details.html'
 })
-export class PlayerDetails {
+export class PlayerDetailsPage {
 
   constructor(public navCtrl: NavController) {}
 

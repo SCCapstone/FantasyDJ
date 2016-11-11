@@ -11,7 +11,7 @@ import { NavController } from 'ionic-angular';
   selector: 'page-search',
   templateUrl: 'search.html'
 })
-export class Search {
+export class SearchPage {
 
   constructor(public navCtrl: NavController) {}
 

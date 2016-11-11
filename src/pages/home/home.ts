@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
-
 import { NavController } from 'ionic-angular';
-
-import { League } from '../league/league';
-
-import { CreateLeague } from '../create-league/create-league';
-
-import { Search } from '../search/search';
+import { LeaguePage } from '../league/league';
+import { CreateLeaguePage } from '../create-league/create-league';
+import { SearchPage } from '../search/search';
 
 @Component({
   selector: 'page-home',
@@ -14,10 +10,10 @@ import { Search } from '../search/search';
 })
 export class HomePage {
 
-  leaguePage = League;
-  createLeaguePage = CreateLeague;
-  searchPage = Search;
-  
+  leaguePage = LeaguePage;
+  createLeaguePage = CreateLeaguePage;
+  searchPage = SearchPage;
+
   constructor(public navCtrl: NavController) {
 
   }

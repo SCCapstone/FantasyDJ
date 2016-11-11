@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { PlayerDetails } from '../player-details/player-details';
+import { PlayerDetailsPage } from '../player-details/player-details';
 
 /*
   Generated class for the League page.
@@ -12,9 +12,9 @@ import { PlayerDetails } from '../player-details/player-details';
   selector: 'page-league',
   templateUrl: 'league.html'
 })
-export class League {
+export class LeaguePage {
 
-  playerDetailsPage = PlayerDetails;
+  playerDetailsPage = PlayerDetailsPage;
 
   constructor(public navCtrl: NavController) {}
 

@@ -19,15 +19,15 @@ export class HomePage {
 
   // Refs
   leagues: FirebaseListObservable<any[]>;
-  
+
   constructor(public navCtrl: NavController, public af: AngularFire) {
-  	this.leagues = this.af.database.list('/Leagues');
+    this.leagues = this.af.database.list('/Leagues');
   }
 
-  goToLeague(league){
-		this.navCtrl.push(LeaguePage, {
-      	league: league
+  goToLeague(league) {
+    this.navCtrl.push(LeaguePage, {
+      league: league
     });
-	}
+  }
 
-}
+};

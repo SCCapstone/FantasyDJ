@@ -7,18 +7,19 @@
 <ion-content padding>
 
   <h2>Leagues</h2>
- 
- <ion-card *ngFor="let league of leagues | async" (click)="goToLeague(league)">
+
+  <ion-card *ngFor="let league of leagues | async" (click)="goToLeague(league)">
 
     <ion-item text-wrap>
       <h2>{{ league.Name }}</h2>
     </ion-item>
 
-  </ion-card> 
+  </ion-card>
 
   <button [navPush] = "leaguePage">Go To League</button>
 
 <div class ="homepg" align=center>
+
   <ion-grid>
 
 
@@ -34,7 +35,7 @@
         </ion-card>
         <!-- <button [navPush] = "leaguePage">Go To League</button> -->
       </ion-col>
- 
+
 
 
       <ion-col width-33>
@@ -70,7 +71,7 @@
   <br>
   <button [navPush] = "createLeaguePage">Create a League</button>
   <br>
-  <button [navPush] = "searchPage">Find new music!</button> 
+  <button [navPush] = "searchPage">Find new music!</button>
 
   -->
 </ion-content>

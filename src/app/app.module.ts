@@ -14,6 +14,7 @@ import { SearchPage } from '../pages/search/search';
 import { AngularFireModule } from 'angularfire2';
 
 import { OAuthService } from '../providers/oauth-service';
+import { SpotifyProvider } from '../providers/spotify-provider';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB9Zq_1L_j0AR3aiMphTPUbDqVAWxe9yiE",
@@ -51,7 +52,8 @@ export const firebaseConfig = {
     SearchPage
   ],
   providers: [
-    OAuthService
+    OAuthService,
+    SpotifyProvider
   ]
 })
 export class AppModule {}

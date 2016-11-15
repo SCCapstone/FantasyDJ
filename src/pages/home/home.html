@@ -8,6 +8,10 @@
 
   <button *ngIf="!isLoggedIn()" class="btn btn-primary" (click)="login()">Log In</button>
 
+  <!-- <ion-item text-wrap> -->
+  <!--   <p *ngIf="isLoggedIn()">{{ getSpotifyUser() }}</p> -->
+  <!-- </ion-item> -->
+
   <h2>Leagues</h2>
 
   <ion-card *ngFor="let league of leagues | async" (click)="goToLeague(league)">

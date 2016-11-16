@@ -16,7 +16,7 @@ export class SearchPage {
   constructor(public navCtrl: NavController) {}
 
   ionViewDidLoad() {
-    console.log('Hello Search Page');
+    console.log('Landed Search Page');
   }
 
 }

@@ -17,12 +17,10 @@
   <ion-card *ngFor="let league of leagues | async" (click)="goToLeague(league)">
 
     <ion-item text-wrap>
-      <h2>{{ league.Name }}</h2>
+      {{ league.name }}
     </ion-item>
 
   </ion-card>
-
-  <button [navPush] = "leaguePage">Go To League</button>
 
 <div class ="homepg" align=center>
 

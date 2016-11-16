@@ -44,7 +44,7 @@ export class HomePage {
         return af.database.object('Leagues/'+item[0]);
       }));
 
-    this.leagues = this.af.database.list('/Leagues/LeagueID' || '/League/LeagueID2');
+    this.leagues = this.af.database.list('/Leagues/LeagueID');
     //console.log(this.usersLeagues);
     /**this.leagues = this.usersLeagues.map(function(item){
         return item[0].$key;

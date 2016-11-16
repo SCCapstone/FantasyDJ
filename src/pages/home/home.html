@@ -8,9 +8,9 @@
 
   <h2>Leagues</h2>
  
-<ion-card *ngFor="let league of leagues | async" (click)="goToLeague(league)">
+<ion-card *ngFor="let league of Leagues" (click)="goToLeague(league)">
     <ion-item text-wrap>
-      <h2>{{ league.Name }}</h2>
+      {{ league.Name }}
     </ion-item>
 </ion-card> 
 
@@ -19,8 +19,6 @@
       <button (click) = "newLeague()">Create new league</button>
     </ion-item>
 </ion-card> 
-
-  <button [navPush] = "leaguePage">Go To League</button>
 
 <div class ="homepg" align=center>
   <ion-grid>

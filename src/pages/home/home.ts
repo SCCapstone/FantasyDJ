@@ -23,6 +23,7 @@ export class HomePage {
   // Refs
   leagues: FirebaseListObservable<any[]>;
 
+<<<<<<< HEAD
   constructor(public navCtrl: NavController,
               public af: AngularFire,
               private platform: Platform,

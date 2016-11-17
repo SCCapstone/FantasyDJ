@@ -18,8 +18,7 @@ export class CreateLeaguePage {
   	this.leagues = af.database.list('/Leagues');
   }
   
-
-  ionViewDidLoad() {
+ionViewDidLoad() {
     console.log('Hello CreateLeague Page');
   }
 

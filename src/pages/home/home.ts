@@ -7,8 +7,11 @@ import { SearchPage } from '../search/search';
 
 import { AngularFire, FirebaseListObservable, FirebaseObjectObservable} from 'angularfire2';
 
+import { SpotifyUser } from '../../models/spotify-models';
+
 import { OAuthService } from '../../providers/oauth-service';
 import { SpotifyProvider } from '../../providers/spotify-provider';
+import { UserData, FBUser } from '../../providers/user-provider';
 
 @Component({
   selector: 'page-home',
@@ -19,6 +22,7 @@ export class HomePage {
   leaguePage = LeaguePage;
   createLeaguePage = CreateLeaguePage;
   searchPage = SearchPage;
+  spotifyUser: SpotifyUser;
 
   // Refs
   leagues: FirebaseListObservable<any[]>;
@@ -27,11 +31,12 @@ export class HomePage {
               public af: AngularFire,
               private platform: Platform,
               private authService: OAuthService,
-              private spotify: SpotifyProvider) {
+              private spotify: SpotifyProvider,
+              private userData: UserData) {
     this.leagues = this.af.database.list('/Leagues');
     if (this.authService.token) {
       this.getSpotifyUser();
-      this.searchSpotify('lady gaga');
+      //this.searchSpotify('lady gaga');
     }
   }
 
@@ -47,14 +52,21 @@ export class HomePage {
     return this.authService.token !== null;
   }
 
-  getSpotifyUser(): any {
+  getSpotifyUser() {
     this.spotify.loadCurrentUser().then(res => {
-      console.log('display_name: ' + res.display_name);
-      console.log('id: ' + res.id);
-      return res;
-    }).catch(() => {
-      console.log('getSpotifyUser fail');
-      return 'error getting spotify user';
+      this.spotifyUser = res;
+      console.log(this.spotifyUser);
+    }).then(res => {
+      this.userData.loadUser(this.spotifyUser.id).then(user => {
+        console.log(user);
+      }, err => {
+        console.log('load user fail, creating');
+        this.userData.create(this.spotifyUser).then(user => {
+          console.log('created user: ' + JSON.stringify(user));
+        });
+      });
+    }).catch(err => {
+      console.log(err, 'create user fail');
     });
 
   }

@@ -5,7 +5,7 @@ import { LeaguePage } from '../league/league';
 import { CreateLeaguePage } from '../create-league/create-league';
 import { SearchPage } from '../search/search';
 
-import { AngularFire, FirebaseListObservable, FirebaseObjectObservable} from 'angularfire2';
+import { AngularFire, FirebaseListObservable} from 'angularfire2';
 
 import { OAuthService } from '../../providers/oauth-service';
 import { SpotifyProvider } from '../../providers/spotify-provider';
@@ -23,7 +23,6 @@ export class HomePage {
   // Refs
   leagues: FirebaseListObservable<any[]>;
 
-<<<<<<< HEAD
   constructor(public navCtrl: NavController,
               public af: AngularFire,
               private platform: Platform,

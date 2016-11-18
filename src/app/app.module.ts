@@ -16,6 +16,7 @@ import { AngularFireModule } from 'angularfire2';
 import { OAuthService } from '../providers/oauth-service';
 import { SpotifyProvider } from '../providers/spotify-provider';
 import { UserData } from '../providers/user-provider';
+import { LeagueData } from '../providers/league-provider';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB9Zq_1L_j0AR3aiMphTPUbDqVAWxe9yiE",
@@ -55,7 +56,8 @@ export const firebaseConfig = {
   providers: [
     OAuthService,
     SpotifyProvider,
-    UserData
+    UserData,
+    LeagueData
   ]
 })
 export class AppModule {}

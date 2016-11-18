@@ -9,5 +9,5 @@ export interface League {
   name: string,
   users: any[],
   endTime: Date,
-  winner: User
+  winner: string;
 };

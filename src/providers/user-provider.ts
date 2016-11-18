@@ -1,76 +1,50 @@
 import { Injectable } from '@angular/core';
+import { AngularFire } from 'angularfire2';
 
 import { SpotifyUser } from '../models/spotify-models';
-import { User, League } from '../models/fantasydj-models';
-
-export interface FBUser {
-  leagues: any,
-  dateCreated: Date
-}
+import { User } from '../models/fantasydj-models';
 
 @Injectable()
 export class UserData {
 
-  private db: firebase.database.Database;
+  constructor(private af: AngularFire) {}
 
-  constructor() {
-    this.db = firebase.database();
-  }
+  createUser(spotifyUser: SpotifyUser): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
 
-  create(spotifyUser: SpotifyUser): Promise<User> {
-    return new Promise<User>(resolve => {
-      let date = new Date();
-      this.db.ref('/UserProfiles/' + spotifyUser.id).update({
-        leagues: null,
-        dateCreated: date
+      if (!spotifyUser || spotifyUser.id === undefined) {
+        reject('no spotify user. unable to create user.');
+        return;
+      }
+
+      this.af.database.object('/UserProfiles/' + spotifyUser.id).update({
+        dateCreated: new Date()
       }).then(_ => {
-        resolve(<User>{
-          id: spotifyUser.id,
-          leagues: [],
-          dateCreated: date
-        });
-      }).catch(error => console.log(error));
+        this.loadUser(spotifyUser.id).then(user => resolve(user));
+      }).catch(err => reject(err));
     });
   }
 
   loadUser(userId: string): Promise<User> {
     return new Promise<User>((resolve, reject) => {
-      this.db.ref('/UserProfiles/' + userId).on('value', snap => {
-        if (snap.val()) {
-          let user = <User>{
-            id: userId,
-            leagues: [],
-            dateCreated: snap.val().dateCreated
-          };
-          snap.child('Leagues').forEach(leagueRef => {
-            user.leagues.push(leagueRef.key);
-            return false;
-          });
-          resolve(user);
+      this.af.database.object('/UserProfiles/' + userId).map(fbuser => {
+
+        if ('$value' in fbuser && ! fbuser.$value) {
+          reject('user ' + userId + ' does not exist');
+          return;
         }
-        reject('not found');
-      }, error => {
-        console.log(error);
-        reject(error);
-      });
-    });
-  }
 
-  addLeague(userId: string, leagueId: string): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      this.db.ref('/UserProfiles/' + userId + '/Leagues' + leagueId)
-        .set(true)
-        .then(_ => resolve(true))
-        .catch(error => console.log(error));
-    });
-  }
+        let user = <User>{
+          id: fbuser.$key,
+          leagues: [],
+          dateCreated: fbuser.dateCreated
+        };
+        for (var key in fbuser.leagues) {
+          user.leagues.push(key);
+        }
 
-  removeLeague(userId: string, leagueId: string): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      this.db.ref('/UserProfiles/' + userId + '/Leagues' + leagueId)
-        .remove()
-        .then(_ => resolve(true))
-        .catch(error => console.log(error));
+        return user;
+      }).subscribe(usr => resolve(usr));
     });
   }
 

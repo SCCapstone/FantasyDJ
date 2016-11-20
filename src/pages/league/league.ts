@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { PlayerDetailsPage } from '../player-details/player-details';
 
+import { League } from '../../models/fantasydj-models';
+import { LeagueData } from '../../providers/league-provider';
+
 /*
   Generated class for the League page.
 
@@ -24,5 +27,7 @@ export class LeaguePage {
   ionViewDidLoad() {
     console.log('Hello League Page');
   }
+
+
 
 }

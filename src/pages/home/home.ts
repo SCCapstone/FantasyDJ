@@ -67,14 +67,17 @@ export class HomePage {
     });
   }
 
-  goToLeague(league) {
+  goToLeague(league, currentUser) {
     this.navCtrl.push(LeaguePage, {
-      league: league
+      league: league,
+      currentUser : currentUser
     });
   }
 
-  newLeague(){
-    this.navCtrl.push(CreateLeaguePage);
+  newLeague(currentUser){
+    this.navCtrl.push(CreateLeaguePage,{
+      user: currentUser
+    });
   }
 
 };

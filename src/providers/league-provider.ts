@@ -62,7 +62,7 @@ export class LeagueData {
               .then(_ => {
                 this.db.object(this.fbUserLeaguesUrl(opponentId, leagueId))
                   .set(false)
-                  .then(_ = resolve(league))
+                  .then(_ => resolve(league))
                   .catch(error => reject(error));
               })
               .catch(error => reject(error));

@@ -101,7 +101,7 @@ export class HomePage {
   }
 
   newLeague(){
-  this.navCtrl.push(CreateLeaguePage);
+    this.navCtrl.push(CreateLeaguePage);
   }
 
 };

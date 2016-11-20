@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
+
+import { User } from '../../models/fantasydj-models';
 
 /*
   Generated class for the PlayerDetails page.
@@ -13,7 +15,11 @@ import { NavController } from 'ionic-angular';
 })
 export class PlayerDetailsPage {
 
-  constructor(public navCtrl: NavController) {}
+  user: User;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.user = this.navParams.get('user');
+  }
 
   ionViewDidLoad() {
     console.log('Hello PlayerDetails Page');

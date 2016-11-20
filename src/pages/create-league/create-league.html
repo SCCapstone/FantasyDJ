@@ -12,7 +12,20 @@
 
 </ion-header>
 
+<ion-content padding class="create-league"> 
+	<ion-item> 
+		<ion-label stacked>League Name</ion-label> 
+		<ion-input [(ngModel)]="name" type="text" placeholder="League Name"></ion-input> 
+	</ion-item>
+	<ion-item>
+		<ion-label stacked>Opponent, we will send them an invitation to join.</ion-label> 
+		<ion-input [(ngModel)]="opponent" type="text" placeholder="Who would you like to invite?" name="opponent"></ion-input> 
+	</ion-item> 
+	<ion-item> 
+		<ion-label>Draft date</ion-label>
+		<ion-datetime displayFormat="D MMM, YY" pickerFormat="DD MMM YYYY" [(ngModel)]="draftDate"></ion-datetime> 
+	</ion-item> 
+	<button block (click)="createLeague(name, opponent, draftDate)"> Create League </button>
 
-<ion-content padding>
 
 </ion-content>

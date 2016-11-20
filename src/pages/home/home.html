@@ -6,19 +6,24 @@
 
 <ion-content padding>
 
-  <button *ngIf="!isLoggedIn()" class="btn btn-primary" (click)="login()">Log In</button>
+  <button *ngIf="! currentUser" class="btn btn-primary" (click)="login()">Log In</button>
+
+  <p *ngIf="currentUser">Hello, {{ currentUser.id }}!</p>
 
   <h2>Leagues</h2>
 
   <ion-card *ngFor="let league of leagues | async" (click)="goToLeague(league)">
 
     <ion-item text-wrap>
-      <h2>{{ league.Name }}</h2>
+      {{ league.name }}
     </ion-item>
-
   </ion-card>
 
-  <button [navPush] = "leaguePage">Go To League</button>
+  <ion-card>
+      <ion-item text-wrap>
+        <button (click) = "newLeague()">Create new league</button>
+      </ion-item>
+  </ion-card>
 
 <div class ="homepg" align=center>
 

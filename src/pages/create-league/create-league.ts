@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { AngularFire, FirebaseListObservable} from 'angularfire2';
 
 /*
   Generated class for the CreateLeague page.
@@ -12,11 +13,29 @@ import { NavController } from 'ionic-angular';
   templateUrl: 'create-league.html'
 })
 export class CreateLeaguePage {
-
-  constructor(public navCtrl: NavController) {}
-
-  ionViewDidLoad() {
+  leagues: FirebaseListObservable<any>;
+  constructor(public navCtrl: NavController, public af:AngularFire) {
+  	this.leagues = af.database.list('/Leagues');
+  }
+  
+ionViewDidLoad() {
     console.log('Hello CreateLeague Page');
   }
 
+createLeague(name, opponent, draftDate){
+ this.leagues.push({ 
+ 	name: name,  
+ 	endTime: draftDate, 
+ 	winner: null,
+ 	users: {
+ 	'currentUser': true,
+ 	opponent: true,
+ 	}
+ 	}).then( newLeague => { 
+ 		this.navCtrl.pop();
+ 	}, error => { 
+ 		console.log(error); 
+ 		}
+ 	); 
+ }
 }

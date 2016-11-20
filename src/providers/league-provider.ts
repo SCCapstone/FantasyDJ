@@ -41,10 +41,13 @@ export class LeagueData {
       });
   }
 
-  createLeague(userId: string, name: string): Promise<League> {
+  createLeague(name: string,
+               creatorId: string,
+               opponentId: string): Promise<League> {
     return new Promise<League>((resolve, reject) => {
       let usersRef = {};
-      usersRef[userId] = true;
+      usersRef[creatorId] = true;
+      usersRef[opponentId] = false;
 
       let leagueId: string = this.fbLeagues.push({
         name: name,
@@ -85,6 +88,7 @@ export class LeagueData {
       id: fbleague.$key,
       name: fbleague.name,
       users: [],
+      draftDate: fbleague.draftDate,
       endTime: fbleague.endTime,
       winner: fbleague.winner || null
     };

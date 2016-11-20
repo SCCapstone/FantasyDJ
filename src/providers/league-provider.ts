@@ -57,9 +57,14 @@ export class LeagueData {
       if (leagueId) {
         console.log(leagueId);
         this.loadLeague(leagueId).then(league => {
-            this.db.object(this.fbUserLeaguesUrl(userId, leagueId))
+            this.db.object(this.fbUserLeaguesUrl(creatorId, leagueId))
               .set(true)
-              .then(_ => resolve(league))
+              .then(_ => {
+                this.db.object(this.fbUserLeaguesUrl(opponentId, leagueId))
+                  .set(false)
+                  .then(_ = resolve(league))
+                  .catch(error => reject(error));
+              })
               .catch(error => reject(error));
           }).catch(error => reject(error));
       }

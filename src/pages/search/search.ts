@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { SearchService } from '../../providers/search-service';
 
 /*
   Generated class for the Search page.
@@ -19,4 +20,5 @@ export class SearchPage {
     console.log('Landed Search Page');
   }
 
+ 
 }

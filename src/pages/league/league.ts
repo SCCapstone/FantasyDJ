@@ -19,6 +19,7 @@ export class LeaguePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.league = this.navParams.get('league');
+    console.log(this.league)
   }
 
   ionViewDidLoad() {

@@ -2,13 +2,34 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 
+import { SpotifyProvider } from './spotify-provider';
+
 import { SpotifyUser } from '../models/spotify-models';
 import { User } from '../models/fantasydj-models';
 
 @Injectable()
 export class UserData {
 
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private db: AngularFireDatabase, private spotify: SpotifyProvider) {}
+
+  loadCurrentUser(): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
+      this.spotify.loadCurrentUser().then(spotifyUser => {
+        // since we have a spotify user, try to load
+        // fantasy-dj user
+        this.loadUser(spotifyUser.id)
+          .then(user => resolve(user))
+          .catch(error => {
+            // no fantasy-dj user, so let's create one
+            this.createUser(spotifyUser)
+              .then(user => resolve(user))
+              .catch(error => reject(error));
+          });
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
 
   createUser(spotifyUser: SpotifyUser): Promise<User> {
     return new Promise<User>((resolve, reject) => {

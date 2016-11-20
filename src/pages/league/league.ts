@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+
 import { PlayerDetailsPage } from '../player-details/player-details';
 
-import { League } from '../../models/fantasydj-models';
+import { League, User } from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
+import { UserData } from '../../providers/user-provider';
 
 /*
   Generated class for the League page.
@@ -17,17 +20,26 @@ import { LeagueData } from '../../providers/league-provider';
 })
 export class LeaguePage {
 
-  league = null;
+  league: League;
   playerDetailsPage = PlayerDetailsPage;
+  users: Observable<User[]>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private leagueData: LeagueData,
+              private userData: UserData) {
     this.league = this.navParams.get('league');
+    this.users = this.userData.loadUsers(this.league.id);
   }
 
   ionViewDidLoad() {
     console.log('Hello League Page');
   }
 
-
+  goToPlayer(user) {
+    this.navCtrl.push(PlayerDetailsPage, {
+      user: user
+    });
+  }
 
 }

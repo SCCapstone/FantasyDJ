@@ -7,16 +7,23 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{league.name}}</ion-title>
+    <ion-title>{{ league.name }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-<p>Players: {{league.users}}</p>
-<p>Endtime: {{league.endTime}}</p>
+  <h2>Players</h2>
 
-<br>
-<button [navPush] = "PlayerDetailsPage">Go To Player Details</button>
+  <ion-card *ngFor="let user of users | async" (click)="goToPlayer(user)">
+    <ion-item text-wrap>{{ user.id }}</ion-item>
+  </ion-card>
+
+  <p *ngIf="! users">None yet.</p>
+
+  <div *ngIf="league.endTime">
+    <h2>End Time</h2>
+    <p>{{ league.endTime }}</p>
+  </div>
 </ion-content>

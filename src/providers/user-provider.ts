@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFire } from 'angularfire2';
+import { AngularFireDatabase } from 'angularfire2';
+import { Observable } from 'rxjs/Observable';
 
 import { SpotifyUser } from '../models/spotify-models';
 import { User } from '../models/fantasydj-models';
@@ -7,7 +8,7 @@ import { User } from '../models/fantasydj-models';
 @Injectable()
 export class UserData {
 
-  constructor(private af: AngularFire) {}
+  constructor(private db: AngularFireDatabase) {}
 
   createUser(spotifyUser: SpotifyUser): Promise<User> {
     return new Promise<User>((resolve, reject) => {
@@ -17,7 +18,7 @@ export class UserData {
         return;
       }
 
-      this.af.database.object('/UserProfiles/' + spotifyUser.id).update({
+      this.db.object('/UserProfiles/' + spotifyUser.id).update({
         dateCreated: new Date()
       }).then(_ => {
         this.loadUser(spotifyUser.id).then(user => resolve(user));
@@ -27,7 +28,7 @@ export class UserData {
 
   loadUser(userId: string): Promise<User> {
     return new Promise<User>((resolve, reject) => {
-      this.af.database.object('/UserProfiles/' + userId).map(fbuser => {
+      this.db.object('/UserProfiles/' + userId).map(fbuser => {
 
         if ('$value' in fbuser && ! fbuser.$value) {
           reject('user ' + userId + ' does not exist');
@@ -46,6 +47,19 @@ export class UserData {
         return user;
       }).subscribe(usr => resolve(usr));
     });
+  }
+
+  loadUsers(leagueId: string): Observable<User[]> {
+    return this.db.list('/Leagues/' + leagueId + '/users')
+      .map(items => {
+        let users: User[] = [];
+        for (let item of items) {
+          this.loadUser(item.$key)
+            .then(user => users.push(user))
+            .catch(error => console.log(error));
+        }
+        return users;
+      });
   }
 
 };

@@ -6,11 +6,9 @@
 
 <ion-content padding>
 
-  <button *ngIf="!isLoggedIn()" class="btn btn-primary" (click)="login()">Log In</button>
+  <button *ngIf="! currentUser" class="btn btn-primary" (click)="login()">Log In</button>
 
-  <!-- <ion-item text-wrap> -->
-  <!--   <p *ngIf="isLoggedIn()">{{ getSpotifyUser() }}</p> -->
-  <!-- </ion-item> -->
+  <p *ngIf="currentUser">Hello, {{ currentUser.id }}!</p>
 
   <h2>Leagues</h2>
 

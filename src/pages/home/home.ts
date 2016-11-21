@@ -74,10 +74,8 @@ export class HomePage {
     });
   }
 
-  newLeague(currentUser){
-    this.navCtrl.push(CreateLeaguePage,{
-      user: currentUser
-    });
+  newLeague(){
+    this.navCtrl.push(CreateLeaguePage);
   }
 
 };

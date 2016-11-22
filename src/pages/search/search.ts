@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { SpotifyProvider } from '../../providers/spotify-provider';
 
+import { SpotifyProvider } from '../../providers/spotify-provider';
+import { SpotifySearchResult } from '../../models/spotify-models';
+
 /*
   Generated class for the Search page.
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
@@ -23,18 +26,27 @@ public tracks:any;
 
   }
 
+  query: string = "";
+  results: SpotifySearchResult;
+
+  constructor(public navCtrl: NavController,
+              private spotify: SpotifyProvider) {}
+
 
   ionViewDidLoad() {
     console.log('Landed on Search Page');
   }
 
-  doSearch(val) {
-  console.log(this.searchInput);
-  this.spotify.search(this.searchInput).then(res => {
-	 	this.tracks = res.tracks;
-	    }, err => {
-	      console.log('error searching spotify');
-	    });
+
+  search() {
+    if (this.query.length > 0) {
+      this.spotify.search(this.query)
+        .then(results => this.results = results)
+        .catch(error => console.log(error));
+    } else {
+      this.results = null;
+    }
   }
 
 }
+

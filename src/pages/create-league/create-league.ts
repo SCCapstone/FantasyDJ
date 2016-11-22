@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams  } from 'ionic-angular';
-import { AngularFire, FirebaseListObservable} from 'angularfire2';
 import { OAuthService } from '../../providers/oauth-service';
 
 import { User} from '../../models/fantasydj-models';
@@ -19,34 +18,37 @@ import { UserData } from '../../providers/user-provider';
   templateUrl: 'create-league.html'
 })
 export class CreateLeaguePage {
-  leagues: FirebaseListObservable<any>;
-  currentUser: User = null
-  constructor(public navCtrl: NavController, 
-              public af:AngularFire,
+  currentUser: User = null;
+
+  name: string;
+  opponent: string;
+
+  constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private authService: OAuthService,
               private userData: UserData,
               private leagueData: LeagueData) {
-  	this.leagues = af.database.list('/Leagues');
-    //this.user = this.navParams.get('currentUser');
     if (this.authService.token) {
       this.userData.loadCurrentUser().then(user => {
         this.currentUser = user;
       }).catch(error => console.log(error));
     }
   }
-  
-ionViewDidLoad() {
+
+  ionViewDidLoad() {
     console.log('Hello CreateLeague Page');
   }
 
-createLeague(name, opponent){
-  this.leagueData.createLeague(name, this.currentUser.id, opponent).then(league => {
-          console.log(league.name);
-          this.navCtrl.pop();
-        }, err => {
-          console.log(err);
-          console.log('error creating new league');
-        });
+  createLeague(){
+    this.leagueData.createLeague(
+      this.name,
+      this.currentUser.id,
+      this.opponent
+    ).then(league => {
+      console.log('created league: ' + league.name);
+      this.navCtrl.pop();
+    }).catch(err => {
+      console.log(err, 'error creating new league');
+    });
  }
 }

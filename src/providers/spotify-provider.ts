@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { Http, Request, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -9,9 +10,16 @@ import { OAuthService } from './oauth-service';
 @Injectable()
 export class SpotifyProvider {
 
+  private _apiUrl: string;
   private _headers: Headers;
 
-  constructor(private http: Http, private authService: OAuthService) {}
+  constructor(private http: Http,
+              private platform: Platform,
+              private authService: OAuthService) {
+    this._apiUrl = this.platform.is('core') ?
+      '/spotify' :
+      'https://api.spotify.com/v1';
+  }
 
   get headers(): Headers {
     if (! this._headers) {
@@ -25,7 +33,7 @@ export class SpotifyProvider {
 
   private api(loc: string): Observable<Response> {
     let req = new Request({
-      url: '/spotify' + loc,
+      url: this._apiUrl + loc,
       method: 'get',
       headers: this.headers
     });

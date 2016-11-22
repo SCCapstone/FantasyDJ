@@ -1,8 +1,3 @@
-export interface SpotifyUser {
-  id: string,
-  display_name: string
-};
-
 export interface SpotifyImage {
   url: string,
   width: number,
@@ -16,11 +11,18 @@ export interface SpotifySimplifiedObject {
   uri: string
 };
 
+export interface SpotifyImageable {
+  images: SpotifyImage[]
+}
+
+export interface SpotifyUser extends SpotifySimplifiedObject, SpotifyImageable{
+  display_name: string,
+  email?: string
+};
+
 export interface SpotifySimplifiedArtist extends SpotifySimplifiedObject {};
 
-export interface SpotifyArtist extends SpotifySimplifiedArtist {
-  images: SpotifyImage[]
-};
+export interface SpotifyArtist extends SpotifySimplifiedArtist, SpotifyImageable {};
 
 export interface SpotifySimplifiedTrack extends SpotifySimplifiedObject {
   artists: SpotifySimplifiedArtist[]
@@ -32,9 +34,8 @@ export interface SpotifyTrack extends SpotifySimplifiedTrack {
   preview_url: string
 };
 
-export interface SpotifySimplifiedAlbum extends SpotifySimplifiedObject {
-  artists: SpotifySimplifiedArtist[],
-  images: SpotifyImage[]
+export interface SpotifySimplifiedAlbum extends SpotifySimplifiedObject, SpotifyImageable {
+  artists: SpotifySimplifiedArtist[]
 };
 
 export interface SpotifyAlbum extends SpotifySimplifiedAlbum {

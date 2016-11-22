@@ -24,9 +24,12 @@ export interface SpotifySimplifiedArtist extends SpotifySimplifiedObject {};
 
 export interface SpotifyArtist extends SpotifySimplifiedArtist, SpotifyImageable {};
 
-export interface SpotifySimplifiedTrack extends SpotifySimplifiedObject {
+export interface SpotifyArtistable {
   artists: SpotifySimplifiedArtist[]
 };
+
+export interface SpotifySimplifiedTrack extends SpotifySimplifiedObject,
+                                                SpotifyArtistable {};
 
 export interface SpotifyTrack extends SpotifySimplifiedTrack {
   album: SpotifySimplifiedAlbum,
@@ -34,9 +37,9 @@ export interface SpotifyTrack extends SpotifySimplifiedTrack {
   preview_url: string
 };
 
-export interface SpotifySimplifiedAlbum extends SpotifySimplifiedObject, SpotifyImageable {
-  artists: SpotifySimplifiedArtist[]
-};
+export interface SpotifySimplifiedAlbum extends SpotifySimplifiedObject,
+                                                SpotifyImageable,
+                                                SpotifyArtistable {};
 
 export interface SpotifyAlbum extends SpotifySimplifiedAlbum {
   tracks: SpotifyPagingObject<SpotifySimplifiedTrack>

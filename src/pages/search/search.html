@@ -2,39 +2,33 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Search </ion-title>
+    <ion-title>Search</ion-title>
   </ion-navbar>
 
-
+</ion-header>
 
 <ion-content padding>
+
 
 
 
 </ion-content>
 
 
-<!-- <ion-searchbar
-  [(ngModel)]="search"
-  placeholder="Ex. Guns & Roses">
-  autocorrect="off"
-  [showCancelButton]="shouldShowCancel"
-  (change)="doSearch()"
-  (ionCancel)="onCancel($event)"
-  
-</ion-searchbar> -->
+  <ion-searchbar
+    [(ngModel)]="query"
+    (ionInput)="search()"
+    (debounce)="5000"
+    placeholder="Ex. Guns 'N Roses">
+  </ion-searchbar>
 
-  <div class="item item-input-inset">
-    <label class="item-input-wrapper">
-      <input type="search" placeholder="Ex. Guns & Roses" ngmodel="searchInput">
-    </label>
-    <button class="button button-small" (click)="doSearch(searchInput)">
-      Search
-    </button>
+  <div *ngIf="results && results.tracks" id="tracks" class="results">
+    <ion-card *ngFor="let track of results.tracks.items" padding>
+      <ion-card-title text-wrap>{{ track.name }}</ion-card-title>
+      <ion-item text-wrap>by {{ track.album.artists[0].name }}</ion-item>
+      <ion-item text-wrap>on {{ track.album.name }}</ion-item>
+    </ion-card>
   </div>
 
-<ion-card *ngFor= "let track of tracks">
+</ion-content>
 
-{{track.name}}
-
-</ion-card>

@@ -1,8 +1,3 @@
-export interface SpotifyUser {
-  id: string,
-  display_name: string
-};
-
 export interface SpotifyImage {
   url: string,
   width: number,
@@ -16,11 +11,25 @@ export interface SpotifySimplifiedObject {
   uri: string
 };
 
+export interface SpotifyImageable {
+  images: SpotifyImage[]
+}
+
+export interface SpotifyUser extends SpotifySimplifiedObject, SpotifyImageable{
+  display_name: string,
+  email?: string
+};
+
 export interface SpotifySimplifiedArtist extends SpotifySimplifiedObject {};
 
-export interface SpotifySimplifiedTrack extends SpotifySimplifiedObject {
+export interface SpotifyArtist extends SpotifySimplifiedArtist, SpotifyImageable {};
+
+export interface SpotifyArtistable {
   artists: SpotifySimplifiedArtist[]
 };
+
+export interface SpotifySimplifiedTrack extends SpotifySimplifiedObject,
+                                                SpotifyArtistable {};
 
 export interface SpotifyTrack extends SpotifySimplifiedTrack {
   album: SpotifySimplifiedAlbum,
@@ -28,12 +37,15 @@ export interface SpotifyTrack extends SpotifySimplifiedTrack {
   preview_url: string
 };
 
-export interface SpotifySimplifiedAlbum extends SpotifySimplifiedObject {
-  artists: SpotifySimplifiedArtist[],
-  images: SpotifyImage[]
+export interface SpotifySimplifiedAlbum extends SpotifySimplifiedObject,
+                                                SpotifyImageable,
+                                                SpotifyArtistable {};
+
+export interface SpotifyAlbum extends SpotifySimplifiedAlbum {
+  tracks: SpotifyPagingObject<SpotifySimplifiedTrack>
 };
 
-export interface SpotifySearchResultPage<T> {
+export interface SpotifyPagingObject<T> {
   href: string,
   items: T[],
   limit: number,
@@ -44,7 +56,15 @@ export interface SpotifySearchResultPage<T> {
 };
 
 export interface SpotifySearchResult {
-  artists?: SpotifySearchResultPage<SpotifySimplifiedArtist>,
-  albums?: SpotifySearchResultPage<SpotifySimplifiedAlbum>,
-  tracks?: SpotifySearchResultPage<SpotifySimplifiedTrack>
+  artists?: SpotifyPagingObject<SpotifySimplifiedArtist>,
+  albums?: SpotifyPagingObject<SpotifySimplifiedAlbum>,
+  tracks?: SpotifyPagingObject<SpotifySimplifiedTrack>
 };
+
+export type SpotifySearchType = 'artist' | 'album' | 'track';
+
+export const DEFAULT_SEARCH_TYPES: SpotifySearchType[] = [
+  'artist',
+  'album',
+  'track'
+]

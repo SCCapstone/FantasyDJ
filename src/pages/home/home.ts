@@ -46,8 +46,11 @@ export class HomePage {
 
   login() {
     this.platform.ready().then(() => {
-      this.authService.loginToSpotify();
-    }, (error) => {
+      this.authService.loginToSpotify()
+        .then(token => {
+          window.location.reload();
+        });
+    }).catch(error => {
       console.log(error);
     });
   }

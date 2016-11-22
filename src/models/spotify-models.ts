@@ -18,6 +18,10 @@ export interface SpotifySimplifiedObject {
 
 export interface SpotifySimplifiedArtist extends SpotifySimplifiedObject {};
 
+export interface SpotifyArtist extends SpotifySimplifiedArtist {
+  images: SpotifyImage[]
+};
+
 export interface SpotifySimplifiedTrack extends SpotifySimplifiedObject {
   artists: SpotifySimplifiedArtist[]
 };
@@ -33,7 +37,11 @@ export interface SpotifySimplifiedAlbum extends SpotifySimplifiedObject {
   images: SpotifyImage[]
 };
 
-export interface SpotifySearchResultPage<T> {
+export interface SpotifyAlbum extends SpotifySimplifiedAlbum {
+  tracks: SpotifyPagingObject<SpotifySimplifiedTrack>
+};
+
+export interface SpotifyPagingObject<T> {
   href: string,
   items: T[],
   limit: number,
@@ -44,7 +52,15 @@ export interface SpotifySearchResultPage<T> {
 };
 
 export interface SpotifySearchResult {
-  artists?: SpotifySearchResultPage<SpotifySimplifiedArtist>,
-  albums?: SpotifySearchResultPage<SpotifySimplifiedAlbum>,
-  tracks?: SpotifySearchResultPage<SpotifySimplifiedTrack>
+  artists?: SpotifyPagingObject<SpotifySimplifiedArtist>,
+  albums?: SpotifyPagingObject<SpotifySimplifiedAlbum>,
+  tracks?: SpotifyPagingObject<SpotifySimplifiedTrack>
 };
+
+export type SpotifySearchType = 'artist' | 'album' | 'track';
+
+export const DEFAULT_SEARCH_TYPES: SpotifySearchType[] = [
+  'artist',
+  'album',
+  'track'
+]

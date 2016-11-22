@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -16,4 +17,12 @@ export class SearchService {
     console.log('Landed SearchService Provider');
   }
 
+
+/*
+  public searchFunc(): {
+
+  var spot = 'https://api.spotify.com/v1/search?q='
+
+  }
+*/
 }

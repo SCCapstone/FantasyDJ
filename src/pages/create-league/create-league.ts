@@ -50,5 +50,5 @@ export class CreateLeaguePage {
     }).catch(err => {
       console.log(err, 'error creating new league');
     });
- }
+  }
 }

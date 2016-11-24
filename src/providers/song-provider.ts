@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
-import { Observable } from 'rxjs/Observable';
 
 import { Song } from '../models/fantasydj-models';
 
@@ -38,14 +37,15 @@ export class SongData {
       return null;
     }
 
-    let song = <song>{
+    let song = <Song>{
       artist: fbsong.$key,
 	  name: fbsong.name,
 	  spotifyId: fbsong.spotifyId,
-	  leagues: [];
+	  leagues: []
     };
     for (var key in fbsong.leagues) {
       song.leagues.push(key);
     }
       return song;
   }
+}

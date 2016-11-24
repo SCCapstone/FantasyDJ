@@ -115,7 +115,7 @@ export class LeagueData {
 
       if (test) {
         console.log(test);
-        this.loadLeague(leagueId).then(league => {
+        /*this.loadLeague(leagueId).then(league => {
             this.db.object(this.fbUserLeaguesUrl(creatorId, leagueId))
               .set(true)
               .then(_ => {
@@ -125,7 +125,7 @@ export class LeagueData {
                   .catch(error => reject(error));
               })
               .catch(error => reject(error));
-          }).catch(error => reject(error));
+          }).catch(error => reject(error));*/
       }
       else {
         reject('no leagueId generated');

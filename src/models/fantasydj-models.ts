@@ -12,3 +12,10 @@ export interface League {
   endTime: Date,
   winner: string;
 };
+
+export interface Song {
+	artist: string,
+	name: string,
+	spotifyId: string,
+	leagues: any[];
+};

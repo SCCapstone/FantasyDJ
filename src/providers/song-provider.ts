@@ -21,12 +21,12 @@ export class SongData {
   loadSong(songId: string): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
       this.db.object('/Songs/' + songId)
-        .map(this.mapFBLeague)
-        .subscribe(league => {
-          if (! league) {
+        .map(this.mapFBSong)
+        .subscribe(song => {
+          if (! song) {
             reject('song does not exist');
           }
-          resolve(league);
+          resolve(song);
         });
     });
   }

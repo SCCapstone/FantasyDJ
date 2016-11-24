@@ -103,4 +103,34 @@ export class LeagueData {
 
     return league;
   }
-};
+
+  private addSongToUser(userId: string, 
+                        leagueId: string,
+                        songId: string ): Promise<League> {
+    return new Promise<League>((resolve, reject) => {
+
+      let test: string = this.db.list('/Leagues/'+leagueId+'/users/'+userId).push({
+        songId: true,
+      }).key;
+
+      if (test) {
+        console.log(test);
+        this.loadLeague(leagueId).then(league => {
+            this.db.object(this.fbUserLeaguesUrl(creatorId, leagueId))
+              .set(true)
+              .then(_ => {
+                this.db.object(this.fbUserLeaguesUrl(opponentId, leagueId))
+                  .set(false)
+                  .then(_ => resolve(league))
+                  .catch(error => reject(error));
+              })
+              .catch(error => reject(error));
+          }).catch(error => reject(error));
+      }
+      else {
+        reject('no leagueId generated');
+
+  }
+});
+}
+}

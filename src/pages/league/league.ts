@@ -41,5 +41,8 @@ export class LeaguePage {
       user: user
     });
   }
-
+  
+  deleteThisLeague() {
+    console.log('Are you sure you want to delete this league?');
+  } 
 }

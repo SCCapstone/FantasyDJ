@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { SpotifyProvider } from '../../providers/spotify-provider';
-
-import { SpotifyProvider } from '../../providers/spotify-provider';
 import { SpotifySearchResult } from '../../models/spotify-models';
 
 /*
@@ -19,12 +17,6 @@ export class SearchPage {
 public searchInput: any;
 public tracks:any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private spotify: SpotifyProvider) {
-  	this.searchInput = "TEST";
-  
-  	console.log(this.searchInput);
-
-  }
 
   query: string = "";
   results: SpotifySearchResult;

@@ -106,31 +106,28 @@ export class LeagueData {
 
   addSongToUser(userId: string, 
                         leagueId: string,
-                        songId: string ): Promise<League> {
+                        songId: string, 
+                        songName: string, 
+                        songArtist: string ): Promise<League> {
     return new Promise<League>((resolve, reject) => {
 
-      let test: string = this.db.list('/Leagues/'+leagueId+'/users/'+userId).push({
-        songId: songId,
+    let song: string = this.db.list('/Songs').push({
+        spotifyId: songId,
+        name: songName,
+        artist: songArtist
       }).key;
 
-      if (test) {
-        console.log(test);
-        /*this.loadLeague(leagueId).then(league => {
-            this.db.object(this.fbUserLeaguesUrl(creatorId, leagueId))
-              .set(true)
-              .then(_ => {
-                this.db.object(this.fbUserLeaguesUrl(opponentId, leagueId))
-                  .set(false)
-                  .then(_ => resolve(league))
-                  .catch(error => reject(error));
-              })
-              .catch(error => reject(error));
-          }).catch(error => reject(error));*/
+    if (song) {
+        console.log(song);
+        this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
+        //this.loadLeague(leagueId).then(league => {
+            
+          //}).catch(error => reject(error));
       }
       else {
-        reject('no leagueId generated');
+        reject('no song generated');
+      }
 
-  }
 });
 }
 }

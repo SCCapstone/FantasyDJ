@@ -29,6 +29,7 @@ export class LeaguePage {
               private leagueData: LeagueData,
               private userData: UserData) {
     this.league = this.navParams.get('league');
+    console.log('Got league from navs league:' + this.league);
     this.users = this.userData.loadUsers(this.league.id);
   }
 
@@ -36,9 +37,10 @@ export class LeaguePage {
     console.log('Hello League Page');
   }
 
-  goToPlayer(user) {
+  goToPlayer(user, league) {
     this.navCtrl.push(PlayerDetailsPage, {
-      user: user
+      user: user,
+      league: league
     });
   }
 

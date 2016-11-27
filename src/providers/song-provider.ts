@@ -1,21 +1,24 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
+import { SearchPage } from '../search/search';
 
 import { Song } from '../models/fantasydj-models';
+
 
 @Injectable()
 export class SongData {
 
+  searchPage = SearchPage;
   private fbSongs: FirebaseListObservable<any[]>;
 
   constructor(private db: AngularFireDatabase) {
     this.fbSongs = this.db.list('/Songs');
   }
 
-  private fbSongLeaguesUrl(songId: string,): string {
+  /*private fbSongLeaguesUrl(songId: string,): string {
     let url = '/Songs/' + songId + '/leagues';
      return url;
-  }
+  }*/
 
   loadSong(songId: string): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {

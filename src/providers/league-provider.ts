@@ -104,13 +104,13 @@ export class LeagueData {
     return league;
   }
 
-  private addSongToUser(userId: string, 
+  addSongToUser(userId: string, 
                         leagueId: string,
                         songId: string ): Promise<League> {
     return new Promise<League>((resolve, reject) => {
 
       let test: string = this.db.list('/Leagues/'+leagueId+'/users/'+userId).push({
-        songId: true,
+        songId: songId,
       }).key;
 
       if (test) {

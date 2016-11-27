@@ -16,5 +16,12 @@
 <ion-content padding>
 
   <p>DJing since {{ user.dateCreated }}</p>
+      <ion-card (click)="goToSearch(user,league)">
+        <ion-card-content>
+                  <ion-card-title>
+                    Add New Song
+                    </ion-card-title>
+                </ion-card-content>
+              </ion-card>
 
 </ion-content>

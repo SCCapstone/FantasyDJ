@@ -104,10 +104,10 @@ export class LeagueData {
     return league;
   }
 
-  addSongToUser(userId: string, 
+  addSongToUser(userId: string,
                         leagueId: string,
-                        songId: string, 
-                        songName: string, 
+                        songId: string,
+                        songName: string,
                         songArtist: string ): Promise<League> {
     return new Promise<League>((resolve, reject) => {
 
@@ -120,9 +120,9 @@ export class LeagueData {
     if (song) {
         console.log(song);
         this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
-        //this.loadLeague(leagueId).then(league => {
-            
-          //}).catch(error => reject(error));
+        this.loadLeague(leagueId)
+          .then(league => resolve(league))
+          .catch(error => reject(error));
       }
       else {
         reject('no song generated');

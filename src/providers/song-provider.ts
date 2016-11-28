@@ -33,7 +33,7 @@ export class SongData {
     });
   }
 
-  loadSongs(leagueId: string, 
+  loadSongs(leagueId: string,
             userId: string): Observable<Song[]> {
     return this.db.list('/Leagues/' + leagueId + '/users/' + userId)
       .map(items => {
@@ -55,7 +55,7 @@ export class SongData {
     }
 
     let song = <Song>{
-      artist: fbsong.$key,
+      artist: fbsong.artist,
 	    name: fbsong.name,
 	    spotifyId: fbsong.spotifyId,
 	    leagues: []

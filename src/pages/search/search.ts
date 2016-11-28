@@ -48,17 +48,14 @@ export class SearchPage {
   }
 
   addSong(user, league, track) {
-    console.log('user:' + user);
-    console.log('league:' + league.id );
-    console.log('track:' + track.album.name);
     this.leagueData.addSongToUser(
       user.id,
       league.id,
       track.id,
       track.name,
-      track.album.artists[0].name,
+      track.album.artists[0].name
     ).then(song => {
-      console.log('created league: ' + song.name);
+      console.log('added song: ' + song.name);
       this.navCtrl.pop();
     }).catch(err => {
       console.log(err, 'error adding new song');

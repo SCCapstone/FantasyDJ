@@ -17,6 +17,7 @@ import { OAuthService } from '../providers/oauth-service';
 import { SpotifyProvider } from '../providers/spotify-provider';
 import { UserData } from '../providers/user-provider';
 import { LeagueData } from '../providers/league-provider';
+import { SongData } from '../providers/song-provider';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB9Zq_1L_j0AR3aiMphTPUbDqVAWxe9yiE",
@@ -57,7 +58,8 @@ export const firebaseConfig = {
     OAuthService,
     SpotifyProvider,
     UserData,
-    LeagueData
+    LeagueData,
+    SongData
   ]
 })
 export class AppModule {}

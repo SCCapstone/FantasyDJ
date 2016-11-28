@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { SearchPage } from '../search/search';
+import { Observable } from 'rxjs/Observable';
 
-import { User, League } from '../../models/fantasydj-models';
+
+import { User, League, Song } from '../../models/fantasydj-models';
+
+import { SongData } from '../../providers/song-provider';
 
 /*
   Generated class for the PlayerDetails page.
@@ -18,11 +22,14 @@ export class PlayerDetailsPage {
   searchPage = SearchPage;
   user: User;
   league: League;
+  songs: Observable<Song[]>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              private songData: SongData) {
     this.user = this.navParams.get('user');
     this.league = this.navParams.get('league');
-    console.log('Got league from navs play:' + this.league);
+    this.songs = this.songData.loadSongs(this.league.id, this.user.id);
   }
 
   ionViewDidLoad() {

@@ -16,6 +16,9 @@
 <ion-content padding>
 
   <p>DJing since {{ user.dateCreated }}</p>
+    <ion-card *ngFor="let song of songs | async" >
+      <ion-item text-wrap>{{ song.name }} </ion-item>
+    </ion-card>
       <ion-card (click)="goToSearch(user,league)">
         <ion-card-content>
                   <ion-card-title>

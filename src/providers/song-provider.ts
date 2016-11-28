@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
-import { SearchPage } from '../search/search';
+import { Observable } from 'rxjs/Observable';
+
 
 import { Song } from '../models/fantasydj-models';
 
@@ -8,7 +9,6 @@ import { Song } from '../models/fantasydj-models';
 @Injectable()
 export class SongData {
 
-  searchPage = SearchPage;
   private fbSongs: FirebaseListObservable<any[]>;
 
   constructor(private db: AngularFireDatabase) {
@@ -33,6 +33,20 @@ export class SongData {
     });
   }
 
+  loadSongs(leagueId: string, 
+            userId: string): Observable<Song[]> {
+    return this.db.list('/Leagues/' + leagueId + '/users/' + userId)
+      .map(items => {
+        let songs: Song[] = [];
+        for (let item of items) {
+          this.loadSong(item.$key)
+            .then(song=> songs.push(song))
+            .catch(error => console.log(error));
+        }
+        return songs;
+      });
+  }
+
   private mapFBSong(fbsong): Song {
     console.log('start mapFBSong');
     if ('$value' in fbsong && ! fbsong.$value) {
@@ -42,9 +56,9 @@ export class SongData {
 
     let song = <Song>{
       artist: fbsong.$key,
-	  name: fbsong.name,
-	  spotifyId: fbsong.spotifyId,
-	  leagues: []
+	    name: fbsong.name,
+	    spotifyId: fbsong.spotifyId,
+	    leagues: []
     };
     for (var key in fbsong.leagues) {
       song.leagues.push(key);

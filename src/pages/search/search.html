@@ -24,7 +24,7 @@
   </ion-searchbar>
 
   <div *ngIf="results && results.tracks" id="tracks" class="results">
-    <ion-card *ngFor="let track of results.tracks.items" padding>
+    <ion-card *ngFor="let track of results.tracks.items" padding (click)="addSong(user, league, track)">
       <ion-card-title text-wrap>{{ track.name }}</ion-card-title>
       <ion-item text-wrap>by {{ track.album.artists[0].name }}</ion-item>
       <ion-item text-wrap>on {{ track.album.name }}</ion-item>

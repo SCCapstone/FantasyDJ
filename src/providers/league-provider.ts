@@ -103,4 +103,31 @@ export class LeagueData {
 
     return league;
   }
-};
+
+  addSongToUser(userId: string,
+                        leagueId: string,
+                        songId: string,
+                        songName: string,
+                        songArtist: string ): Promise<League> {
+    return new Promise<League>((resolve, reject) => {
+
+    let song: string = this.db.list('/Songs').push({
+        spotifyId: songId,
+        name: songName,
+        artist: songArtist
+      }).key;
+
+    if (song) {
+        console.log(song);
+        this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
+        this.loadLeague(leagueId)
+          .then(league => resolve(league))
+          .catch(error => reject(error));
+      }
+      else {
+        reject('no song generated');
+      }
+
+});
+}
+}

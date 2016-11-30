@@ -1,7 +1,15 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+<<<<<<< HEAD
+=======
+
+>>>>>>> 95a08d9e62346546d0cf3c864c52019b5190fb7d
 import { SpotifyProvider } from '../../providers/spotify-provider';
 import { SpotifySearchResult } from '../../models/spotify-models';
+
+import { League, User } from '../../models/fantasydj-models';
+
+import { LeagueData } from '../../providers/league-provider';
 
 /*
   Generated class for the Search page.
@@ -18,11 +26,18 @@ public searchInput: any;
 public tracks:any;
 
 
+  user: User;
+  league: League;
   query: string = "";
   results: SpotifySearchResult;
 
   constructor(public navCtrl: NavController,
-              private spotify: SpotifyProvider) {}
+              public navParams: NavParams,
+              private spotify: SpotifyProvider,
+              private leagueData: LeagueData) {
+    this.league = this.navParams.get('league');
+    this.user = this.navParams.get('user');
+  }
 
 
   ionViewDidLoad() {
@@ -38,6 +53,21 @@ public tracks:any;
     } else {
       this.results = null;
     }
+  }
+
+  addSong(user, league, track) {
+    this.leagueData.addSongToUser(
+      user.id,
+      league.id,
+      track.id,
+      track.name,
+      track.album.artists[0].name
+    ).then(song => {
+      console.log('added song: ' + song.name);
+      this.navCtrl.pop();
+    }).catch(err => {
+      console.log(err, 'error adding new song');
+    });
   }
 
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 
 import { PlayerDetailsPage } from '../player-details/player-details';
@@ -23,16 +24,19 @@ export class LeaguePage {
   league: League;
   playerDetailsPage = PlayerDetailsPage;
   users: Observable<User[]>;
+  private fbLeagues: FirebaseListObservable<any[]>;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private leagueData: LeagueData,
               public alertCtrl: AlertController,
+              private db: AngularFireDatabase,
               private userData: UserData) {
     this.league = this.navParams.get('league');
     console.log('Got league from navs league:' + this.league);
     this.users = this.userData.loadUsers(this.league.id);
     console.log('Current league: ' + this.league.id)
+    this.fbLeagues = this.db.list('/Leagues')
   }
 
   ionViewDidLoad() {
@@ -47,7 +51,7 @@ export class LeaguePage {
   }
   
   deleteThisLeague(league) {
-    /* this.db.object('/Leagues/' + this.league.id).remove() */
+
 
     let confirm = this.alertCtrl.create({
       title: 'Delete League',
@@ -62,6 +66,8 @@ export class LeaguePage {
         {
           text: 'Yes',
           handler: () => {
+            /* this.db.object('/Leagues/' + this.league.id).remove() */
+
             console.log('Yes clicked');
           }
         }

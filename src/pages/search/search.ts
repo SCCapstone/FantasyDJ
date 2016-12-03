@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-<<<<<<< HEAD
-=======
-
->>>>>>> 95a08d9e62346546d0cf3c864c52019b5190fb7d
 import { SpotifyProvider } from '../../providers/spotify-provider';
 import { SpotifySearchResult } from '../../models/spotify-models';
-
 import { League, User } from '../../models/fantasydj-models';
 
 import { LeagueData } from '../../providers/league-provider';
@@ -24,6 +19,7 @@ import { LeagueData } from '../../providers/league-provider';
 export class SearchPage {
 public searchInput: any;
 public tracks:any;
+
 
 
   user: User;
@@ -55,6 +51,11 @@ public tracks:any;
     }
   }
 
+  do() {
+  console.log('clicked card');
+  }
+
+  
   addSong(user, league, track) {
     this.leagueData.addSongToUser(
       user.id,

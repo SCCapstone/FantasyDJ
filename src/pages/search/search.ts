@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-<<<<<<< HEAD
-=======
-import { SpotifyProvider } from '../../providers/spotify-provider';
->>>>>>> 36ed5c13e7c3570171ae7c5d383dcc09cc2a16e7
-
 import { SpotifyProvider } from '../../providers/spotify-provider';
 import { SpotifySearchResult } from '../../models/spotify-models';
 

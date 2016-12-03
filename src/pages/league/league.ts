@@ -29,7 +29,12 @@ export class LeaguePage {
               private leagueData: LeagueData,
               private userData: UserData) {
     this.league = this.navParams.get('league');
+
     console.log('Got league from navs league:' + this.league);
+
+
+    console.log(this.league)
+
     this.users = this.userData.loadUsers(this.league.id);
   }
 

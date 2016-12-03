@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+<<<<<<< HEAD
+=======
+import { SpotifyProvider } from '../../providers/spotify-provider';
+>>>>>>> 36ed5c13e7c3570171ae7c5d383dcc09cc2a16e7
 
 import { SpotifyProvider } from '../../providers/spotify-provider';
 import { SpotifySearchResult } from '../../models/spotify-models';
@@ -14,11 +18,21 @@ import { LeagueData } from '../../providers/league-provider';
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 */
+
 @Component({
   selector: 'page-search',
   templateUrl: 'search.html'
 })
 export class SearchPage {
+public searchInput: any;
+public tracks:any;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private spotify: SpotifyProvider) {
+  	this.searchInput = "TEST";
+  
+  	console.log(this.searchInput);
+
+  }
 
   user: User;
   league: League;
@@ -34,8 +48,10 @@ export class SearchPage {
   }
 
   ionViewDidLoad() {
-    console.log('Hello Search Page');
+    console.log('Landed on Search Page');
   }
+
+
 
   search() {
     if (this.query.length > 0) {
@@ -63,3 +79,6 @@ export class SearchPage {
   }
 
 }
+
+ 
+

@@ -37,10 +37,13 @@ export class LeaguePage {
 
 
     console.log(this.league)
+    this.uID = this.userData.loadUsers(this.userId);
+    console.log(this.userData.loadUsers);
 
     this.users = this.userData.loadUsers(this.league.id);
     console.log('Current league: ' + this.league.id)
     this.fbLeagues = this.db.list('/Leagues')
+    console.log('working ------')
   }
 
   ionViewDidLoad() {
@@ -72,6 +75,8 @@ export class LeaguePage {
           text: 'Yes',
           handler: () => {
             this.db.object('/Leagues/' + this.league.id).remove()
+            /* this.db.object('/UserProfiles/' + this.league.id).remove() */
+            this.navCtrl.popTo(HomePage); 
 
             console.log('Yes clicked');
           }

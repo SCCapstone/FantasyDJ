@@ -26,9 +26,6 @@ export class LeagueData {
     });
   }
 
-  deleteLeague(leagueId: string) {
-    this.db.object('/Leagues/' + leagueId).remove()
-  }
 
   loadLeagues(userId: string): Observable<League[]> {
     return this.db.list(this.fbUserLeaguesUrl(userId))

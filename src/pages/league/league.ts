@@ -37,10 +37,13 @@ export class LeaguePage {
 
 
     console.log(this.league)
+    this.uID = this.userData.loadUsers(this.userId);
+    console.log(this.userData.loadUsers);
 
     this.users = this.userData.loadUsers(this.league.id);
     console.log('Current league: ' + this.league.id)
     this.fbLeagues = this.db.list('/Leagues')
+    console.log('working ------')
   }
 
   ionViewDidLoad() {

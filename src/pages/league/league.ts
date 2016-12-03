@@ -53,11 +53,9 @@ export class LeaguePage {
       league: league
     });
   }
-  
-
-  deleteThisLeague(league) {
 
 
+  deleteThisLeague() {
     let confirm = this.alertCtrl.create({
       title: 'Delete League',
       message: 'Do you really want to delete this league?',
@@ -71,7 +69,10 @@ export class LeaguePage {
         {
           text: 'Yes',
           handler: () => {
-            this.db.object('/Leagues/' + this.league.id).remove()
+            this.db.object('/Leagues/' + this.league.id)
+              .remove()
+              .then(() => this.navCtrl.pop())
+              .catch(err => console.log(err));
 
             console.log('Yes clicked');
           }
@@ -80,5 +81,5 @@ export class LeaguePage {
     });
     confirm.present();
     console.log('Are you sure you want to delete this league?');
-  } 
+  }
 }

@@ -15,9 +15,6 @@
 
 <ion-content padding>
 
-<p>Players: {{league.UserIDs}}</p>
-<p>Endtime: {{league.endTime}}
-
   <h2>Players</h2>
 
   <ion-card *ngFor="let user of users | async" (click)="goToPlayer(user, league)">

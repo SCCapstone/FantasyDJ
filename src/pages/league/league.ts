@@ -66,7 +66,7 @@ export class LeaguePage {
         {
           text: 'Yes',
           handler: () => {
-            /* this.db.object('/Leagues/' + this.league.id).remove() */
+            this.db.object('/Leagues/' + this.league.id).remove()
 
             console.log('Yes clicked');
           }

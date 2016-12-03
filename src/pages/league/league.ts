@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
-
 import { PlayerDetailsPage } from '../player-details/player-details';
 
 import { League, User } from '../../models/fantasydj-models';
@@ -33,7 +32,12 @@ export class LeaguePage {
               private db: AngularFireDatabase,
               private userData: UserData) {
     this.league = this.navParams.get('league');
+
     console.log('Got league from navs league:' + this.league);
+
+
+    console.log(this.league)
+
     this.users = this.userData.loadUsers(this.league.id);
     console.log('Current league: ' + this.league.id)
     this.fbLeagues = this.db.list('/Leagues')
@@ -50,6 +54,7 @@ export class LeaguePage {
     });
   }
   
+
   deleteThisLeague(league) {
 
 

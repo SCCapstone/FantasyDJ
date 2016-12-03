@@ -22,12 +22,7 @@ export class SearchPage {
 public searchInput: any;
 public tracks:any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private spotify: SpotifyProvider) {
-  	this.searchInput = "TEST";
-  
-  	console.log(this.searchInput);
 
-  }
 
   user: User;
   league: League;

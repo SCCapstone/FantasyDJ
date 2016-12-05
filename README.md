@@ -15,7 +15,7 @@ Welcome to fantasyDJ
 * Requires: NodeJS, Cordova, Ionic 2
 * Plugins Required: Whitelist, in-app browser
 * Uses Firebase database
-* Deployment instructions: see (BUILDING.md)[./BUILDING.md]
+* Deployment instructions: see [BUILDING.md](./BUILDING.md)
 
 ### Who do I talk to? ###
 

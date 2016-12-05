@@ -29,4 +29,4 @@ ionic emulate android
 ```
 
 ### ios: 
-replace `android` with `ios`
+like above, but replace `android` with `ios`

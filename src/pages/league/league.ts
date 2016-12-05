@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 import { PlayerDetailsPage } from '../player-details/player-details';
 
@@ -23,27 +22,14 @@ export class LeaguePage {
   league: League;
   playerDetailsPage = PlayerDetailsPage;
   users: Observable<User[]>;
-  private fbLeagues: FirebaseListObservable<any[]>;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private leagueData: LeagueData,
               public alertCtrl: AlertController,
-              private db: AngularFireDatabase,
               private userData: UserData) {
     this.league = this.navParams.get('league');
-
-    console.log('Got league from navs league:' + this.league);
-
-
-    console.log(this.league)
-    this.uID = this.userData.loadUsers(this.userId);
-    console.log(this.userData.loadUsers);
-
     this.users = this.userData.loadUsers(this.league.id);
-    console.log('Current league: ' + this.league.id)
-    this.fbLeagues = this.db.list('/Leagues')
-    console.log('working ------')
   }
 
   ionViewDidLoad() {
@@ -56,7 +42,6 @@ export class LeaguePage {
       league: league
     });
   }
-
 
   deleteThisLeague() {
     let confirm = this.alertCtrl.create({
@@ -72,17 +57,14 @@ export class LeaguePage {
         {
           text: 'Yes',
           handler: () => {
-            this.db.object('/Leagues/' + this.league.id)
-              .remove()
+            this.leagueData.deleteLeague(this.league.id)
               .then(() => this.navCtrl.pop())
               .catch(err => console.log(err));
-
             console.log('Yes clicked');
           }
         }
       ]
     });
     confirm.present();
-    console.log('Are you sure you want to delete this league?');
   }
 }

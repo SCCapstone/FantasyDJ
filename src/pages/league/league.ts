@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-
 import { PlayerDetailsPage } from '../player-details/player-details';
 
 import { League, User } from '../../models/fantasydj-models';
@@ -27,9 +26,9 @@ export class LeaguePage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private leagueData: LeagueData,
+              public alertCtrl: AlertController,
               private userData: UserData) {
     this.league = this.navParams.get('league');
-    console.log('Got league from navs league:' + this.league);
     this.users = this.userData.loadUsers(this.league.id);
   }
 
@@ -43,8 +42,29 @@ export class LeaguePage {
       league: league
     });
   }
-  
+
   deleteThisLeague() {
-    console.log('Are you sure you want to delete this league?');
-  } 
+    let confirm = this.alertCtrl.create({
+      title: 'Delete League',
+      message: 'Do you really want to delete this league?',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+            console.log('No clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.leagueData.deleteLeague(this.league.id)
+              .then(() => this.navCtrl.pop())
+              .catch(err => console.log(err));
+            console.log('Yes clicked');
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
 }

@@ -26,6 +26,7 @@ export class LeagueData {
     });
   }
 
+
   loadLeagues(userId: string): Observable<League[]> {
     return this.db.list(this.fbUserLeaguesUrl(userId))
       .map(items => {
@@ -127,7 +128,59 @@ export class LeagueData {
       else {
         reject('no song generated');
       }
+    });
+  }
 
-});
-}
+  deleteLeague(leagueId: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      console.log('removing league ' + leagueId);
+      this.loadLeague(leagueId).then(league => {
+        for (let userId of league.users) {
+          this.db.object('/Leagues/' + leagueId + '/users/' + userId)
+            .forEach(userRef => {
+              console.log(userRef);
+              for (let songId in userRef) {
+                if (! songId.startsWith('$')) {
+                  console.log('songId: ' + songId);
+                  this.db.object('/Songs/' + songId + '/leagues/' + leagueId)
+                    .remove()
+                    .then(() => {
+                      console.log('league '
+                                  + leagueId
+                                  + ' removed from song '
+                                  + songId);
+                    })
+                    .catch(err => {
+                      console.log('error removing league '
+                                  + leagueId
+                                  + ' from song '
+                                  + songId);
+                    });
+                }
+              }
+            });
+
+          this.db.object('/UserProfiles/' + userId + '/leagues/' + leagueId)
+            .remove()
+            .then(() => {
+              console.log('league '
+                          + leagueId
+                          + ' removed from user '
+                          + userId);
+            })
+            .catch(err => {
+              console.log('error removing league '
+                          + leagueId
+                          + ' from user '
+                          + userId);
+            });
+        }
+      }).then(() => {
+        this.db.object('/Leagues/' + leagueId)
+          .remove()
+          .then(() => resolve(true))
+          .catch(err => reject(err));
+      }).catch(err => reject(err));
+    });
+  }
 }

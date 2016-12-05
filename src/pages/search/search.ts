@@ -1,24 +1,26 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-
 import { SpotifyProvider } from '../../providers/spotify-provider';
 import { SpotifySearchResult } from '../../models/spotify-models';
-
 import { League, User } from '../../models/fantasydj-models';
 
 import { LeagueData } from '../../providers/league-provider';
 
 /*
   Generated class for the Search page.
-
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 */
+
 @Component({
   selector: 'page-search',
   templateUrl: 'search.html'
 })
 export class SearchPage {
+public searchInput: any;
+public tracks:any;
+
+
 
   user: User;
   league: League;
@@ -33,9 +35,11 @@ export class SearchPage {
     this.user = this.navParams.get('user');
   }
 
+
   ionViewDidLoad() {
-    console.log('Hello Search Page');
+    console.log('Landed on Search Page');
   }
+
 
   search() {
     if (this.query.length > 0) {
@@ -47,6 +51,11 @@ export class SearchPage {
     }
   }
 
+  do() {
+  console.log('clicked card');
+  }
+
+  
   addSong(user, league, track) {
     this.leagueData.addSongToUser(
       user.id,
@@ -63,3 +72,5 @@ export class SearchPage {
   }
 
 }
+
+

@@ -24,7 +24,7 @@ export class OAuthService {
     this.callback = this.platform.is('android') ? 'http://localhost/callback' : 'http://localhost:8100/';
     this.browserTarget = this.platform.is('core') ? '_self' : '_blank';
 
-    if (window.location.hash.match(/^#access_token/) && ! this.token) {
+    if (window.location.hash.match(/^#access_token/)) {
       this.parseToken(window.location.href);
     }
 

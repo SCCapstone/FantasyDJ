@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { Http, Request, Headers, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Http, Request, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 import {
@@ -39,54 +38,48 @@ export class SpotifyProvider {
     return this._headers;
   }
 
-  private api(loc: string): Observable<Response> {
+  private api<T>(loc: string): Promise<T> {
     let req = new Request({
       url: this._apiUrl + loc,
       method: 'get',
       headers: this.headers
     });
     console.log(JSON.stringify(req));
-    return this.http.request(req);
+
+    return new Promise<T>((resolve, reject) => {
+      this.http.request(req)
+        .map(response => <T>(response.json()))
+        .subscribe(
+          obj => resolve(obj),
+          error => {
+            if (error.status && error.status === 401) {
+              this.authService.loginToSpotify()
+                .then(_ => {
+                  window.location.reload();
+                })
+                .catch(err => reject(err));
+            }
+
+            reject(error)
+          },
+          () => console.log('spotify api call complete'));
+    });
   }
 
   loadCurrentUser(): Promise<SpotifyUser> {
-    return new Promise<SpotifyUser>((resolve, reject) => {
-      this.api('/me')
-        .map(response => <SpotifyUser>(response.json()))
-        .subscribe(user => resolve(user),
-                   error => reject(error),
-                   () => console.log('spotify loadCurrentUser complete'));
-    });
+    return this.api('/me');
   }
 
   loadArtist(artistId: string): Promise<SpotifyArtist> {
-    return new Promise<SpotifyArtist>((resolve, reject) => {
-      this.api('/artists/' + artistId)
-        .map(response => <SpotifyArtist>(response.json()))
-        .subscribe(artist => resolve(artist),
-                   error => reject(error),
-                   () => console.log('spotify load artist complete'));
-    });
+    return this.api('/artists/' + artistId);
   }
 
   loadAlbum(albumId: string): Promise<SpotifyAlbum> {
-    return new Promise<SpotifyAlbum>((resolve, reject) => {
-      this.api('/albums/' + albumId)
-        .map(response => <SpotifyAlbum>(response.json()))
-        .subscribe(album => resolve(album),
-                   error => reject(error),
-                   () => console.log('spotify load album complete'));
-    });
-  };
+    return this.api('/albums/' + albumId);
+  }
 
   loadTrack(trackId: string): Promise<SpotifyTrack> {
-    return new Promise<SpotifyTrack>((resolve, reject) => {
-      this.api('/tracks/' + trackId)
-        .map(response => <SpotifyTrack>(response.json()))
-        .subscribe(track => resolve(track),
-                   error => reject(error),
-                   () => console.log('spotify loadTrack complete'));
-    });
+    return this.api('/tracks/' + trackId);
   }
 
   search(query: string,
@@ -110,13 +103,7 @@ export class SpotifyProvider {
       params.push(key + '=' + searchParams[key]);
     }
 
-    return new Promise<SpotifySearchResult>((resolve, reject) => {
-      this.api('/search?' + params.join('&'))
-        .map(response => <SpotifySearchResult>(response.json()))
-        .subscribe(result => resolve(result),
-                   error => reject(error),
-                   () => console.log('spotify search complete'));
-    });
+    return this.api('/search?' + params.join('&'));
   }
 
 };

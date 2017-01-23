@@ -2,14 +2,17 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 
-import { League } from '../models/fantasydj-models';
+import { SongData } from './song-provider';
+
+
+import { League, Song } from '../models/fantasydj-models';
 
 @Injectable()
 export class LeagueData {
 
   private fbLeagues: FirebaseListObservable<any[]>;
 
-  constructor(private db: AngularFireDatabase) {
+  constructor(private db: AngularFireDatabase, private song: SongData) {
     this.fbLeagues = this.db.list('/Leagues');
   }
 
@@ -105,6 +108,25 @@ export class LeagueData {
     return league;
   }
 
+  checkIfSongExists(spotifyId: string): string {
+
+      this.db.list('/Songs/', {
+        query: {
+          orderByChild: 'spotifyId',
+          equalTo: spotifyId,
+          limitToFirst: 1
+        },
+        preserveSnapshot: true
+      }).subscribe(snapshots =>  {
+        console.log('Entered snapshots');
+      snapshots.forEach(snapshot => {
+        console.log('Current key: ' + snapshot.key);
+        return(snapshot.key);
+        });
+    });
+      return null;
+}
+
   addSongToUser(userId: string,
                         leagueId: string,
                         songId: string,
@@ -112,11 +134,18 @@ export class LeagueData {
                         songArtist: string ): Promise<League> {
     return new Promise<League>((resolve, reject) => {
 
-    let song: string = this.db.list('/Songs').push({
+    var song = this.checkIfSongExists(songId);
+
+    console.log(song);
+    if (song != null){
+      console.log(song + 'Song already in db')
+    }
+    else{
+      song = this.db.list('/Songs').push({
         spotifyId: songId,
         name: songName,
         artist: songArtist
-      }).key;
+      }).key;}
 
     if (song) {
         console.log(song);

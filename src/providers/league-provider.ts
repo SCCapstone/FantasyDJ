@@ -2,17 +2,15 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 
-import { SongData } from './song-provider';
 
-
-import { League, Song } from '../models/fantasydj-models';
+import { League} from '../models/fantasydj-models';
 
 @Injectable()
 export class LeagueData {
 
   private fbLeagues: FirebaseListObservable<any[]>;
 
-  constructor(private db: AngularFireDatabase, private song: SongData) {
+  constructor(private db: AngularFireDatabase) {
     this.fbLeagues = this.db.list('/Leagues');
   }
 
@@ -108,25 +106,6 @@ export class LeagueData {
     return league;
   }
 
-  checkIfSongExists(spotifyId: string): string {
-
-      var song = null;
-      this.db.list('/Songs/', {
-        query: {
-          orderByChild: 'spotifyId',
-          equalTo: spotifyId,
-          limitToFirst: 1
-        },
-        preserveSnapshot: true
-      }).subscribe(snapshots =>  {
-        console.log('Entered snapshots');
-      snapshots.forEach(snapshot => {
-      
-        
-        });
-    });
-      return null;
-}
 
   addSongToUser(userId: string,
                         leagueId: string,
@@ -152,6 +131,7 @@ export class LeagueData {
           if (song) {
         console.log(song);
         this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
+        this.db.object('/Songs/'+song+'/leagues/'+leagueId).set(true);
         this.loadLeague(leagueId)
           .then(league => resolve(league))
           .catch(error => reject(error));
@@ -169,6 +149,7 @@ export class LeagueData {
           if (song) {
         console.log(song);
         this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
+        this.db.object('/Songs/'+song+'/leagues/'+leagueId).set(true);
         this.loadLeague(leagueId)
           .then(league => resolve(league))
           .catch(error => reject(error));

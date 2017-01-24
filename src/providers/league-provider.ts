@@ -110,6 +110,7 @@ export class LeagueData {
 
   checkIfSongExists(spotifyId: string): string {
 
+      var song = null;
       this.db.list('/Songs/', {
         query: {
           orderByChild: 'spotifyId',
@@ -120,8 +121,8 @@ export class LeagueData {
       }).subscribe(snapshots =>  {
         console.log('Entered snapshots');
       snapshots.forEach(snapshot => {
-        console.log('Current key: ' + snapshot.key);
-        return(snapshot.key);
+      
+        
         });
     });
       return null;
@@ -134,20 +135,21 @@ export class LeagueData {
                         songArtist: string ): Promise<League> {
     return new Promise<League>((resolve, reject) => {
 
-    var song = this.checkIfSongExists(songId);
-
-    console.log(song);
-    if (song != null){
-      console.log(song + 'Song already in db')
-    }
-    else{
-      song = this.db.list('/Songs').push({
-        spotifyId: songId,
-        name: songName,
-        artist: songArtist
-      }).key;}
-
-    if (song) {
+      var song = null;
+      this.db.list('/Songs/', {
+        query: {
+          orderByChild: 'spotifyId',
+          equalTo: songId,
+          limitToFirst: 1
+        },
+        preserveSnapshot: true
+      }).subscribe(snapshots =>  {
+        console.log('Entered snapshots');
+      snapshots.forEach(snapshot => {
+        if(snapshot.key != null){
+          song = snapshot.key
+          console.log('Song already in db ' + song);
+          if (song) {
         console.log(song);
         this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
         this.loadLeague(leagueId)
@@ -157,6 +159,29 @@ export class LeagueData {
       else {
         reject('no song generated');
       }
+        }
+        else{
+          song = this.db.list('/Songs').push({
+          spotifyId: songId,
+          name: songName,
+          artist: songArtist
+          }).key;
+          if (song) {
+        console.log(song);
+        this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
+        this.loadLeague(leagueId)
+          .then(league => resolve(league))
+          .catch(error => reject(error));
+      }
+      else {
+        reject('no song generated');
+      }
+        }
+        
+        });
+    });
+
+    
     });
   }
 

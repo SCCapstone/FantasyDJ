@@ -34,6 +34,9 @@ export class PlayerDetailsPage {
 
   ionViewDidLoad() {
     console.log('Hello PlayerDetails Page');
+    console.log(this.league)
+    console.log(this.songData)
+    console.log(this.user)
   }
 
   goToSearch(user, league) {

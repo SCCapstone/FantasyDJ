@@ -147,7 +147,7 @@ def print_song_stats(provided_song_id=None):
     for song_id, stats in get_all_stats_grouped_by_song_id(provided_song_id).iteritems():
         try:
             song = get_song(song_id)
-            print('%s by %s (%s):' % (song.name, song.artist, song.spotifyId))
+            print(u'%s by %s (%s):' % (song.name, song.artist, song.spotifyId)).encode('UTF-8')
         except TypeError:
             print('song %s may not exist' % (song_id))
 
@@ -165,11 +165,11 @@ def update_song_stats(spotify):
                     print('  %s:' % (user_id))
                     for song in songs:
                         popularity = spotify.popularity(song.spotifyId)
-                        print('    %s by %s (%s, popularity: %s)' % (
+                        print(u'    %s by %s (%s, popularity: %s)' % (
                             song.name,
                             song.artist,
                             song.spotifyId,
                             popularity
-                        ))
+                        )).encode('UTF-8')
                         add_song_stat(song.id, popularity)
 

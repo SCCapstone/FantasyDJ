@@ -57,7 +57,7 @@ public tracks:any;
 
   
   addSong(user, league, track) {
-    this.leagueData.addSongToUser(
+    this.leagueData.addSong(
       user.id,
       league.id,
       track.id,

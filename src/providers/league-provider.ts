@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 
-import { League } from '../models/fantasydj-models';
+
+import { League} from '../models/fantasydj-models';
 
 @Injectable()
 export class LeagueData {
@@ -105,29 +106,61 @@ export class LeagueData {
     return league;
   }
 
-  addSongToUser(userId: string,
+
+  addSong(userId: string,
                         leagueId: string,
                         songId: string,
                         songName: string,
                         songArtist: string ): Promise<League> {
     return new Promise<League>((resolve, reject) => {
 
-    let song: string = this.db.list('/Songs').push({
+      var song = null;
+      this.db.list('/Songs/', {
+        query: {
+          orderByChild: 'spotifyId',
+          equalTo: songId,
+          limitToFirst: 1
+        },
+        preserveSnapshot: true
+      }).subscribe(snapshots =>  {
+      if(snapshots.length > 0){
+        snapshots.forEach(snapshot => {
+        console.log(snapshot.key);
+        if(snapshot.key != null){
+          song = snapshot.key
+          console.log('Song already in db ' + song);
+          if (song) {
+            console.log(song);
+            this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
+            this.db.object('/Songs/'+song+'/leagues/'+leagueId).set(true);
+            this.loadLeague(leagueId)
+              .then(league => resolve(league))
+              .catch(error => reject(error));
+          }
+          else {
+            reject('song found but error');
+          }
+        }});}
+      else{
+        song = this.db.list('/Songs').push({
         spotifyId: songId,
         name: songName,
         artist: songArtist
-      }).key;
-
-    if (song) {
-        console.log(song);
-        this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
-        this.loadLeague(leagueId)
-          .then(league => resolve(league))
-          .catch(error => reject(error));
-      }
-      else {
-        reject('no song generated');
-      }
+        }).key;
+        if (song) {
+          console.log(song);
+          this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
+          this.db.object('/Songs/'+song+'/leagues/'+leagueId).set(true);
+          this.loadLeague(leagueId)
+            .then(league => resolve(league))
+            .catch(error => reject(error));
+        }
+        else {
+          reject('no song generated');
+        }
+      }     
+    
+    });
     });
   }
 

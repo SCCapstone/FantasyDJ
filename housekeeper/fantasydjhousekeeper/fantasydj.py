@@ -149,7 +149,7 @@ def print_song_stats(provided_song_id=None):
             song = get_song(song_id)
             print('%s by %s (%s):' % (song.name, song.artist, song.spotifyId))
         except TypeError:
-            print("song %s may not exist" % (song_id))
+            print('song %s may not exist' % (song_id))
 
         for stat in stats:
             print('  %s: %s' % (stat.date, stat.popularity))

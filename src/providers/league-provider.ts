@@ -107,7 +107,7 @@ export class LeagueData {
   }
 
 
-  addSongToUser(userId: string,
+  addSong(userId: string,
                         leagueId: string,
                         songId: string,
                         songName: string,
@@ -123,28 +123,25 @@ export class LeagueData {
         },
         preserveSnapshot: true
       }).subscribe(snapshots =>  {
-      console.log('Entered snapshots');
-      console.log(snapshots.length);
       if(snapshots.length > 0){
-      snapshots.forEach(snapshot => {
+        snapshots.forEach(snapshot => {
         console.log(snapshot.key);
-      if(snapshot.key != null){
-        song = snapshot.key
-        console.log('Song already in db ' + song);
-        if (song) {
-          console.log(song);
-          this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
-          this.db.object('/Songs/'+song+'/leagues/'+leagueId).set(true);
-          this.loadLeague(leagueId)
-            .then(league => resolve(league))
-            .catch(error => reject(error));
-        }
-        else {
-          reject('song found but error');
-        }
-      }});}
+        if(snapshot.key != null){
+          song = snapshot.key
+          console.log('Song already in db ' + song);
+          if (song) {
+            console.log(song);
+            this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
+            this.db.object('/Songs/'+song+'/leagues/'+leagueId).set(true);
+            this.loadLeague(leagueId)
+              .then(league => resolve(league))
+              .catch(error => reject(error));
+          }
+          else {
+            reject('song found but error');
+          }
+        }});}
       else{
-        console.log('Song not in db');
         song = this.db.list('/Songs').push({
         spotifyId: songId,
         name: songName,

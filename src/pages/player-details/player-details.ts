@@ -24,7 +24,7 @@ export class PlayerDetailsPage {
   league: League;
   songs: Observable<Song[]>;
 
-  constructor(public navCtrl: NavController, 
+  constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private songData: SongData) {
     this.user = this.navParams.get('user');
@@ -35,7 +35,7 @@ export class PlayerDetailsPage {
   ionViewDidLoad() {
     console.log('Hello PlayerDetails Page');
     console.log(this.league)
-    console.log(this.songData)
+    console.log("____ User data below ____")
     console.log(this.user)
   }
 

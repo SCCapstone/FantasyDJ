@@ -59,7 +59,7 @@ export class UserData {
 
         let user = <User>{
           id: fbuser.$key,
-          email: fbuser.email,
+          email: fbuser.userEmail,
           leagues: [],
           dateCreated: fbuser.dateCreated
         };

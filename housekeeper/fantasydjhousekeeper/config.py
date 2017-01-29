@@ -5,9 +5,8 @@ spotify_client_secret = '9b25b58435784d3cb34c048879e77aeb'
 spotify_redirect_uri = 'http://localhost/callback'
 
 firebase_config = {
-  "apiKey": "AIzaSyB9Zq_1L_j0AR3aiMphTPUbDqVAWxe9yiE",
-  "authDomain": "fantasydj-cb3b4.firebaseapp.com",
-  "databaseURL": "https://fantasydj-cb3b4.firebaseio.com",
-  "storageBucket": "fantasydj-cb3b4.appspot.com",
+    "apiKey": "AIzaSyB9Zq_1L_j0AR3aiMphTPUbDqVAWxe9yiE",
+    "authDomain": "fantasydj-cb3b4.firebaseapp.com",
+    "databaseURL": "https://fantasydj-cb3b4.firebaseio.com",
+    "storageBucket": "fantasydj-cb3b4.appspot.com",
 }
-

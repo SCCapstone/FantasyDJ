@@ -10,7 +10,10 @@
     ],
     "module": "es2015",
     "moduleResolution": "node",
-    "target": "es5"
+    "target": "es5",
+    "types": [
+      "jasmine"
+    ]
   },
   "exclude": [
     "node_modules"

@@ -158,8 +158,8 @@ export class LeagueData {
         else {
           reject('no song generated');
         }
-      }     
-    
+      }
+
     });
     });
   }

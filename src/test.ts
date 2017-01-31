@@ -14,8 +14,18 @@ import { getTestBed, TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { App, Config, Form, IonicModule, Keyboard, DomController, MenuController, NavController, Platform } from 'ionic-angular';
 import { ConfigMock, PlatformMock } from './mocks';
-import { ClickersServiceMock } from './services/clickers.mock';
-import { ClickersService } from './services';
+
+import { LeagueDataMock } from './providers/league-provider.mock';
+import { LeagueData } from './providers/league-provider';
+
+import { SongDataMock } from './providers/song-provider.mock';
+import { SongData } from './providers/song-provider';
+
+import { UserDataMock } from './providers/user-provider.mock';
+import { UserData } from './providers/user-provider';
+
+import { SpotifyProviderMock } from './providers/spotify-provider.mock';
+import { SpotifyProvider } from './providers/spotify-provider';
 
 import { AboutPage } from './pages/about/about'
 
@@ -62,7 +72,10 @@ export class TestUtils {
         App, Form, Keyboard, DomController, MenuController, NavController,
         {provide: Platform, useClass: PlatformMock},
         {provide: Config, useClass: ConfigMock},
-        {provide: ClickersService, useClass: ClickersServiceMock},
+        {provide: SpotifyProvider, useClass: SpotifyProviderMock},
+        {provide: LeagueData, useClass: LeagueDataMock},
+        {provide: SongData, useClass: SongDataMock},
+        {provide: UserData, useClass: UserDataMock},
       ],
       imports: [
         FormsModule,

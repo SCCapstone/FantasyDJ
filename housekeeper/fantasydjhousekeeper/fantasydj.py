@@ -1,8 +1,12 @@
 import pyrebase
 from .config import firebase_config
 from .entities import League, Song, SongStat
-from .util import get_val, get_date
+from .util import get_val, get_date, str_from_date
 from datetime import datetime
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 firebase = pyrebase.initialize_app(firebase_config)
@@ -132,7 +136,7 @@ def get_song_stat(song_id, date_str):
 
 
 def add_song_stat(song_id, popularity):
-    date_str = datetime.now().date().strftime('%Y-%m-%d')
+    date_str = date_from_str(datetime.now().date())
     data = {
         'songId': song_id,
         'date': date_str,
@@ -144,32 +148,48 @@ def add_song_stat(song_id, popularity):
 
 
 def print_song_stats(provided_song_id=None):
-    for song_id, stats in get_all_stats_grouped_by_song_id(provided_song_id).iteritems():
+    for song_id, stats in get_all_stats_grouped_by_song_id(
+            provided_song_id
+    ).iteritems():
         try:
             song = get_song(song_id)
-            print(u'%s by %s (%s):' % (song.name, song.artist, song.spotifyId)).encode('UTF-8')
-        except TypeError:
-            print('song %s may not exist' % (song_id))
+            logger.debug('successfully got song %s' % (song_id))
+            stats_str = [
+                '%s: %s' % (
+                    str_from_date(stat.date),
+                    stat.popularity
+                ) for stat in stats
+            ]
+            print(u'%s by %s (%s): %s' % (
+                song.name,
+                song.artist,
+                song.spotifyId,
+                stats_str
+            )).encode('UTF-8')
 
-        for stat in stats:
-            print('  %s: %s' % (stat.date, stat.popularity))
+        except TypeError:
+            logger.debug('song %s may not exist' % (song_id))
 
 
 def update_song_stats(spotify):
     for league in get_active_leagues():
-        print league.name
+        logger.info('entering league %s' % (league.name))
         if league.users is not None:
             for user_id in league.users:
                 songs = get_playlist(league.id, user_id)
                 if songs:
-                    print('  %s:' % (user_id))
+                    logger.info(
+                        'entering playlist for user %s:' % (user_id)
+                    )
                     for song in songs:
                         popularity = spotify.popularity(song.spotifyId)
-                        print(u'    %s by %s (%s, popularity: %s)' % (
-                            song.name,
-                            song.artist,
-                            song.spotifyId,
-                            popularity
-                        )).encode('UTF-8')
+                        logger.info(
+                            u'got popularity %s for song %s by %s (%s)' % (
+                                popularity,
+                                song.name,
+                                song.artist,
+                                song.spotifyId
+                            )
+                        ).encode('UTF-8')
                         add_song_stat(song.id, popularity)
 

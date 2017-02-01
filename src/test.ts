@@ -44,7 +44,8 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting(),
 );
 // Then we find all the tests.
-const context: any = require.context('./', true, /\.spec\.ts$/);
+// const context: any = require.context('./', true, /\.spec\.ts$/);
+const context: any = require.context('./', true, /.spec.ts$/); // had some weirdness with the original pattern
 // And load the modules.
 context.keys().map(context);
 // Finally, start Karma to run the tests.
@@ -66,7 +67,7 @@ export class TestUtils {
   public static configureIonicTestingModule(components: Array<any>): typeof TestBed {
     return TestBed.configureTestingModule({
       declarations: [
-        AboutPage,
+        ...components,
       ],
       providers: [
         App, Form, Keyboard, DomController, MenuController, NavController,

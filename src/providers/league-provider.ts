@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 
-
 import { League} from '../models/fantasydj-models';
 
 @Injectable()
@@ -216,4 +215,16 @@ export class LeagueData {
       }).catch(err => reject(err));
     });
   }
+
+getOpponentId(userId: string, leagueId: string): string {
+  let opponent_id: string = null;
+  this.db.list('/Leagues/'+leagueId+'/users/').forEach(user=>{
+      if (user.length > 0){
+        for(var i = 0; i < user.length; i++)
+          if (user[i].$key != userId){
+            opponent_id = user[i].$key;
+      } }  
+    });
+  return opponent_id;
+} 
 }

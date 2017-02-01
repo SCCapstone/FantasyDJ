@@ -19,6 +19,7 @@
     <ion-card *ngFor="let song of songs | async" >
       <ion-item text-wrap>{{ song.name }} by {{ song.artist }}</ion-item>
     </ion-card>
+    <div *ngIf="( songs | async)?.length > (opp_songs | async)?.length">
       <ion-card (click)="goToSearch(user,league)">
         <ion-card-content>
                   <ion-card-title>
@@ -26,5 +27,10 @@
                     </ion-card-title>
                 </ion-card-content>
               </ion-card>
+  </div>
+  <div *ngIf="( songs | async)?.length < (opp_songs | async)?.length">
+    Wait for opponent to choose another song.
+  </div>
+
 
 </ion-content>

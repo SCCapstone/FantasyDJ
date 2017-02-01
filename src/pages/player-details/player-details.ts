@@ -3,10 +3,12 @@ import { NavController, NavParams } from 'ionic-angular';
 import { SearchPage } from '../search/search';
 import { Observable } from 'rxjs/Observable';
 
-
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { User, League, Song } from '../../models/fantasydj-models';
 
 import { SongData } from '../../providers/song-provider';
+import { UserData } from '../../providers/user-provider';
+import { LeagueData } from '../../providers/league-provider';
 
 /*
   Generated class for the PlayerDetails page.
@@ -23,13 +25,24 @@ export class PlayerDetailsPage {
   user: User;
   league: League;
   songs: Observable<Song[]>;
+  users: FirebaseListObservable<any[]>;
+  opp_songs: Observable<Song[]>;
+  opponent_id: string;
 
   constructor(public navCtrl: NavController, 
+              private db: AngularFireDatabase,
               public navParams: NavParams,
-              private songData: SongData) {
+              private songData: SongData,
+              private userData: UserData,
+              private leagueData: LeagueData) {
     this.user = this.navParams.get('user');
     this.league = this.navParams.get('league');
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
+    this.opponent_id = this.leagueData.getOpponentId(this.user.id, this.league.id);
+    this.opp_songs = this.songData.loadSongs(this.league.id, this.opponent_id);
+    console.log(this.songs);
+    console.log(this.opp_songs);
+
   }
 
   ionViewDidLoad() {

@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 import { League } from '../models/fantasydj-models';
 
 export class LeagueDataMock {
@@ -7,7 +8,7 @@ export class LeagueDataMock {
     <League>{
       id: '-KbmR7uWBQKMzbRSyeN5',
       name: 'Test League 1',
-      users: [],
+      users: <Array<string>>[],
       draftDate: null,
       endTime: null,
       winner: null
@@ -15,7 +16,7 @@ export class LeagueDataMock {
     <League>{
       id: '-KbmRcx2VDzbUbujLSYZ',
       name: 'Test League 2',
-      users: [],
+      users: <Array<string>>[],
       draftDate: null,
       endTime: null,
       winner: null
@@ -23,25 +24,29 @@ export class LeagueDataMock {
     <League>{
       id: '-KbmRgI3WVFkNexx0fr3',
       name: 'Test League 3',
-      users: [],
+      users: <Array<string>>[],
       draftDate: null,
       endTime: null,
       winner: null
-    },
+    }
   ];
 
+  private getMock(key: number): Promise<League> {
+    return Promise.resolve(LeagueDataMock.LEAGUES[0]);
+  }
+
   public loadLeague(leagueId: string): Promise<League> {
-    return Promise.resolve(LEAGUES[0]);
+    return this.getMock(0);
   }
 
   public loadLeagues(userId: string): Observable<League[]> {
-    return Observable.from(LEAGUES);
+    return Observable.of(LeagueDataMock.LEAGUES);
   }
 
   public createLeague(name: string,
                       creatorId: string,
                       opponentId: string): Promise<League> {
-    return Promise.resolve(LEAGUES[0]);
+    return this.getMock(0);
   }
 
   public addSong(userId: string,
@@ -49,7 +54,7 @@ export class LeagueDataMock {
                  songId: string,
                  songName: string,
                  songArtist: string): Promise<League> {
-    return loadLeague(leagueId);
+    return this.getMock(0);
   }
 
   public deleteLeague(leagueId: string): Promise<boolean> {

@@ -1,13 +1,15 @@
 import {
+  SpotifyImage,
   SpotifyUser,
-  SpotifySimplifiedArtist
+  SpotifySimplifiedArtist,
   SpotifyArtist,
-  SpotifySimplifiedAlbum
+  SpotifySimplifiedAlbum,
   SpotifyAlbum,
-  SpotifySimplifiedTrack
+  SpotifySimplifiedTrack,
   SpotifyTrack,
   SpotifySearchResult,
-  SpotifySearchType} from '../models/spotify-models';
+  SpotifySearchType,
+  SpotifyPagingObject} from '../models/spotify-models';
 
 export class SpotifyProviderMock {
 
@@ -17,9 +19,9 @@ export class SpotifyProviderMock {
       id: '0123456789',
       name: 'Spotify User 1',
       uri: '',
-      images: [],
+      images: <Array<SpotifyImage>>[],
       display_name: 'Spotify User 1 Display Name',
-      email: 'a@b.cd',
+      email: 'a@b.cd'
     });
   }
 
@@ -29,7 +31,7 @@ export class SpotifyProviderMock {
       id: '',
       name: 'Spotify Artist 1',
       uri: '',
-      images: [],
+      images: <Array<SpotifyImage>>[],
     });
   }
 
@@ -38,11 +40,11 @@ export class SpotifyProviderMock {
       href: '',
       id: '',
       name: 'Spotify Artist 1',
-      uri: '',
+      uri: ''
     };
 
-  private static TRACKS: <SpotifyPagingObject<SpotifySimplifiedTrack>> =
-    <SpotifyPagingObject<SpotifySimplifiedTrack>{
+  private static TRACKS: SpotifyPagingObject<SpotifySimplifiedTrack> =
+    <SpotifyPagingObject<SpotifySimplifiedTrack>>{
       href: '',
       items: <Array<SpotifySimplifiedTrack>>[
         <SpotifySimplifiedTrack>{
@@ -50,7 +52,7 @@ export class SpotifyProviderMock {
           id: '',
           name: 'Spotify Artist 1',
           uri: '',
-          artists: [SIMPLIFIED_ARTIST_1],
+          artists: [SpotifyProviderMock.SIMPLIFIED_ARTIST_1]
         }
       ]
     };
@@ -61,9 +63,9 @@ export class SpotifyProviderMock {
       id: '',
       name: 'Spotify Album 1',
       uri: '',
-      images: [],
-      artists: [SIMPLIFIED_ARTIST_1],
-      tracks: TRACKS,
+      images: <Array<SpotifyImage>>[],
+      artists: [SpotifyProviderMock.SIMPLIFIED_ARTIST_1],
+      tracks: SpotifyProviderMock.TRACKS
     });
   }
 
@@ -73,14 +75,14 @@ export class SpotifyProviderMock {
       id: '',
       name: 'Spotify Artist 1',
       uri: '',
-      artists: [SIMPLIFIED_ARTIST_1],
+      artists: [SpotifyProviderMock.SIMPLIFIED_ARTIST_1],
       album: <SpotifySimplifiedAlbum> {
         href: '',
         id: '',
         name: 'Spotify Album 1',
         uri: '',
-        images: [],
-        artists: [SIMPLIFIED_ARTIST_1],
+        images: <Array<SpotifyImage>>[],
+        artists: [SpotifyProviderMock.SIMPLIFIED_ARTIST_1]
       }
     });
   }
@@ -90,7 +92,7 @@ export class SpotifyProviderMock {
          limit?: number,
          offset?: number): Promise<SpotifySearchResult> {
     return Promise.resolve(<SpotifySearchResult>{
-      tracks: TRACKS
+      tracks: SpotifyProviderMock.TRACKS
     });
   }
 

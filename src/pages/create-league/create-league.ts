@@ -48,9 +48,9 @@ export class CreateLeaguePage {
 
   createLeague(){
     this.leagueData.createLeague(
-      this.leagueForm.name,
+      this.leagueForm.value.name,
       this.currentUser.id,
-      this.leagueForm.opponent
+      this.leagueForm.value.opponent
     ).then(league => {
       console.log('created league: ' + league.name);
       this.navCtrl.pop();

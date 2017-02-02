@@ -228,4 +228,13 @@ getOpponentId(userId: string, leagueId: string): string {
     });
   return opponent_id;
 } 
+
+getCreatorId(leagueId: string): string {
+  let creator_id: string = null;
+  this.db.object('/Leagues/' + leagueId + '/creator', 
+    {preserveSnapshot: true}).subscribe(snapshot => {
+      creator_id = snapshot.val();
+    });
+    return creator_id;
+}
 }

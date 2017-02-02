@@ -24,6 +24,7 @@ export class PlayerDetailsPage {
   searchPage = SearchPage;
   user: User;
   league: League;
+  creator: boolean;
   songs: Observable<Song[]>;
   users: FirebaseListObservable<any[]>;
   opp_songs: Observable<Song[]>;
@@ -37,12 +38,15 @@ export class PlayerDetailsPage {
               private leagueData: LeagueData) {
     this.user = this.navParams.get('user');
     this.league = this.navParams.get('league');
+    console.log(this.leagueData.getCreatorId(this.league.id));
+    if (this.leagueData.getCreatorId(this.league.id) == this.user.id){
+      this.creator = true;
+    } 
+    else this.creator = false;
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.opponent_id = this.leagueData.getOpponentId(this.user.id, this.league.id);
     this.opp_songs = this.songData.loadSongs(this.league.id, this.opponent_id);
-    console.log(this.songs);
-    console.log(this.opp_songs);
-
+    console.log('creator: ' + this.creator);
   }
 
   ionViewDidLoad() {

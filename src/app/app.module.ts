@@ -8,6 +8,7 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LeaguePage } from '../pages/league/league';
 import { PlayerDetailsPage } from '../pages/player-details/player-details';
+import { OpponentDetailsPage } from '../pages/opponent-details/opponent-details';
 import { CreateLeaguePage } from '../pages/create-league/create-league';
 import { SearchPage } from '../pages/search/search';
 
@@ -35,6 +36,7 @@ export const firebaseConfig = {
     TabsPage,
     LeaguePage,
     PlayerDetailsPage,
+    OpponentDetailsPage,
     CreateLeaguePage,
     SearchPage
   ],
@@ -51,6 +53,7 @@ export const firebaseConfig = {
     TabsPage,
     LeaguePage,
     PlayerDetailsPage,
+    OpponentDetailsPage,
     CreateLeaguePage,
     SearchPage
   ],

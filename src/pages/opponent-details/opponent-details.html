@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Player Details for {{ user.id }}</ion-title>
+    <ion-title> {{ league.name}} member: {{ user.id }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,16 +15,16 @@
 
 <ion-content padding>
 
-  <p>DJing since {{ user.dateCreated }}</p>
+  <p> {{ user.id }}'s playlist </p>
   <ion-card *ngFor="let song of songs | async" >
     <ion-item text-wrap>{{ song.name }} by {{ song.artist }}</ion-item>
   </ion-card>
-  <ion-card (click)="goToSearch(user,league)">
-    <ion-card-content>
-      <ion-card-title>
-        Add New Song
-      </ion-card-title>
-    </ion-card-content>
-  </ion-card>
+  <!--<ion-card (click)="goToSearch(user,league)">-->
+    <!--<ion-card-content>-->
+      <!--<ion-card-title>-->
+        <!--Add New Song-->
+      <!--</ion-card-title>-->
+    <!--</ion-card-content>-->
+  <!--</ion-card>-->
 
 </ion-content>

@@ -52,6 +52,7 @@ export class LeagueData {
 
       let leagueId: string = this.fbLeagues.push({
         name: name,
+        creator: creatorId,
         users: usersRef
       }).key;
 

@@ -9,11 +9,11 @@ import { User, League, Song } from '../../models/fantasydj-models';
 import { SongData } from '../../providers/song-provider';
 
 /*
-  Generated class for the PlayerDetails page.
+ Generated class for the PlayerDetails page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+ See http://ionicframework.com/docs/v2/components/#navigation for more info on
+ Ionic pages and navigation.
+ */
 @Component({
   selector: 'page-player-details',
   templateUrl: 'player-details.html'

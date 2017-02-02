@@ -33,10 +33,12 @@ export class LeaguePage {
   }
 
   ionViewDidLoad() {
-    console.log('Hello League Page');
+    console.log('Hello League page');
+
   }
 
   goToPlayer(user, league) {
+    console.log("user: " + user.id);
     this.navCtrl.push(PlayerDetailsPage, {
       user: user,
       league: league

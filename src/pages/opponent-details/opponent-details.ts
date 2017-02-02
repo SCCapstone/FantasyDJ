@@ -9,16 +9,16 @@ import { User, League, Song } from '../../models/fantasydj-models';
 import { SongData } from '../../providers/song-provider';
 
 /*
-  Generated class for the PlayerDetails page.
+ Generated class for the PlayerDetails page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+ See http://ionicframework.com/docs/v2/components/#navigation for more info on
+ Ionic pages and navigation.
+ */
 @Component({
-  selector: 'page-player-details',
-  templateUrl: 'player-details.html'
+  selector: 'page-opponent-details',
+  templateUrl: 'opponent-details.html'
 })
-export class PlayerDetailsPage {
+export class OpponentDetailsPage {
   searchPage = SearchPage;
   user: User;
   league: League;
@@ -33,16 +33,16 @@ export class PlayerDetailsPage {
   }
 
   ionViewDidLoad() {
-    console.log('Hello PlayerDetails Page');
+    console.log('Hello OpponentPlayerDetails Page');
     console.log(this.league)
     console.log(this.user)
   }
 
-  goToSearch(user, league) {
-    this.navCtrl.push(SearchPage, {
-      league: league,
-      user : user
-    });
-  }
+  // goToSearch(user, league) {
+  //   this.navCtrl.push(SearchPage, {
+  //     league: league,
+  //     user : user
+  //   });
+  // }
 
 }

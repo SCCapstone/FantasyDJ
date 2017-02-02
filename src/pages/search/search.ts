@@ -55,7 +55,7 @@ public tracks:any;
   console.log('clicked card');
   }
 
-  
+
   addSong(user, league, track) {
     this.leagueData.addSong(
       user.id,
@@ -65,12 +65,12 @@ public tracks:any;
       track.album.artists[0].name
     ).then(song => {
       console.log('added song: ' + song.name);
+      console.log("Track id: " + track.id)
       this.navCtrl.pop();
     }).catch(err => {
       console.log(err, 'error adding new song');
     });
   }
-
 }
 
 

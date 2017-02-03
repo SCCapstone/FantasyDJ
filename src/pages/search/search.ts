@@ -62,7 +62,8 @@ public tracks:any;
       league.id,
       track.id,
       track.name,
-      track.album.artists[0].name
+      track.album.artists[0].name,
+      track.album.images[0].url
     ).then(song => {
       console.log('added song: ' + song.name);
       console.log("Track id: " + track.id)

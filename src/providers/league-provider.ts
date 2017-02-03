@@ -112,7 +112,8 @@ export class LeagueData {
                         leagueId: string,
                         songId: string,
                         songName: string,
-                        songArtist: string ): Promise<League> {
+                        songArtist: string,
+                        imageUrl): Promise<League> {
     return new Promise<League>((resolve, reject) => {
 
       var song = null;
@@ -146,7 +147,8 @@ export class LeagueData {
         song = this.db.list('/Songs').push({
         spotifyId: songId,
         name: songName,
-        artist: songArtist
+        artist: songArtist,
+        pic: imageUrl
         }).key;
         if (song) {
           console.log(song);

@@ -58,7 +58,8 @@ export class SongData {
       artist: fbsong.artist,
 	    name: fbsong.name,
 	    spotifyId: fbsong.spotifyId,
-	    leagues: []
+	    leagues: [],
+      pic: fbsong.pic
     };
     for (var key in fbsong.leagues) {
       song.leagues.push(key);

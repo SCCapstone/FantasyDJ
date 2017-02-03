@@ -6,7 +6,7 @@
 
 <ion-content padding>
 
-  <button *ngIf="! currentUser" class="btn btn-primary" (click)="login()">Log In</button>
+  <button *ngIf="! currentUser" class="btn btn-primary" id="btn-login" (click)="login()">Log In</button>
 
   <p *ngIf="currentUser">Hello, {{ currentUser.id }}!</p>
 

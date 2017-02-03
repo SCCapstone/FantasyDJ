@@ -14,6 +14,7 @@ export interface League {
 };
 
 export interface Song {
+  id: string,
 	artist: string,
 	name: string,
 	spotifyId: string,

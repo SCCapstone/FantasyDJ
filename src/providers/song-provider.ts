@@ -48,13 +48,13 @@ export class SongData {
   }
 
   private mapFBSong(fbsong): Song {
-    console.log('start mapFBSong');
     if ('$value' in fbsong && ! fbsong.$value) {
       console.log(fbsong, 'returning null');
       return null;
     }
 
     let song = <Song>{
+      id: fbsong.$key,
       artist: fbsong.artist,
 	    name: fbsong.name,
 	    spotifyId: fbsong.spotifyId,
@@ -63,6 +63,6 @@ export class SongData {
     for (var key in fbsong.leagues) {
       song.leagues.push(key);
     }
-      return song;
+    return song;
   }
 }

@@ -15,6 +15,8 @@ import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@ang
 import { App, Config, Form, IonicModule, Keyboard, DomController, MenuController, NavController, Platform } from 'ionic-angular';
 import { ConfigMock, PlatformMock } from './mocks';
 
+
+
 import { LeagueDataMock } from './providers/league-provider.mock';
 import { LeagueData } from './providers/league-provider';
 
@@ -27,7 +29,8 @@ import { UserData } from './providers/user-provider';
 import { SpotifyProviderMock } from './providers/spotify-provider.mock';
 import { SpotifyProvider } from './providers/spotify-provider';
 
-import { AboutPage } from './pages/about/about'
+import { OAuthServiceMock } from './providers/oauth-service.mock';
+import { OAuthService } from './providers/oauth-service';
 
 // Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
 declare var __karma__: any;
@@ -44,10 +47,10 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting(),
 );
 // Then we find all the tests.
-// const context: any = require.context('./', true, /\.spec\.ts$/);
-const context: any = require.context('./', true, /.spec.ts$/); // had some weirdness with the original pattern
+const context: any = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);
+
 // Finally, start Karma to run the tests.
 __karma__.start();
 
@@ -69,19 +72,20 @@ export class TestUtils {
       declarations: [
         ...components,
       ],
-      providers: [
-        App, Form, Keyboard, DomController, MenuController, NavController,
-        {provide: Platform, useClass: PlatformMock},
-        {provide: Config, useClass: ConfigMock},
-        {provide: SpotifyProvider, useClass: SpotifyProviderMock},
-        {provide: LeagueData, useClass: LeagueDataMock},
-        {provide: SongData, useClass: SongDataMock},
-        {provide: UserData, useClass: UserDataMock},
-      ],
       imports: [
         FormsModule,
         IonicModule,
         ReactiveFormsModule,
+      ],
+      providers: [
+        App, Form, Keyboard, DomController, MenuController, NavController,
+        {provide: Platform, useClass: PlatformMock},
+        {provide: Config, useClass: ConfigMock},
+        {provide: OAuthService, useClass: OAuthServiceMock},
+        {provide: SpotifyProvider, useClass: SpotifyProviderMock},
+        {provide: LeagueData, useClass: LeagueDataMock},
+        {provide: SongData, useClass: SongDataMock},
+        {provide: UserData, useClass: UserDataMock},
       ],
     });
   }

@@ -5,7 +5,6 @@ import { LeaguePage } from '../league/league';
 import { CreateLeaguePage } from '../create-league/create-league';
 import { SearchPage } from '../search/search';
 
-import { AngularFire } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 
 import { User, League } from '../../models/fantasydj-models';
@@ -17,7 +16,7 @@ import { LeagueData } from '../../providers/league-provider';
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: './home.html'
 })
 export class HomePage {
 
@@ -30,12 +29,15 @@ export class HomePage {
   leagues: Observable<League[]>;
 
   constructor(public navCtrl: NavController,
-              public af: AngularFire,
               private platform: Platform,
               private authService: OAuthService,
               private spotify: SpotifyProvider,
               private userData: UserData,
               private leagueData: LeagueData) {
+    this.init();
+  }
+
+  private init() {
     if (this.authService.token) {
       this.userData.loadCurrentUser().then(user => {
         this.currentUser = user;
@@ -48,25 +50,10 @@ export class HomePage {
     this.platform.ready().then(() => {
       this.authService.loginToSpotify()
         .then(token => {
-          window.location.reload();
+          this.init();
         });
     }).catch(error => {
       console.log(error);
-    });
-  }
-
-  searchSpotify(query: string) {
-    this.spotify.search(query).then(res => {
-      for (var item of res.tracks.items) {
-        this.spotify.loadTrack(item.id).then(track => {
-          console.log(track.name);
-          console.log(track.popularity);
-        }, err => {
-          console.log('error loading track from spotify');
-        });
-      }
-    }, err => {
-      console.log('error searching spotify')
     });
   }
 

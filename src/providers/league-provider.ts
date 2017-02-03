@@ -50,10 +50,11 @@ export class LeagueData {
       let usersRef = {};
       usersRef[creatorId] = true;
       usersRef[opponentId] = false;
+      // usersRef["members"] = [creatorId];
 
       let leagueId: string = this.fbLeagues.push({
         name: name,
-        users: usersRef
+        users: usersRef,
       }).key;
 
       if (leagueId) {

@@ -40,7 +40,8 @@ export class UserData {
       }
 
       this.db.object('/UserProfiles/' + spotifyUser.id).update({
-        dateCreated: new Date()
+        dateCreated: new Date(),
+        userEmail: spotifyUser.email
       }).then(_ => {
         this.loadUser(spotifyUser.id).then(user => resolve(user));
       }).catch(err => reject(err));
@@ -58,6 +59,7 @@ export class UserData {
 
         let user = <User>{
           id: fbuser.$key,
+          email: fbuser.userEmail,
           leagues: [],
           dateCreated: fbuser.dateCreated
         };

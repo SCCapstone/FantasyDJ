@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { SpotifyProvider } from '../../providers/spotify-provider';
 import { SpotifySearchResult } from '../../models/spotify-models';
 import { League, User } from '../../models/fantasydj-models';
 
 import { LeagueData } from '../../providers/league-provider';
+import { SongData } from '../../providers/song-provider';
 
 /*
   Generated class for the Search page.
@@ -24,15 +25,20 @@ public tracks:any;
 
   user: User;
   league: League;
+  opponent_id: string;
   query: string = "";
   results: SpotifySearchResult;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              public alert: AlertController,
               private spotify: SpotifyProvider,
-              private leagueData: LeagueData) {
+              private leagueData: LeagueData,
+              private songData: SongData) {
     this.league = this.navParams.get('league');
     this.user = this.navParams.get('user');
+    this.opponent_id = this.navParams.get('opponent_id');
+    this.alert = alert;
   }
 
 
@@ -56,7 +62,13 @@ public tracks:any;
   }
 
   
-  addSong(user, league, track) {
+  addSong(user, opponent_id, league, track) {
+
+      if (this.leagueData.songAlreadyInLeague(this.songData.getKeyFromSpotifyId(track.id), league.id, 
+                                              user.id, this.opponent_id) == true){
+          this.showAlertPopup();
+      }
+    else{
     this.leagueData.addSong(
       user.id,
       league.id,
@@ -69,6 +81,15 @@ public tracks:any;
     }).catch(err => {
       console.log(err, 'error adding new song');
     });
+  }
+  }
+
+  showAlertPopup(){
+    let popup = this.alert.create({
+      title: 'That song has already been chosen. Please choose another.',
+      buttons: ['Okay']
+    });
+    popup.present();
   }
 
 }

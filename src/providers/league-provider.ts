@@ -113,7 +113,7 @@ export class LeagueData {
                         songName: string,
                         songArtist: string ): Promise<League> {
     return new Promise<League>((resolve, reject) => {
-
+      console.log('adding song: ' + songName);
       var song = null;
       this.db.list('/Songs/', {
         query: {
@@ -142,6 +142,7 @@ export class LeagueData {
           }
         }});}
       else{
+        console.log('Entered add song push');
         song = this.db.list('/Songs').push({
         spotifyId: songId,
         name: songName,
@@ -236,5 +237,19 @@ getCreatorId(leagueId: string): string {
       creator_id = snapshot.val();
     });
     return creator_id;
+}
+
+songAlreadyInLeague(songId: string, leagueId: string, 
+                  userId: string, opponent_id: string): boolean{
+  if(!songId) return false;
+  console.log('query: ' + '/Leagues/'+leagueId+'/users/'+opponent_id+'/'+songId);
+  let test = this.db.object('/Songs/' + songId + '/leagues/' + leagueId);
+  console.log('songAlreadyInLeague: ' + test);
+  if(test){
+    return true;
+  }
+  else return false;
+  
+  
 }
 }

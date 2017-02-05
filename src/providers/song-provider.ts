@@ -65,4 +65,25 @@ export class SongData {
     }
       return song;
   }
+
+  getKeyFromSpotifyId(spotifyId: string): any {
+     this.db.list('Songs/', {
+      query: {
+        orderByChild: 'spotifyId',
+        equalTo: spotifyId
+      }}).subscribe(songs =>{
+        console.log(songs);
+        if(songs.length == 0){
+          return null;
+        }
+        else{
+          console.log('get key: ' + songs[0].$key);
+          return songs[0].$key;
+        }
+
+    });
+  }
+
+
+
 }

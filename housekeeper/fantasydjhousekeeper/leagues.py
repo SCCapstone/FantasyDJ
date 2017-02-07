@@ -13,20 +13,28 @@ class LeagueModel(object):
         self.db = db
         self.song_model = SongModel(db)
 
+    def __league_from_result(self, fbleague):
+        val = fbleague.val()
+
+        if val is None:
+            raise ValueError('value of league result is None')
+
+        league = League(
+            fbleague.key(),
+            val['name'],
+            [key_id for key_id in val['users'].keys()],
+            get_date(val, 'draftDate'),
+            get_date(val, 'endTime'),
+            get_val(val, 'winner')
+        )
+        return league
+
     def get_active_leagues(self):
-        leagues = []
         fbleagues = self.db.child('Leagues').get()
-        for fbleague in fbleagues.each():
-            val = fbleague.val()
-            loaded = League(
-                fbleague.key(),
-                val['name'],
-                [key_id for key_id in val['users'].keys()],
-                get_date(val, 'draftDate'),
-                get_date(val, 'endTime'),
-                get_val(val, 'winner')
-            )
-            leagues.append(loaded)
+        leagues = [
+            self.__league_from_result(fbleague)
+            for fbleague in fbleagues.each()
+        ]
 
         # now = datetime.now()
         return [
@@ -45,6 +53,13 @@ class LeagueModel(object):
         if val in [True, False, None] or not hasattr(val, 'keys'):
             return None
 
-        songs = [self.song_model.get_song(song_id) for song_id in val.keys()]
+        songs = []
+        for song_id in val.keys():
+            try:
+                songs.append(self.song_model.get_song(song_id))
+            except:
+                logger.debug('song %s may not exist' % (song_id))
+                pass
 
-        return [song for song in songs if song is not None]
+        return songs
+

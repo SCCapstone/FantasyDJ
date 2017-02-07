@@ -15,7 +15,7 @@ class SongModel(object):
         val = fbsong.val()
 
         if val is None:
-            raise ValueError('value is None')
+            raise ValueError('value of song result is None')
 
         leagues = None
         try:

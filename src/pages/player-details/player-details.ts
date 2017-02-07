@@ -28,7 +28,7 @@ export class PlayerDetailsPage {
   songs: Observable<Song[]>;
   users: FirebaseListObservable<any[]>;
   opp_songs: Observable<Song[]>;
-  opponent_id: string;
+  opponent: User;
 
 
   constructor(public navCtrl: NavController,
@@ -38,13 +38,25 @@ export class PlayerDetailsPage {
               private leagueData: LeagueData) {
     this.user = this.navParams.get('user');
     this.league = this.navParams.get('league');
-    if (this.leagueData.getCreatorId(this.league.id) == this.user.id){
-      this.creator = true;
-    } 
-    else this.creator = false;
+    this.leagueData.getCreator(this.league.id).then(user => {
+      if(user.id == this.user.id) {
+        this.creator = true;
+      }
+      else {
+        this.creator = false;
+      }
+      console.log("this.creator: " + this.creator);
+    });  
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
-    this.opponent_id = this.leagueData.getOpponentId(this.user.id, this.league.id);
-    this.opp_songs = this.songData.loadSongs(this.league.id, this.opponent_id);
+    this.leagueData.getOpponent(this.user.id, this.league.id).then(opp =>{
+      console.log(opp);
+      this.opponent = opp;
+      this.opp_songs = this.songData.loadSongs(this.league.id, this.opponent.id);
+      console.log("opponent_id: " + this.opponent.id);
+    });
+    
+    
+    
   }
 
   ionViewDidLoad() {
@@ -53,11 +65,10 @@ export class PlayerDetailsPage {
     console.log(this.user)
   }
 
-  goToSearch(user, opponent_id, league) {
+  goToSearch(user, league) {
     this.navCtrl.push(SearchPage, {
       league: league,
-      user : user,
-      opponent_id: opponent_id
+      user : user
     });
   }
 

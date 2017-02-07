@@ -6,7 +6,9 @@ import { AngularFireDatabase,
 import { Observable } from 'rxjs/Observable';
 
 import { SongData } from './song-provider';
+import { UserData } from './user-provider';
 import { League} from '../models/fantasydj-models';
+import { User } from '../models/fantasydj-models';
 
 @Injectable()
 export class LeagueData {
@@ -14,7 +16,8 @@ export class LeagueData {
   private fbLeagues: FirebaseListObservable<any[]>;
 
   constructor(private db: AngularFireDatabase,
-              private songData: SongData) {
+              private songData: SongData,
+              private userData: UserData) {
     this.fbLeagues = this.db.list('/Leagues');
   }
 
@@ -124,22 +127,31 @@ export class LeagueData {
     return new Promise<League>((resolve, reject) => {
       this.songData.createSong(spotifyTrackId, songName, songArtist)
         .then(song => {
-          this.loadLeague(leagueId).then(league => {
-            if (!song.id) {
-              reject('song was returned but is undefined');
-            }
-            else {
-              this.dbObj('Leagues', leagueId, 'users', userId, song.id)
-                .set(true)
-                .then(_ => {
-                  this.dbObj('Songs', song.id, 'leagues', leagueId)
+          this.dbObj('Songs', song.id, 'leagues', leagueId)
+            .subscribe(snapshot => {
+              if(snapshot.val()==true){
+                reject('song alrady in league');
+              }
+              else{
+                this.loadLeague(leagueId).then(league => {
+                if (!song.id) {
+                  reject('song was returned but is undefined');
+                }
+                else {
+                  this.dbObj('Leagues', leagueId, 'users', userId, song.id)
                     .set(true)
-                    .then(_ => resolve(league))
+                    .then(_ => {
+                      this.dbObj('Songs', song.id, 'leagues', leagueId)
+                        .set(true)
+                        .then(_ => resolve(league))
+                        .catch(err => reject(err));
+                    })
                     .catch(err => reject(err));
-                })
-                .catch(err => reject(err));
-            }
-          });
+                }
+              });
+              }
+            });
+
         });
     });
   }
@@ -198,38 +210,33 @@ export class LeagueData {
     });
   }
 
-getOpponentId(userId: string, leagueId: string): string {
-  let opponent_id: string = null;
-  this.db.list('/Leagues/'+leagueId+'/users/').forEach(user=>{
+getOpponent(userId: string, leagueId: string): Promise<User> {
+  return new Promise<User>((resolve, reject) => {
+  this.db.list('/Leagues/'+leagueId+'/users/').subscribe(user=>{
       if (user.length > 0){
-        for(var i = 0; i < user.length; i++)
+        for(var i = 0; i < user.length; i++){
           if (user[i].$key != userId){
-            opponent_id = user[i].$key;
-      } }  
+            console.log('user[i].$key: ' + user[i].$key);
+            this.userData.loadUser(user[i].$key).then(user =>
+              resolve(user))
+              .catch(err => reject(err));
+          } 
+        } 
+      } 
     });
-  return opponent_id;
+    });
 } 
 
-getCreatorId(leagueId: string): string {
-  let creator_id: string = null;
+getCreator(leagueId: string): Promise<User> {
+  return new Promise<User>((resolve, reject) => {
   this.db.object('/Leagues/' + leagueId + '/creator', 
     {preserveSnapshot: true}).subscribe(snapshot => {
-      creator_id = snapshot.val();
+      console.log(snapshot.val());
+      this.userData.loadUser(snapshot.val()).then(user =>
+        resolve(user))
+        .catch(err => reject(err));
     });
-    return creator_id;
+  });
 }
 
-songAlreadyInLeague(songId: string, leagueId: string, 
-                  userId: string, opponent_id: string): boolean{
-  if(!songId) return false;
-  console.log('query: ' + '/Leagues/'+leagueId+'/users/'+opponent_id+'/'+songId);
-  let test = this.db.object('/Songs/' + songId + '/leagues/' + leagueId);
-  console.log('songAlreadyInLeague: ' + test);
-  if(test){
-    return true;
-  }
-  else return false;
-  
-  
-}
 }

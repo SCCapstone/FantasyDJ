@@ -128,20 +128,6 @@ export class SongData {
     return song;
   }
 
-  getKey(spotifyId: string): string{
-    this.getSong(spotifyId).subscribe(song =>{
-      console.log('SONG' + song);
-    });
-    return 'true';
-  }
-
-  getSong(spotifyId: string): FirebaseListObservable<any[]> {
-    return this.db.list('Songs/', {
-      query: {
-        orderByChild: 'spotifyId',
-        equalTo: spotifyId
-      }});
-  }
 
 
 

@@ -37,7 +37,6 @@ public tracks:any;
               private songData: SongData) {
     this.league = this.navParams.get('league');
     this.user = this.navParams.get('user');
-    this.opponent_id = this.navParams.get('opponent_id');
     this.alert = alert;
   }
 
@@ -62,6 +61,7 @@ public tracks:any;
   }
 
   addSong(user, league, track) {
+    console.log(track);
     this.leagueData.addSong(
       user.id,
       league.id,

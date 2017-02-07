@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { async } from '@angular/core/testing';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
-
 
 import { Song } from '../models/fantasydj-models';
 
@@ -10,6 +10,7 @@ import { Song } from '../models/fantasydj-models';
 export class SongData {
 
   private fbSongs: FirebaseListObservable<any[]>;
+  private cachedSongs: any = {};
 
   constructor(private db: AngularFireDatabase) {
     this.fbSongs = this.db.list('/Songs');
@@ -47,55 +48,75 @@ export class SongData {
       });
   }
 
-loadSongFromSpotifyId(songId): Promise<Song> {
+  loadSongBySpotifyId(spotifyTrackId: string): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
-    console.log('loading song from spotify Id');
-    this.db.list('/Songs/', {
-        query: {
-          orderByChild: 'spotifyId',
-          equalTo: songId,
-          limitToFirst: 1
-        }
-      }).map(items => {
-        for (let item of items) {
-          console.log(item);
-          this.loadSong(item.$key)
-            .then(song => {
-              resolve(song);
-              console.log(song);})
-            .catch(error => reject(error));
-        }
-      });
-  });
-}
+      console.log("loadSongBySpotifyId called");
 
-  addSong(spotifyId: string, 
-          userId: string, 
-          leagueId: string, 
-          songName: string,
-          songArtist: string ): Promise<boolean>{
-    return new Promise<boolean>((resolve, reject) => {
-      console.log('adding song: ' + songName);
-      console.log(this.loadSongFromSpotifyId(spotifyId));
-      this.loadSongFromSpotifyId(spotifyId).then(song => {
-        console.log(song);
-        console.log(song.leagues);
-        resolve(true);
-      }).catch(err => reject(err));
+      if (this.cachedSongs[spotifyTrackId]) {
+        this.loadSong(this.cachedSongs[spotifyTrackId]).then(song => {
+          console.log('song ' + song.id + ' loaded via cached id');
+          resolve(song);
+        });
+      }
+      else {
+        let songs = this.db.list('Songs', {
+          query: {
+            orderByChild: 'spotifyId',
+            equalTo: spotifyTrackId,
+            limitToFirst: 1
+          }
+        }).map(items => {
+          if (items != null && items.length > 0) {
+            return this.mapFBSong(items[0]);
+          }
+          else {
+            return null;
+          }
+        }).subscribe(song => {
+          console.log(song);
+          if (song) {
+            console.log('song ' + song.id + ' loaded via spotifyId query');
+            this.cachedSongs[spotifyTrackId] = song.id;
+            resolve(song);
+          }
+          else {
+            reject('song not found by spotifyTrackId ' + spotifyTrackId);
+          }
+        });
+      }
     });
   }
 
+  createSong(spotifyTrackId: string,
+             songName: string,
+             songArtist: string): Promise<Song> {
+    return new Promise<Song>((resolve, reject) => {
+      this.loadSongBySpotifyId(spotifyTrackId).then(song => {
+        resolve(song);
+      }).catch(err => {
+        let songId = this.db.list('/Songs').push({
+          spotifyId: spotifyTrackId,
+          name: songName,
+          artist: songArtist
+        }).key;
+        if (songId) {
+          resolve(this.loadSong(songId));
+        }
+        else {
+          reject('song creation error');
+        }
+      });
+    });
+  }
 
-
-
-  private mapFBSong(fbsong): Song {
-    console.log('start mapFBSong');
+  private mapFBSong(fbsong: any): Song {
     if ('$value' in fbsong && ! fbsong.$value) {
       console.log(fbsong, 'returning null');
       return null;
     }
 
     let song = <Song>{
+      id: fbsong.$key,
       artist: fbsong.artist,
 	    name: fbsong.name,
 	    spotifyId: fbsong.spotifyId,
@@ -104,7 +125,7 @@ loadSongFromSpotifyId(songId): Promise<Song> {
     for (var key in fbsong.leagues) {
       song.leagues.push(key);
     }
-      return song;
+    return song;
   }
 
   getKey(spotifyId: string): string{

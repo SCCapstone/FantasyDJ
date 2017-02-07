@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
+import { AngularFireDatabase,
+         FirebaseListObservable,
+         FirebaseObjectObservable} from 'angularfire2';
+
+<<<<<<< HEAD
+=======
 import { Observable } from 'rxjs/Observable';
 
+import { SongData } from './song-provider';
+>>>>>>> addsong_fix
 import { League} from '../models/fantasydj-models';
 
 @Injectable()
@@ -9,7 +16,8 @@ export class LeagueData {
 
   private fbLeagues: FirebaseListObservable<any[]>;
 
-  constructor(private db: AngularFireDatabase) {
+  constructor(private db: AngularFireDatabase,
+              private songData: SongData) {
     this.fbLeagues = this.db.list('/Leagues');
   }
 
@@ -49,6 +57,7 @@ export class LeagueData {
       let usersRef = {};
       usersRef[creatorId] = true;
       usersRef[opponentId] = false;
+      // usersRef["members"] = [creatorId];
 
       let leagueId: string = this.fbLeagues.push({
         name: name,
@@ -84,6 +93,10 @@ export class LeagueData {
     return url;
   }
 
+  private dbObj(...pathElems: string[]): FirebaseObjectObservable<any> {
+    return this.db.object('/' + pathElems.join('/'));
+  }
+
   private mapFBLeague(fbleague): League {
     console.log('start mapFBLeague');
     if ('$value' in fbleague && ! fbleague.$value) {
@@ -106,71 +119,31 @@ export class LeagueData {
     return league;
   }
 
-
   addSong(userId: string,
-                        leagueId: string,
-                        songId: string,
-                        songName: string,
-                        songArtist: string ): Promise<League> {
+          leagueId: string,
+          spotifyTrackId: string,
+          songName: string,
+          songArtist: string): Promise<League> {
     return new Promise<League>((resolve, reject) => {
-      console.log('adding song: ' + songName);
-      var song = null;
-      let songs = this.db.list('/Songs/', {
-        query: {
-          orderByChild: 'spotifyId',
-          equalTo: songId,
-          limitToFirst: 1
-        },
-        preserveSnapshot: true
-      });
-      songs.subscribe(snapshots =>  {
-        snapshots.forEach(snapshot => {
-        console.log(snapshot.key);
-        if(snapshot.key != null){
-          song = snapshot.key
-          console.log('Song already in db ' + song);
-          this.db.object('/Songs/'+song+'/leagues/'+leagueId).subscribe(test => {
-              console.log(test.$value);
-              if(test.$value == true){
-                console.log('This song already in league');
-                reject('Song already in league');
-              }
-            });
-          if (song) {
-            console.log('Entered if song');
-            this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
-            this.db.object('/Songs/'+song+'/leagues/'+leagueId).set(true);
-            this.loadLeague(leagueId)
-              .then(league => resolve(league))
-              .catch(error => reject(error));
-          }
-          else {
-            reject('song found but error');
-          }
-        }
-      else{
-        console.log('Entered add song push');
-        song = this.db.list('/Songs').push({
-        spotifyId: songId,
-        name: songName,
-        artist: songArtist
-        }).key;
-        if (song) {
-          console.log(song);
-          this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
-          this.db.object('/Songs/'+song+'/leagues/'+leagueId).set(true);
-          this.loadLeague(leagueId)
-            .then(league => resolve(league))
-            .catch(error => reject(error));
-        }
-        else {
-          reject('no song generated');
-        }
-      }     
-      });
-      
-    
-    });
+      this.songData.createSong(spotifyTrackId, songName, songArtist)
+        .then(song => {
+          this.loadLeague(leagueId).then(league => {
+            if (!song.id) {
+              reject('song was returned but is undefined');
+            }
+            else {
+              this.dbObj('Leagues', leagueId, 'users', userId, song.id)
+                .set(true)
+                .then(_ => {
+                  this.dbObj('Songs', song.id, 'leagues', leagueId)
+                    .set(true)
+                    .then(_ => resolve(league))
+                    .catch(err => reject(err));
+                })
+                .catch(err => reject(err));
+            }
+          });
+        });
     });
   }
 

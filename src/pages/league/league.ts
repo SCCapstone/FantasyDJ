@@ -6,6 +6,7 @@ import { PlayerDetailsPage } from '../player-details/player-details';
 import { League, User } from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
 import { UserData } from '../../providers/user-provider';
+import {OpponentDetailsPage} from "../opponent-details/opponent-details";
 
 /*
   Generated class for the League page.
@@ -22,6 +23,7 @@ export class LeaguePage {
   league: League;
   playerDetailsPage = PlayerDetailsPage;
   users: Observable<User[]>;
+  current: User = null;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -30,18 +32,31 @@ export class LeaguePage {
               private userData: UserData) {
     this.league = this.navParams.get('league');
     this.users = this.userData.loadUsers(this.league.id);
-    
-  }
+    this.userData.loadCurrentUser().then(user => {
+      this.current = user;
+
+    }).catch(error => console.log(error));
+}
 
   ionViewDidLoad() {
-    console.log('Hello League Page');
+    console.log('Hello League page');
+
   }
 
   goToPlayer(user, league) {
-    this.navCtrl.push(PlayerDetailsPage, {
-      user: user,
-      league: league
-    });
+    console.log("user: " + user.id);
+    if(this.current.id == user.id){
+      this.navCtrl.push(PlayerDetailsPage, {
+        user: user,
+        league: league
+      });
+    }
+    else {
+      this.navCtrl.push(OpponentDetailsPage, {
+        user: user,
+        league: league
+      });
+    }
   }
 
   deleteThisLeague() {

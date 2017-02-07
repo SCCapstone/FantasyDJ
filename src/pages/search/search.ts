@@ -61,22 +61,22 @@ public tracks:any;
   console.log('clicked card');
   }
 
-  
-  addSong(user, opponent_id, league, track) {
-      this.songData.addSong(
+  addSong(user, league, track) {
+    this.leagueData.addSong(
       user.id,
       league.id,
       track.id,
       track.name,
       track.album.artists[0].name
     ).then(song => {
+      console.log('added song: ' + song.name);
+      console.log("Track id: " + track.id)
       this.navCtrl.pop();
     }).catch(err => {
       this.showAlertPopup(err);
       console.log(err, 'error adding new song');
     });
   }
-
 
   showAlertPopup(message){
     let popup = this.alert.create({

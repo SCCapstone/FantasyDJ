@@ -30,8 +30,8 @@ export class PlayerDetailsPage {
   opp_songs: Observable<Song[]>;
   opponent_id: string;
 
-  constructor(public navCtrl: NavController, 
-              private db: AngularFireDatabase,
+
+  constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private songData: SongData,
               private userData: UserData,
@@ -49,6 +49,8 @@ export class PlayerDetailsPage {
 
   ionViewDidLoad() {
     console.log('Hello PlayerDetails Page');
+    console.log(this.league)
+    console.log(this.user)
   }
 
   goToSearch(user, opponent_id, league) {

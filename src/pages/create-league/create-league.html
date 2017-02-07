@@ -13,15 +13,17 @@
 </ion-header>
 
 <ion-content padding class="create-league">
+  <form [formGroup]="leagueForm"  (ngSubmit)="createLeague()">
 	<ion-item>
 		<ion-label stacked>League Name</ion-label>
-		<ion-input [(ngModel)]="name" type="text" placeholder="League Name"></ion-input>
+		<ion-input type="text" placeholder="League Name" formControlName="name"></ion-input>
 	</ion-item>
 	<ion-item>
 		<ion-label stacked>Opponent, we will send them an invitation to join.</ion-label>
-		<ion-input [(ngModel)]="opponent" type="text" placeholder="Who would you like to invite?" name="opponent"></ion-input>
+		<ion-input type="text" placeholder="Who would you like to invite?"  formControlName="opponent"></ion-input>
 	</ion-item>
-	<button block (click)="createLeague()"> Create League </button>
+	<button block type="submit" [disabled]="!leagueForm.valid">Create League</button>
+  </form>
 
 
 </ion-content>

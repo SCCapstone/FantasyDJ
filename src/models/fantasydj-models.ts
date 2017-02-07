@@ -1,5 +1,6 @@
 export interface User {
   id?: string,
+  email?: string,
   leagues?: any[],
   dateCreated: Date
 };
@@ -15,6 +16,7 @@ export interface League {
 };
 
 export interface Song {
+  id: string,
 	artist: string,
 	name: string,
 	spotifyId: string,

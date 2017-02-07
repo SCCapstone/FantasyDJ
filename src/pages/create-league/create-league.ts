@@ -5,14 +5,15 @@ import { OAuthService } from '../../providers/oauth-service';
 import { User} from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
 import { UserData } from '../../providers/user-provider';
+import {Validators, FormBuilder } from '@angular/forms';
 
 
 /*
-  Generated class for the CreateLeague page.
+ Generated class for the CreateLeague page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+ See http://ionicframework.com/docs/v2/components/#navigation for more info on
+ Ionic pages and navigation.
+ */
 @Component({
   selector: 'page-create-league',
   templateUrl: 'create-league.html'
@@ -22,12 +23,18 @@ export class CreateLeaguePage {
 
   name: string;
   opponent: string;
+  leagueForm: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private authService: OAuthService,
               private userData: UserData,
-              private leagueData: LeagueData) {
+              private leagueData: LeagueData,
+              private formBuilder: FormBuilder) {
+    this.leagueForm = this.formBuilder.group({
+      name: ['', Validators.compose([Validators.pattern('[a-zA-Z ]*'), Validators.required])],
+      opponent: ['', Validators.required],
+    });
     if (this.authService.token) {
       this.userData.loadCurrentUser().then(user => {
         this.currentUser = user;
@@ -41,9 +48,9 @@ export class CreateLeaguePage {
 
   createLeague(){
     this.leagueData.createLeague(
-      this.name,
+      this.leagueForm.value.name,
       this.currentUser.id,
-      this.opponent
+      this.leagueForm.value.opponent
     ).then(league => {
       console.log('created league: ' + league.name);
       this.navCtrl.pop();

@@ -3,12 +3,9 @@ import { AngularFireDatabase,
          FirebaseListObservable,
          FirebaseObjectObservable} from 'angularfire2';
 
-<<<<<<< HEAD
-=======
 import { Observable } from 'rxjs/Observable';
 
 import { SongData } from './song-provider';
->>>>>>> addsong_fix
 import { League} from '../models/fantasydj-models';
 
 @Injectable()

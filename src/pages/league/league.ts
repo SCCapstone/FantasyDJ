@@ -30,6 +30,7 @@ export class LeaguePage {
               private userData: UserData) {
     this.league = this.navParams.get('league');
     this.users = this.userData.loadUsers(this.league.id);
+    
   }
 
   ionViewDidLoad() {

@@ -38,7 +38,6 @@ export class PlayerDetailsPage {
               private leagueData: LeagueData) {
     this.user = this.navParams.get('user');
     this.league = this.navParams.get('league');
-    console.log(this.leagueData.getCreatorId(this.league.id));
     if (this.leagueData.getCreatorId(this.league.id) == this.user.id){
       this.creator = true;
     } 
@@ -46,17 +45,17 @@ export class PlayerDetailsPage {
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.opponent_id = this.leagueData.getOpponentId(this.user.id, this.league.id);
     this.opp_songs = this.songData.loadSongs(this.league.id, this.opponent_id);
-    console.log('creator: ' + this.creator);
   }
 
   ionViewDidLoad() {
     console.log('Hello PlayerDetails Page');
   }
 
-  goToSearch(user, league) {
+  goToSearch(user, opponent_id, league) {
     this.navCtrl.push(SearchPage, {
       league: league,
-      user : user
+      user : user,
+      opponent_id: opponent_id
     });
   }
 

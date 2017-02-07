@@ -47,6 +47,47 @@ export class SongData {
       });
   }
 
+loadSongFromSpotifyId(songId): Promise<Song> {
+    return new Promise<Song>((resolve, reject) => {
+    console.log('loading song from spotify Id');
+    this.db.list('/Songs/', {
+        query: {
+          orderByChild: 'spotifyId',
+          equalTo: songId,
+          limitToFirst: 1
+        }
+      }).map(items => {
+        for (let item of items) {
+          console.log(item);
+          this.loadSong(item.$key)
+            .then(song => {
+              resolve(song);
+              console.log(song);})
+            .catch(error => reject(error));
+        }
+      });
+  });
+}
+
+  addSong(spotifyId: string, 
+          userId: string, 
+          leagueId: string, 
+          songName: string,
+          songArtist: string ): Promise<boolean>{
+    return new Promise<boolean>((resolve, reject) => {
+      console.log('adding song: ' + songName);
+      console.log(this.loadSongFromSpotifyId(spotifyId));
+      this.loadSongFromSpotifyId(spotifyId).then(song => {
+        console.log(song);
+        console.log(song.leagues);
+        resolve(true);
+      }).catch(err => reject(err));
+    });
+  }
+
+
+
+
   private mapFBSong(fbsong): Song {
     console.log('start mapFBSong');
     if ('$value' in fbsong && ! fbsong.$value) {
@@ -66,22 +107,19 @@ export class SongData {
       return song;
   }
 
-  getKeyFromSpotifyId(spotifyId: string): any {
-     this.db.list('Songs/', {
+  getKey(spotifyId: string): string{
+    this.getSong(spotifyId).subscribe(song =>{
+      console.log('SONG' + song);
+    });
+    return 'true';
+  }
+
+  getSong(spotifyId: string): FirebaseListObservable<any[]> {
+    return this.db.list('Songs/', {
       query: {
         orderByChild: 'spotifyId',
         equalTo: spotifyId
-      }}).subscribe(songs =>{
-        console.log(songs);
-        if(songs.length == 0){
-          return null;
-        }
-        else{
-          console.log('get key: ' + songs[0].$key);
-          return songs[0].$key;
-        }
-
-    });
+      }});
   }
 
 

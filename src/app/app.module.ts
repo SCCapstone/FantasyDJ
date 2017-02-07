@@ -10,6 +10,7 @@ import { LeaguePage } from '../pages/league/league';
 import { PlayerDetailsPage } from '../pages/player-details/player-details';
 import { CreateLeaguePage } from '../pages/create-league/create-league';
 import { SearchPage } from '../pages/search/search';
+import { AnalyticsPage } from '../pages/analytics/analytics';
 
 import { AngularFireModule } from 'angularfire2';
 
@@ -36,7 +37,8 @@ export const firebaseConfig = {
     LeaguePage,
     PlayerDetailsPage,
     CreateLeaguePage,
-    SearchPage
+    SearchPage,
+    AnalyticsPage
   ],
   imports: [
     IonicModule.forRoot(FantasyDjApp),
@@ -52,7 +54,8 @@ export const firebaseConfig = {
     LeaguePage,
     PlayerDetailsPage,
     CreateLeaguePage,
-    SearchPage
+    SearchPage,
+    AnalyticsPage
   ],
   providers: [
     OAuthService,

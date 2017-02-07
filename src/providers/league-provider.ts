@@ -115,22 +115,29 @@ export class LeagueData {
     return new Promise<League>((resolve, reject) => {
       console.log('adding song: ' + songName);
       var song = null;
-      this.db.list('/Songs/', {
+      let songs = this.db.list('/Songs/', {
         query: {
           orderByChild: 'spotifyId',
           equalTo: songId,
           limitToFirst: 1
         },
         preserveSnapshot: true
-      }).subscribe(snapshots =>  {
-      if(snapshots.length > 0){
+      });
+      songs.subscribe(snapshots =>  {
         snapshots.forEach(snapshot => {
         console.log(snapshot.key);
         if(snapshot.key != null){
           song = snapshot.key
           console.log('Song already in db ' + song);
+          this.db.object('/Songs/'+song+'/leagues/'+leagueId).subscribe(test => {
+              console.log(test.$value);
+              if(test.$value == true){
+                console.log('This song already in league');
+                reject('Song already in league');
+              }
+            });
           if (song) {
-            console.log(song);
+            console.log('Entered if song');
             this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
             this.db.object('/Songs/'+song+'/leagues/'+leagueId).set(true);
             this.loadLeague(leagueId)
@@ -140,7 +147,7 @@ export class LeagueData {
           else {
             reject('song found but error');
           }
-        }});}
+        }
       else{
         console.log('Entered add song push');
         song = this.db.list('/Songs').push({
@@ -160,10 +167,13 @@ export class LeagueData {
           reject('no song generated');
         }
       }     
+      });
+      
     
     });
     });
   }
+
 
   deleteLeague(leagueId: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {

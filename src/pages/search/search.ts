@@ -63,30 +63,24 @@ public tracks:any;
 
   
   addSong(user, opponent_id, league, track) {
-
-      if (this.leagueData.songAlreadyInLeague(this.songData.getKeyFromSpotifyId(track.id), league.id, 
-                                              user.id, this.opponent_id) == true){
-          this.showAlertPopup();
-      }
-    else{
-    this.leagueData.addSong(
+      this.songData.addSong(
       user.id,
       league.id,
       track.id,
       track.name,
       track.album.artists[0].name
     ).then(song => {
-      console.log('added song: ' + song.name);
       this.navCtrl.pop();
     }).catch(err => {
+      this.showAlertPopup(err);
       console.log(err, 'error adding new song');
     });
   }
-  }
 
-  showAlertPopup(){
+
+  showAlertPopup(message){
     let popup = this.alert.create({
-      title: 'That song has already been chosen. Please choose another.',
+      title: message,
       buttons: ['Okay']
     });
     popup.present();

@@ -1,5 +1,4 @@
-from . import spotify
-import fantasydj
+from .fantasydj import FantasyDJ
 import argparse
 
 parser = argparse.ArgumentParser(description='FantasyDJ nightly housekeeping process')
@@ -7,6 +6,8 @@ parser.add_argument('-t', '--track', help='the spotify track id of a song for wh
 parser.add_argument('-a', '--alltracks', action='store_true', help='get all stats, grouped by song')
 parser.add_argument('-c', '--compile', help='Start scoring for league tally')
 args = parser.parse_args()
+
+fantasydj = FantasyDJ()
 
 if args.alltracks:
     fantasydj.print_song_stats()
@@ -19,5 +20,4 @@ elif args.track is not None:
         print('No song returned for %s' % args.track)
 
 else:
-    sp = spotify.Spotify()
-    fantasydj.update_song_stats(sp)
+    fantasydj.update_song_stats()

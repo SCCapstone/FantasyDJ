@@ -9,6 +9,7 @@ import { SongData } from './song-provider';
 import { UserData } from './user-provider';
 import { League} from '../models/fantasydj-models';
 import { User } from '../models/fantasydj-models';
+import 'rxjs/add/operator/take';
 
 @Injectable()
 export class LeagueData {
@@ -128,7 +129,9 @@ export class LeagueData {
       this.songData.createSong(spotifyTrackId, songName, songArtist)
         .then(song => {
           this.dbObj('Songs', song.id, 'leagues', leagueId)
+            .take(1)
             .subscribe(snapshot => {
+              console.log(snapshot);
               if(snapshot.$value==true){
                 reject('song alrady in league');
               }

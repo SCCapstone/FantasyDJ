@@ -8,6 +8,7 @@ export interface User {
 export interface League {
   id: string,
   name: string,
+  creator: string,
   users: any[],
   draftDate: Date,
   endTime: Date,

@@ -61,7 +61,7 @@ public tracks:any;
   }
 
   addSong(user, league, track) {
-    console.log(track);
+    console.log(league);
     this.leagueData.addSong(
       user.id,
       league.id,

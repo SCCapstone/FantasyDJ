@@ -20,7 +20,7 @@
       <ion-item text-wrap>{{ song.name }} by {{ song.artist }}</ion-item>
     </ion-card>
     <div *ngIf="( songs | async)?.length <= (opp_songs | async)?.length && creator == true ">
-      <ion-card (click)="goToSearch(user, opponent_id, league)">
+      <ion-card (click)="goToSearch(user, league)">
         <ion-card-content>
                   <ion-card-title>
                     Add New Song
@@ -29,7 +29,7 @@
               </ion-card>
   </div>
   <div *ngIf="( songs | async)?.length < (opp_songs | async)?.length && creator == false ">
-      <ion-card (click)="goToSearch(user, opponent_id, league)">
+      <ion-card (click)="goToSearch(user, league)">
         <ion-card-content>
                   <ion-card-title>
                     Add New Song

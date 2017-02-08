@@ -129,7 +129,7 @@ export class LeagueData {
         .then(song => {
           this.dbObj('Songs', song.id, 'leagues', leagueId)
             .subscribe(snapshot => {
-              if(snapshot.val()==true){
+              if(snapshot.$value==true){
                 reject('song alrady in league');
               }
               else{

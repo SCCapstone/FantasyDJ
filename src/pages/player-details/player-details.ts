@@ -54,9 +54,7 @@ export class PlayerDetailsPage {
       this.opp_songs = this.songData.loadSongs(this.league.id, this.opponent.id);
       console.log("opponent_id: " + this.opponent.id);
     });
-    
-    
-    
+     
   }
 
   ionViewDidLoad() {

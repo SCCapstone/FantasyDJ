@@ -22,7 +22,11 @@ class FantasyDJ(object):
         self.stat_model = SongStatModel(db)
         self.spotify = Spotify()
 
-    def print_song_stats(self, provided_song_id=None):
+    def print_song_stats(self, provided_song_id=None, spotify_track_id=None):
+        if not provided_song_id and spotify_track_id:
+            provided_song_id = self.song_model.get_song_by_spotify_id(
+                spotify_track_id
+            ).id
         for song_id, stats in self.stat_model.get_all_stats_grouped_by_song_id(
                 provided_song_id
         ).iteritems():

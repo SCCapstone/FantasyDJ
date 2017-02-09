@@ -15,11 +15,12 @@ def get_val(d, k):
     except KeyError:
         return None
 
-DATETIME_FMT = '%Y-%m-%dT%H:%M.%S%f'
+
+DATETIME_FMT = '%Y-%m-%dT%H:%M:%S.%f'
 DATE_FMT = '%Y-%m-%d'
 
-def get_date(d, k):
-    str_val = get_val(d, k)
+
+def date_from_str(str_val):
     if str_val is not None:
         try:
             dt_val = datetime.strptime(str_val, DATETIME_FMT)
@@ -28,5 +29,13 @@ def get_date(d, k):
         return dt_val
     return None
 
+
+EPOCH_STR = '1970-01-01T00:00:00.000'
+
+
 def str_from_date(dt):
     return dt.strftime(DATE_FMT)
+
+
+def get_date(d, k):
+    return date_from_str(get_val(d, k))

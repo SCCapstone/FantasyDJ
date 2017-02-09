@@ -3,7 +3,6 @@ from .entities import League
 from .songs import SongModel
 from .util import get_val, get_date
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -62,4 +61,3 @@ class LeagueModel(object):
                 pass
 
         return songs
-

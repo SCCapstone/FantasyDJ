@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { async } from '@angular/core/testing';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 

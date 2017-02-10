@@ -31,10 +31,13 @@ def date_from_str(str_val):
 
 
 EPOCH_STR = '1970-01-01T00:00:00.000'
+EPOCH = date_from_str(EPOCH_STR)
 
 
 def str_from_date(dt):
-    return dt.strftime(DATE_FMT)
+    if dt:
+        return dt.strftime(DATE_FMT)
+    return None
 
 
 def get_date(d, k):

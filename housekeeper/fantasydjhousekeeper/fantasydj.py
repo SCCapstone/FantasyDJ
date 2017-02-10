@@ -72,3 +72,37 @@ class FantasyDJ(object):
                                 )
                             )
                             self.stat_model.add_song_stat(song.id, popularity)
+
+    def update_scores(self):
+        for league in self.league_model.get_active_leagues():
+            logger.info('entering league %s' % (league.name))
+            if league.users is not None:
+                for user_id in league.users:
+                    songs = self.league_model.get_playlist(league.id, user_id)
+                    total = 0
+                    if songs:
+                        logger.info(
+                            'entering playlist for user %s:' % (user_id)
+                        )
+                        for song in songs:
+                            stats = self.stat_model.get_song_stats(
+                                song.id,
+                                league.draftDate,
+                                league.endTime
+                            )
+
+                            prev_pop = stats[0].popularity
+                            points = {}
+                            for stat in stats[1:]:
+                                cur_pop = stat.popularity
+                                change = prev_pop - cur_pop
+                                points[str_from_date(stat.date)] = change
+                                prev_pop = cur_pop
+                            self.league_model.update_score(league.id, user_id, song.id, points)
+
+                            print('song %s by %s (%s), points: %s' % (
+                                song.name,
+                                song.artist,
+                                song.spotifyId,
+                                points))
+

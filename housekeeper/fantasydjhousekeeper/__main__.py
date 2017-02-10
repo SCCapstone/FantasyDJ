@@ -27,3 +27,4 @@ elif args.track is not None:
 
 else:
     fantasydj.update_song_stats()
+    fantasydj.update_scores()

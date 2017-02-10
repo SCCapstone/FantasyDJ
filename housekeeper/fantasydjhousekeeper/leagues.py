@@ -61,3 +61,8 @@ class LeagueModel(object):
                 pass
 
         return songs
+
+    def update_score(self, league_id, user_id, song_id, score):
+        self.db.child(
+            'Leagues/%s/users/%s/%s' % (league_id, user_id, song_id)
+        ).set(score)

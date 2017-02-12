@@ -1,7 +1,6 @@
 import logging
-from datetime import datetime
 from .entities import SongStat
-from .util import str_from_date, get_date, EPOCH
+from .util import str_from_date, get_date, EPOCH, begin_of_day
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +19,7 @@ class SongStatModel(object):
         if not start_dt:
             start_dt = EPOCH
         if not end_dt:
-            end_dt = datetime.now()
+            end_dt = begin_of_day()
 
         stats = []
         for fbstat in fbstats.each():
@@ -70,17 +69,17 @@ class SongStatModel(object):
     def get_song_stat(self, song_id, date):
         for stat in self.__query_song_stats(
             song_id, date, date
-        ).each():
+        ):
             return self.__stat_from_result(stat)
         return None
 
     def add_song_stat(self, song_id, popularity):
-        date_str = str_from_date(datetime.now().date())
+        today = begin_of_day()
         data = {
             'songId': song_id,
-            'date': date_str,
+            'date': str_from_date(today),
             'popularity': popularity
         }
 
-        if not self.get_song_stat(song_id, date_str):
+        if not self.get_song_stat(song_id, today):
             self.db.child('SongStats').push(data)

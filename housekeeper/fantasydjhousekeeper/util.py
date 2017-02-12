@@ -34,6 +34,17 @@ EPOCH_STR = '1970-01-01T00:00:00.000'
 EPOCH = date_from_str(EPOCH_STR)
 
 
+def begin_of_day(dtime=None):
+    if not dtime:
+        dtime = datetime.now()
+    return datetime(
+        dtime.year,
+        dtime.month,
+        dtime.day,
+        0, 0, 0, 0
+    )
+
+
 def str_from_date(dt):
     if dt:
         return dt.strftime(DATE_FMT)

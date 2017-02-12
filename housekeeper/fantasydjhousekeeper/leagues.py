@@ -1,9 +1,28 @@
 import logging
 from .entities import League
 from .songs import SongModel
-from .util import get_val, get_date
+from .util import get_val, get_date, str_from_date
 
 logger = logging.getLogger(__name__)
+
+
+def calc_points(stats):
+    if stats and len(stats) > 0:
+        prev_pop = None
+        points_per_day = {}
+
+        for stat in stats:
+            cur_pop = stat.popularity
+
+            if prev_pop:
+                change = prev_pop - cur_pop
+                points_per_day[str_from_date(stat.date)] = change
+
+            prev_pop = cur_pop
+
+        return points_per_day
+
+    return True
 
 
 class LeagueModel(object):
@@ -27,6 +46,11 @@ class LeagueModel(object):
             get_val(val, 'winner')
         )
         return league
+
+    def get_league(self, league_id):
+        return self.__league_from_result(
+            self.db.child('Leagues/%s' % (league_id)).get()
+        )
 
     def get_active_leagues(self):
         fbleagues = self.db.child('Leagues').get()
@@ -62,7 +86,7 @@ class LeagueModel(object):
 
         return songs
 
-    def update_score(self, league_id, user_id, song_id, score):
+    def set_points(self, league_id, user_id, song_id, points):
         self.db.child(
             'Leagues/%s/users/%s/%s' % (league_id, user_id, song_id)
-        ).set(score)
+        ).set(points)

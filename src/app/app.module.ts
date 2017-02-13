@@ -15,6 +15,7 @@ import { AnalyticsPage } from '../pages/analytics/analytics';
 
 import { AngularFireModule } from 'angularfire2';
 
+import { IonicAuth } from '../providers/ionic-auth-provider';
 import { OAuthService } from '../providers/oauth-service';
 import { SpotifyProvider } from '../providers/spotify-provider';
 import { UserData } from '../providers/user-provider';
@@ -27,7 +28,7 @@ const cloudSettings: CloudSettings = {
   'core': {
      'app_id': '1001d482'
   },
-    'push': {
+  'push': {
     'sender_id': '385737243579',
     'pluginConfig': {
       'ios': {
@@ -84,6 +85,7 @@ export const firebaseConfig = {
   providers: [
     OAuthService,
     SpotifyProvider,
+    IonicAuth,
     UserData,
     LeagueData,
     SongData

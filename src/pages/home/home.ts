@@ -11,7 +11,7 @@ import { User, League } from '../../models/fantasydj-models';
 
 import { OAuthService } from '../../providers/oauth-service';
 import { SpotifyProvider } from '../../providers/spotify-provider';
-import { IonicAuth } from '../../providers/ionic-auth-provider';
+import { IonicCloud } from '../../providers/ionic-cloud-provider';
 import { UserData } from '../../providers/user-provider';
 import { LeagueData } from '../../providers/league-provider';
 
@@ -32,7 +32,7 @@ export class HomePage {
   constructor(public navCtrl: NavController,
               private platform: Platform,
               private authService: OAuthService,
-              private ionicAuth: IonicAuth,
+              private ionicCloud: IonicCloud,
               private spotify: SpotifyProvider,
               private userData: UserData,
               private leagueData: LeagueData) {
@@ -42,11 +42,13 @@ export class HomePage {
   private init() {
     if (this.authService.token) {
       this.userData.loadCurrentUser().then(user => {
-        this.ionicAuth.login().then(ionicUser => {
+        this.ionicCloud.login().then(ionicUser => {
           console.log('login to ionic cloud success: ' + ionicUser);
-          this.currentUser = user;
-          this.leagues = this.leagueData.loadLeagues(user.id);
-        }).catch(error => console.log('error logging into ionic cloud'));
+        }).catch(error => {
+          console.log('error logging into ionic cloud');
+        });
+        this.currentUser = user;
+        this.leagues = this.leagueData.loadLeagues(user.id);
       }).catch(error => console.log(error));
     }
   }

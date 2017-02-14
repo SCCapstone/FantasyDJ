@@ -24,16 +24,19 @@ export class FantasyDjApp {
       Splashscreen.hide();
     });
 
-  this.push.register().then((t: PushToken) => {
-    return this.push.saveToken(t);
-  }).then((t: PushToken) => {
-    console.log('Token saved:', t.token);
-  });
+    this.push.register().then((t: PushToken) => {
+      return this.push.saveToken(t);
+    }).then((t: PushToken) => {
+      console.log('Token saved:', t.token);
 
-  this.push.rx.notification()
-  .subscribe((msg) => {
-    alert(msg.title + ': ' + msg.text);
-  });
+      this.push.rx.notification()
+        .subscribe((msg) => {
+          alert(msg.title + ': ' + msg.text);
+        });
+    }).catch(err => {
+      console.log('error initializing push notifications: ' + err);
+    });
   }
+
 }
 

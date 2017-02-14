@@ -5,6 +5,7 @@ import { AngularFireDatabase,
 
 import { Observable } from 'rxjs/Observable';
 
+import { IonicCloud } from './ionic-cloud-provider';
 import { SongData } from './song-provider';
 import { UserData } from './user-provider';
 import { League} from '../models/fantasydj-models';
@@ -18,7 +19,8 @@ export class LeagueData {
 
   constructor(private db: AngularFireDatabase,
               private songData: SongData,
-              private userData: UserData) {
+              private userData: UserData,
+              private ionicCloud: IonicCloud) {
     this.fbLeagues = this.db.list('/Leagues');
   }
 
@@ -74,7 +76,16 @@ export class LeagueData {
               .then(_ => {
                 this.db.object(this.fbUserLeaguesUrl(opponentId, leagueId))
                   .set(false)
-                  .then(_ => resolve(league))
+                  .then(_ => {
+                    this.ionicCloud.sendPush(
+                      opponentId,
+                      creatorId +
+                        ' has invited you to league ' +
+                        league.name
+                    )
+                    .then(_ => resolve(league))
+                    .catch(err => reject(err));
+                  })
                   .catch(error => reject(error));
               })
               .catch(error => reject(error));
@@ -223,16 +234,16 @@ getOpponent(userId: string, leagueId: string): Promise<User> {
             this.userData.loadUser(user[i].$key).then(user =>
               resolve(user))
               .catch(err => reject(err));
-          } 
-        } 
-      } 
+          }
+        }
+      }
     });
     });
-} 
+}
 
 getCreator(leagueId: string): Promise<User> {
   return new Promise<User>((resolve, reject) => {
-  this.db.object('/Leagues/' + leagueId + '/creator', 
+  this.db.object('/Leagues/' + leagueId + '/creator',
     {preserveSnapshot: true}).subscribe(snapshot => {
       console.log(snapshot.val());
       this.userData.loadUser(snapshot.val()).then(user =>

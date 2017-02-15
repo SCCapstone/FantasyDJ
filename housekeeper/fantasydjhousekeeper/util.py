@@ -1,5 +1,5 @@
 from datetime import datetime
-from dateutil import parser
+from dateutil import parser, tz
 import re
 
 
@@ -34,6 +34,9 @@ RE_DATETIME = re.compile(PAT_DATETIME)
 
 
 def date_from_str(str_val):
+    if str_val is None:
+        return None
+
     match = RE_DATETIME.match(str_val)
     if not match:
         orig_str_val = str_val
@@ -53,6 +56,8 @@ def date_from_str(str_val):
         match = RE_DATETIME.match(str_val)
         if not match:
             raise ValueError('date not formatted correctly: {}'.format(orig_str_val))
+    else:
+        print('matched first time: {}'.format(match.group(0)))
 
     return parser.parse(str_val)
 
@@ -63,7 +68,7 @@ EPOCH = date_from_str(EPOCH_STR)
 
 def begin_of_day(dtime=None):
     if not dtime:
-        dtime = datetime.utcnow()
+        dtime = datetime.now(tz.tzutc())
     return datetime(
         dtime.year,
         dtime.month,
@@ -80,4 +85,4 @@ def str_from_date(dt):
 
 
 def get_date(d, k):
-    return parser.parse(get_val(d, k))
+    return date_from_str(get_val(d, k))

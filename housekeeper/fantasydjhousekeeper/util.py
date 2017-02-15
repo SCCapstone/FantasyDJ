@@ -52,12 +52,11 @@ def date_from_str(str_val):
             if match and match.group(0) == str_val:
                 str_val += 'T00:00:00.000+0000'
 
-        print str_val
         match = RE_DATETIME.match(str_val)
         if not match:
-            raise ValueError('date not formatted correctly: {}'.format(orig_str_val))
-    else:
-        print('matched first time: {}'.format(match.group(0)))
+            raise ValueError(
+                'date not formatted correctly: {}'.format(orig_str_val)
+            )
 
     return parser.parse(str_val)
 

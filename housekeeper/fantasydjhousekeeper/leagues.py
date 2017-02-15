@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 def calc_points(stats):
-    if stats and len(stats) > 0:
+    if stats and len(stats) > 1:
         prev_pop = None
         points_per_day = {}
 
@@ -15,7 +15,7 @@ def calc_points(stats):
             cur_pop = stat.popularity
 
             if prev_pop:
-                change = prev_pop - cur_pop
+                change = cur_pop - prev_pop
                 points_per_day[str_from_date(stat.date)] = change
 
             prev_pop = cur_pop
@@ -37,10 +37,11 @@ class LeagueModel(object):
         if val is None:
             raise ValueError('value of league result is None')
 
+        users = val['users'] if 'users' in val else {}
         league = League(
             fbleague.key(),
             val['name'],
-            [key_id for key_id in val['users'].keys()],
+            [key_id for key_id in users.keys()],
             get_date(val, 'draftDate'),
             get_date(val, 'endTime'),
             get_val(val, 'winner')

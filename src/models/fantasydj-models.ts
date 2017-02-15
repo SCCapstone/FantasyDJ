@@ -22,3 +22,9 @@ export interface Song {
 	spotifyId: string,
 	leagues: any[];
 };
+
+export interface SongScore {
+  key: string,
+  scores: any[],
+  total: number
+};

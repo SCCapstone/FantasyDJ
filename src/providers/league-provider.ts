@@ -8,8 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { IonicCloud } from './ionic-cloud-provider';
 import { SongData } from './song-provider';
 import { UserData } from './user-provider';
-import { League} from '../models/fantasydj-models';
-import { User } from '../models/fantasydj-models';
+import { League, User, Song } from '../models/fantasydj-models';
 import 'rxjs/add/operator/take';
 
 @Injectable()
@@ -135,8 +134,8 @@ export class LeagueData {
           leagueId: string,
           spotifyTrackId: string,
           songName: string,
-          songArtist: string): Promise<League> {
-    return new Promise<League>((resolve, reject) => {
+          songArtist: string): Promise<Song> {
+    return new Promise<Song>((resolve, reject) => {
       this.songData.createSong(spotifyTrackId, songName, songArtist)
         .then(song => {
           this.dbObj('Songs', song.id, 'leagues', leagueId)
@@ -144,7 +143,7 @@ export class LeagueData {
             .subscribe(snapshot => {
               console.log(snapshot);
               if(snapshot.$value==true){
-                reject('song alrady in league');
+                reject('song already in league');
               }
               else{
                 this.loadLeague(leagueId).then(league => {
@@ -152,21 +151,56 @@ export class LeagueData {
                   reject('song was returned but is undefined');
                 }
                 else {
-                  this.dbObj('Leagues', leagueId, 'users', userId, song.id)
-                    .set(true)
-                    .then(_ => {
-                      this.dbObj('Songs', song.id, 'leagues', leagueId)
-                        .set(true)
-                        .then(_ => resolve(league))
-                        .catch(err => reject(err));
-                    })
-                    .catch(err => reject(err));
+                  let plSongDbObj = this.dbObj(
+                    'Leagues', leagueId, 'users', userId, song.id
+                  );
+                  let songLeagueDbObj = this.dbObj(
+                    'Songs', song.id, 'leagues', leagueId
+                  );
+                  plSongDbObj.set(true)
+                    .then(() => songLeagueDbObj.set(true))
+                    .then(() => resolve(song))
+                    .catch(error => reject(error));
                 }
               });
               }
             });
 
         });
+    });
+  }
+
+  notifyOfPlayistUpdate(senderId: string, leagueId: string): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      let opponentId: string = null;
+      let leagueName: string = null;
+      let songsLength: number = null;
+      this.getOpponent(senderId, leagueId)
+        .then(opponent => {
+          opponentId = opponent.id;
+          return this.loadLeague(leagueId);
+        })
+        .then(league => {
+          leagueName = league.name;
+          this.songData.loadSongs(league.id, opponentId)
+            .map(songs => songs.length)
+            .subscribe(size => {
+              songsLength = size;
+            });
+        })
+        .then(() => {
+          let msg = null;
+          if (songsLength < 3) {
+            msg = `It is your turn to pick a song for league "${leagueName}"`;
+          }
+          else {
+            msg = `Your opponent has picked the last song for league "${leagueName}".`;
+          }
+          this.ionicCloud.sendPush(opponentId, msg)
+            .then(res => resolve(res))
+            .catch(error => reject(error));
+        })
+        .catch(error => reject(error));
     });
   }
 

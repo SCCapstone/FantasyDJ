@@ -12,7 +12,7 @@ export interface League {
   users: any[],
   draftDate: Date,
   endTime: Date,
-  winner: string;
+  winner: string
 };
 
 export interface Song {
@@ -20,5 +20,6 @@ export interface Song {
 	artist: string,
 	name: string,
 	spotifyId: string,
-	leagues: any[];
+	leagues: any[],
+  artwork?: string
 };

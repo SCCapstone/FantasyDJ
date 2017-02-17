@@ -24,6 +24,8 @@
       <ion-card-title text-wrap>{{ track.name }}</ion-card-title>
       <ion-item text-wrap>by {{ track.album.artists[0].name }}</ion-item>
       <ion-item text-wrap>on {{ track.album.name }}</ion-item>
+      <img src="{{ track.album.images[0].url }}"
+           alt="album artwork for {{ track.name }}">
     </ion-card>
   </div>
 

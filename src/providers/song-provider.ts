@@ -3,6 +3,7 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 
 import { Song } from '../models/fantasydj-models';
+import { SpotifyProvider } from './spotify-provider';
 
 
 @Injectable()
@@ -11,7 +12,8 @@ export class SongData {
   private fbSongs: FirebaseListObservable<any[]>;
   private cachedSongs: any = {};
 
-  constructor(private db: AngularFireDatabase) {
+  constructor(private db: AngularFireDatabase,
+              private spotify: SpotifyProvider) {
     this.fbSongs = this.db.list('/Songs');
   }
 
@@ -24,6 +26,16 @@ export class SongData {
     return new Promise<Song>((resolve, reject) => {
       this.db.object('/Songs/' + songId)
         .map(this.mapFBSong)
+        .map(song => {
+          if (song) {
+            this.spotify.loadTrack(song.spotifyId)
+              .then(track => {
+                song.artwork = track.album.images[0].url;
+              })
+              .catch(error => console.log(error));
+          }
+          return song;
+        })
         .subscribe(song => {
           if (! song) {
             reject('song does not exist');

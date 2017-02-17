@@ -1,4 +1,6 @@
 from datetime import datetime
+from dateutil import parser, tz
+import re
 
 
 def strip_to_none(str_val):
@@ -7,6 +9,7 @@ def strip_to_none(str_val):
         if len(str_val) == 0:
             return None
         return str_val
+    return None
 
 
 def get_val(d, k):
@@ -15,18 +18,70 @@ def get_val(d, k):
     except KeyError:
         return None
 
-DATETIME_FMT = '%Y-%m-%dT%H:%M.%S%f'
+
+DATETIME_FMT = '%Y-%m-%dT%H:%M:%S.%fZ'
 DATE_FMT = '%Y-%m-%d'
 
-def get_date(d, k):
-    str_val = get_val(d, k)
-    if str_val is not None:
-        try:
-            dt_val = datetime.strptime(str_val, DATETIME_FMT)
-        except ValueError:
-            dt_val = datetime.strptime(str_val, DATE_FMT)
-        return dt_val
-    return None
+PAT_DATE = '\d{4}(-\d{2}){2}'
+PAT_DATETIME_NO_TZ = PAT_DATE + 'T(\d{2}:){2}\d{2}\.\d{3}'
+PAT_DATETIME_Z = PAT_DATETIME_NO_TZ + 'Z'
+PAT_DATETIME = PAT_DATETIME_NO_TZ + '\+0000'
+
+RE_DATE = re.compile(PAT_DATE)
+RE_DATETIME_NO_TZ = re.compile(PAT_DATETIME_NO_TZ)
+RE_DATETIME_Z = re.compile(PAT_DATETIME_Z)
+RE_DATETIME = re.compile(PAT_DATETIME)
+
+
+def date_from_str(str_val):
+    if str_val is None:
+        return None
+
+    match = RE_DATETIME.match(str_val)
+    if not match:
+        orig_str_val = str_val
+        match = RE_DATETIME_Z.match(str_val)
+        if match:
+            str_val = str_val[:-1]
+
+        match = RE_DATETIME_NO_TZ.match(str_val)
+        if match:
+            str_val += '+0000'
+        else:
+            match = RE_DATE.match(str_val)
+            if match and match.group(0) == str_val:
+                str_val += 'T00:00:00.000+0000'
+
+        match = RE_DATETIME.match(str_val)
+        if not match:
+            raise ValueError(
+                'date not formatted correctly: {}'.format(orig_str_val)
+            )
+
+    return parser.parse(str_val)
+
+
+EPOCH_STR = '1970-01-01T00:00:00.000Z'
+EPOCH = date_from_str(EPOCH_STR)
+
+
+def begin_of_day(dtime=None):
+    if not dtime:
+        dtime = datetime.now(tz.tzutc())
+    return datetime(
+        dtime.year,
+        dtime.month,
+        dtime.day,
+        0, 0, 0, 0,
+        dtime.tzinfo
+    )
+
 
 def str_from_date(dt):
-    return dt.strftime(DATE_FMT)
+    if dt:
+        return dt.strftime(DATE_FMT)
+    return None
+
+
+def get_date(d, k):
+    return date_from_str(get_val(d, k))

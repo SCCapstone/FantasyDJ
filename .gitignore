@@ -37,4 +37,4 @@ UserInterfaceState.xcuserstate
 
 *.pyc
 *.egg-info
-*.cache-*
+*.cache*

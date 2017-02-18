@@ -15,19 +15,17 @@ __HEADERS = {
 
 
 def __init_data(external_id, message):
-    return {
+    return json.dumps({
         'external_ids': [external_id],
         'profile': 'push',
         'notification': {
             'message': message
         }
-    }
+    })
 
 
 def send_push(external_id, message):
     r = requests.post(__URL_API_PUSH,
-                      data=json.dumps(
-                          __init_data(external_id, message)
-                      ),
+                      data=__init_data(external_id, message),
                       headers=__HEADERS)
     return r.json()

@@ -9,6 +9,7 @@ import { IonicCloud } from './ionic-cloud-provider';
 import { SongData } from './song-provider';
 import { UserData } from './user-provider';
 import { League, User, Song } from '../models/fantasydj-models';
+import { SpotifyTrack } from '../models/spotify-models';
 import 'rxjs/add/operator/take';
 
 @Injectable()
@@ -120,6 +121,7 @@ export class LeagueData {
       name: fbleague.name,
       users: [],
       draftDate: fbleague.draftDate,
+      startTime: fbleague.startTime,
       endTime: fbleague.endTime,
       winner: fbleague.winner || null
     };
@@ -130,80 +132,138 @@ export class LeagueData {
     return league;
   }
 
-  addSong(userId: string,
-          leagueId: string,
-          spotifyTrackId: string,
-          songName: string,
-          songArtist: string): Promise<Song> {
-    return new Promise<Song>((resolve, reject) => {
-      this.songData.createSong(spotifyTrackId, songName, songArtist)
-        .then(song => {
-          this.dbObj('Songs', song.id, 'leagues', leagueId)
-            .take(1)
-            .subscribe(snapshot => {
-              console.log(snapshot);
-              if(snapshot.$value==true){
-                reject('song already in league');
-              }
-              else{
-                this.loadLeague(leagueId).then(league => {
-                if (!song.id) {
-                  reject('song was returned but is undefined');
-                }
-                else {
-                  let plSongDbObj = this.dbObj(
-                    'Leagues', leagueId, 'users', userId, song.id
-                  );
-                  let songLeagueDbObj = this.dbObj(
-                    'Songs', song.id, 'leagues', leagueId
-                  );
-                  plSongDbObj.set(true)
-                    .then(() => songLeagueDbObj.set(true))
-                    .then(() => resolve(song))
-                    .catch(error => reject(error));
-                }
-              });
-              }
-            });
-
+  private leagueHasSong(leagueId: string, songId:string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.dbObj('Songs', songId, 'leagues', leagueId)
+        .take(1)
+        .subscribe(snapshot => {
+          if (snapshot.$value == true) {
+            resolve(true);
+          }
+          else {
+            resolve(false);
+          }
         });
     });
   }
 
-  notifyOfPlayistUpdate(senderId: string, leagueId: string): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      let opponentId: string = null;
-      let leagueName: string = null;
-      let songsLength: number = null;
-      this.getOpponent(senderId, leagueId)
-        .then(opponent => {
-          opponentId = opponent.id;
-          return this.loadLeague(leagueId);
-        })
-        .then(league => {
-          leagueName = league.name;
-          this.songData.loadSongs(league.id, opponentId)
-            .map(songs => songs.length)
-            .subscribe(size => {
-              songsLength = size;
-            });
+  private leagueIsFull(leagueId: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      let size: number = 0;
+
+      this.dbObj('Leagues', leagueId, 'users')
+        .take(1)
+        .forEach(usersRef => {
+          for (let userId in usersRef) {
+            if (! userId.startsWith('$')) {
+              for (let songId in usersRef[userId]) {
+                size++;
+              }
+            }
+          }
         })
         .then(() => {
-          let msg = null;
-          if (songsLength < 3) {
-            msg = `It is your turn to pick a song for league "${leagueName}"`;
-          }
-          else {
-            msg = `Your opponent has picked the last song for league "${leagueName}".`;
-          }
-          this.ionicCloud.sendPush(opponentId, msg)
-            .then(res => resolve(res))
-            .catch(error => reject(error));
+          resolve(size >= 6);
         })
         .catch(error => reject(error));
     });
   }
 
+  public updatePlaylist(userId: string,
+                        leagueId: string,
+                        spotifyTrack: SpotifyTrack): Promise<Song> {
+    return new Promise<Song>((resolve, reject) => {
+      let song: Song = null;
+      let league: League = null;
+      let message: string = null;
+      let recipients: Array<string> = [];
+
+      this.songData.createSong(spotifyTrack.id,
+                               spotifyTrack.name,
+                               spotifyTrack.artists[0].name)
+        .then(songResult => {
+          song = songResult;
+          return this.leagueHasSong(leagueId, songResult.id);
+        })
+        .then(leagueHasSong => {
+          if (leagueHasSong) {
+            throw new Error('song already in league');
+          }
+          return this.loadLeague(leagueId);
+        })
+        .then(leagueResult => {
+          league = leagueResult;
+        })
+        .then(() => {
+          return this.dbObj(
+            'Leagues', leagueId, 'users', userId, song.id
+          ).set(true);
+        })
+        .then(() => {
+          return this.dbObj(
+            'Songs', song.id, 'leagues', leagueId
+          ).set(true);
+        })
+        .then(() => {
+          return this.getOpponent(userId, leagueId);
+        })
+        .then(opponent => {
+          recipients.push(opponent.id);
+          return this.leagueIsFull(leagueId);
+        })
+        .then(full => {
+          if (! full) {
+            message = `It is your turn to choose a song for league ${league.name}`;
+          }
+          else {
+            recipients.push(userId);
+            message = `All songs in league ${league.name} have been chosen.`;
+          }
+          return this.setLeagueDatesIfFull(leagueId, full);
+        })
+        .then(_ => {
+          for (let recipient of recipients) {
+            console.log(`sending message to ${recipient}: ${message}`);
+            this.ionicCloud.sendPush(recipient, message)
+              .then(res => {
+                console.log('sendPush for league turn success');
+              })
+              .catch(err => {
+                console.log('sendPush for league turn failure', err);
+              });
+          }
+        })
+        .then(() => resolve(song))
+        .catch(error => reject(error));
+    });
+  }
+
+  private setLeagueDatesIfFull(leagueId: string, full: boolean): Promise<League> {
+    if (full) {
+      return new Promise<League>((resolve, reject) => {
+          let startTime: Date = new Date();
+          let endTime: Date = new Date(
+            startTime.getTime() + (1 * 24 * 60 * 60 * 1000)
+          );
+          let dates = {
+            startTime: startTime,
+            endTime: endTime
+          };
+
+          this.dbObj('Leagues', leagueId).update(dates)
+            .then(() => {
+              return this.loadLeague(leagueId);
+            })
+            .then(league => {
+              resolve(league);
+            })
+            .catch(error => reject(error));
+      });
+    }
+    else {
+      return this.loadLeague(leagueId);
+    }
+  }
 
   deleteLeague(leagueId: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {

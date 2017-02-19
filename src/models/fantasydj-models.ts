@@ -11,6 +11,7 @@ export interface League {
   creator: string,
   users: any[],
   draftDate: Date,
+  startTime: Date,
   endTime: Date,
   winner: string
 };

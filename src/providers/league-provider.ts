@@ -10,7 +10,7 @@ import { SongData } from './song-provider';
 import { UserData } from './user-provider';
 import { League} from '../models/fantasydj-models';
 import { User } from '../models/fantasydj-models';
-import { SongScore } from '../models/fantasydj-models';
+import { Score } from '../models/fantasydj-models';
 import 'rxjs/add/operator/take';
 
 @Injectable()
@@ -286,10 +286,10 @@ getDatesInner(startDate: Date, stopDate:Date): Promise<Date[]> {
 });
 }
 
-loadSongScores(leagueId: string, userId:string): Observable<SongScore[]>{
+loadSongScores(leagueId: string, userId:string): Observable<Score[]>{
       return this.db.list('/Leagues/' + leagueId + '/users/' + userId)
       .map(items => {
-          let scores: SongScore[] = [];
+          let scores: Score[] = [];
           for (let item of items) {
             this.getScores(item)
               .then(score => scores.push(score))
@@ -299,8 +299,8 @@ loadSongScores(leagueId: string, userId:string): Observable<SongScore[]>{
     });
   }
 
-getScores(song: Object): Promise<SongScore> {
-    return new Promise<SongScore>((resolve, reject) => {
+getScores(song: Object): Promise<Score> {
+    return new Promise<Score>((resolve, reject) => {
       var score = this.mapDailyScores(song);
           if (! score) {
             reject('score not found');
@@ -309,21 +309,70 @@ getScores(song: Object): Promise<SongScore> {
     });
   }
 
-private mapDailyScores(item: any): SongScore {
-    let songScore = <SongScore>{
+private mapDailyScores(item: any): Score {
+    let Score = <Score>{
       key: item.$key,
       scores: []
     };
     let total: number = 0;
     for (var score in item) {
       if(score != '$key' && score != '$exists'){
-        songScore.scores.push(item[score]);
+        Score.scores.push(item[score]);
         total = total + Number(item[score]);
       }
     }
-    songScore.total = total;
-    return songScore;
+    Score.total = total;
+    return Score;
+  }
+
+loadPlaylistScores(leagueId: string, userId:string): Observable<Score[]>{
+      return this.db.list('/Leagues/' + leagueId + '/users/')
+      .map(items => {
+        console.log('ENTER 2');
+        console.log(items);
+          let scores: Score[] = [];
+          for (let item of items) {
+            console.log(item);
+            this.getScore(item)
+              .then(score => scores.push(score))
+              .catch(error => console.log(error));
+          }  
+          return scores;       
+    });
   }
 
 
+
+getScore(song: Object): Promise<Score> {
+    return new Promise<Score>((resolve, reject) => {
+      var score = this.mapPlaylistScores(song);
+          if (! score) {
+            reject('score not found');
+          }
+          resolve(score);
+    });
+  }
+
+
+private mapPlaylistScores(item: any): Score {
+    let Score = <Score>{
+      key: item.$key,
+      scores: []
+    };
+    let total: number = 0;
+    for (var score in item) {
+      console.log(score);
+      if(score != '$key' && score != '$exists'){
+        console.log(item[score]);
+        for(var date in item[score]){
+          Score.scores.push(item[score][date]);
+          total = total + Number(item[score][date]);
+        }
+      }
+    }
+    Score.total = total;
+    return Score;
+  }
+
+  
 }

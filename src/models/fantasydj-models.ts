@@ -23,7 +23,7 @@ export interface Song {
 	leagues: any[];
 };
 
-export interface SongScore {
+export interface Score {
   key: string,
   scores: any[],
   total: number

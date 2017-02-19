@@ -4,7 +4,7 @@ import { SearchPage } from '../search/search';
 import { Observable } from 'rxjs/Observable';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
-import { User, League, Song, SongScore } from '../../models/fantasydj-models';
+import { User, League, Song, Score } from '../../models/fantasydj-models';
 
 import { SongData } from '../../providers/song-provider';
 import { UserData } from '../../providers/user-provider';
@@ -26,7 +26,7 @@ export class PlayerDetailsPage {
   league: League;
   creator: boolean;
   songs: Observable<Song[]>;
-  scores: Observable<SongScore[]>;
+  scores: Observable<Score[]>;
   users: FirebaseListObservable<any[]>;
   opp_songs: Observable<Song[]>;
   opponent: User;

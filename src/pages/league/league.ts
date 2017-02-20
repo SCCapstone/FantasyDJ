@@ -3,7 +3,7 @@ import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { PlayerDetailsPage } from '../player-details/player-details';
 
-import { League, User } from '../../models/fantasydj-models';
+import { League, User, Score } from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
 import { UserData } from '../../providers/user-provider';
 import {OpponentDetailsPage} from "../opponent-details/opponent-details";
@@ -23,7 +23,9 @@ export class LeaguePage {
   league: League;
   playerDetailsPage = PlayerDetailsPage;
   users: Observable<User[]>;
+  scores: Observable<Score[]>;
   current: User = null;
+  opponent: User;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -32,9 +34,15 @@ export class LeaguePage {
               private userData: UserData) {
     this.league = this.navParams.get('league');
     this.users = this.userData.loadUsers(this.league.id);
-    this.userData.loadCurrentUser().then(user => {
-      this.current = user;
 
+    this.userData.loadCurrentUser().then(user => {
+    this.current = user;
+    this.leagueData.getOpponent(user.id, this.league.id).then(opp =>{
+      this.opponent = opp;
+    }).catch(error => console.log(error));
+    
+    //this.playlist_scores = this.leagueData.loadPlaylistScores(this.league.id);
+    this.scores = this.leagueData.loadPlaylistScores(this.league.id, user.id);
     }).catch(error => console.log(error));
 }
 

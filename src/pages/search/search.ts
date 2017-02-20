@@ -8,18 +8,18 @@ import { LeagueData } from '../../providers/league-provider';
 import { SongData } from '../../providers/song-provider';
 
 /*
-  Generated class for the Search page.
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+ Generated class for the Search page.
+ See http://ionicframework.com/docs/v2/components/#navigation for more info on
+ Ionic pages and navigation.
+ */
 
 @Component({
   selector: 'page-search',
   templateUrl: 'search.html'
 })
 export class SearchPage {
-public searchInput: any;
-public tracks:any;
+  public searchInput: any;
+  public tracks:any;
 
 
 
@@ -57,7 +57,7 @@ public tracks:any;
   }
 
   do() {
-  console.log('clicked card');
+    console.log('clicked card');
   }
 
   addSong(user, league, track) {
@@ -72,8 +72,8 @@ public tracks:any;
       console.log('added song: ' + song.name);
       console.log("Track id: " + track.id)
       this.leagueData.notifyOfPlayistUpdate(user.id, league.id)
-       .then(res => console.log('opponent notified of turn'))
-       .catch(error => console.log('error sending turn notification to opponent'));
+        .then(res => console.log('opponent notified of turn'))
+        .catch(error => console.log('error sending turn notification to opponent'));
       this.navCtrl.pop();
     }).catch(err => {
       this.showAlertPopup(err);
@@ -90,5 +90,3 @@ public tracks:any;
   }
 
 }
-
-

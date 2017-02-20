@@ -1,16 +1,26 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
+import { AngularFireDatabase,
+  FirebaseListObservable,
+  FirebaseObjectObservable} from 'angularfire2';
+
 import { Observable } from 'rxjs/Observable';
 
-
+import { IonicCloud } from './ionic-cloud-provider';
+import { SongData } from './song-provider';
+import { UserData } from './user-provider';
 import { League} from '../models/fantasydj-models';
+import { User } from '../models/fantasydj-models';
+import 'rxjs/add/operator/take';
 
 @Injectable()
 export class LeagueData {
 
   private fbLeagues: FirebaseListObservable<any[]>;
 
-  constructor(private db: AngularFireDatabase) {
+  constructor(private db: AngularFireDatabase,
+              private songData: SongData,
+              private userData: UserData,
+              private ionicCloud: IonicCloud) {
     this.fbLeagues = this.db.list('/Leagues');
   }
 
@@ -54,22 +64,32 @@ export class LeagueData {
 
       let leagueId: string = this.fbLeagues.push({
         name: name,
-        users: usersRef,
+        creator: creatorId,
+        users: usersRef
       }).key;
 
       if (leagueId) {
         console.log(leagueId);
         this.loadLeague(leagueId).then(league => {
-            this.db.object(this.fbUserLeaguesUrl(creatorId, leagueId))
-              .set(true)
-              .then(_ => {
-                this.db.object(this.fbUserLeaguesUrl(opponentId, leagueId))
-                  .set(false)
-                  .then(_ => resolve(league))
-                  .catch(error => reject(error));
-              })
-              .catch(error => reject(error));
-          }).catch(error => reject(error));
+          this.db.object(this.fbUserLeaguesUrl(creatorId, leagueId))
+            .set(true)
+            .then(_ => {
+              this.db.object(this.fbUserLeaguesUrl(opponentId, leagueId))
+                .set(false)
+                .then(_ => {
+                  this.ionicCloud.sendPush(
+                    opponentId,
+                    creatorId +
+                    ' has invited you to league ' +
+                    league.name
+                  )
+                    .then(_ => resolve(league))
+                    .catch(err => reject(err));
+                })
+                .catch(error => reject(error));
+            })
+            .catch(error => reject(error));
+        }).catch(error => reject(error));
       }
       else {
         reject('no leagueId generated');
@@ -83,6 +103,10 @@ export class LeagueData {
       url += '/' + leagueId;
     }
     return url;
+  }
+
+  private dbObj(...pathElems: string[]): FirebaseObjectObservable<any> {
+    return this.db.object('/' + pathElems.join('/'));
   }
 
   private mapFBLeague(fbleague): League {
@@ -107,65 +131,45 @@ export class LeagueData {
     return league;
   }
 
-
   addSong(userId: string,
-                        leagueId: string,
-                        songId: string,
-                        songName: string,
-                        songArtist: string,
-                        imageUrl): Promise<League> {
+          leagueId: string,
+          spotifyTrackId: string,
+          songName: string,
+          songArtist: string): Promise<League> {
     return new Promise<League>((resolve, reject) => {
+      this.songData.createSong(spotifyTrackId, songName, songArtist)
+        .then(song => {
+          this.dbObj('Songs', song.id, 'leagues', leagueId)
+            .take(1)
+            .subscribe(snapshot => {
+              console.log(snapshot);
+              if(snapshot.$value==true){
+                reject('song alrady in league');
+              }
+              else{
+                this.loadLeague(leagueId).then(league => {
+                  if (!song.id) {
+                    reject('song was returned but is undefined');
+                  }
+                  else {
+                    this.dbObj('Leagues', leagueId, 'users', userId, song.id)
+                      .set(true)
+                      .then(_ => {
+                        this.dbObj('Songs', song.id, 'leagues', leagueId)
+                          .set(true)
+                          .then(_ => resolve(league))
+                          .catch(err => reject(err));
+                      })
+                      .catch(err => reject(err));
+                  }
+                });
+              }
+            });
 
-      var song = null;
-      this.db.list('/Songs/', {
-        query: {
-          orderByChild: 'spotifyId',
-          equalTo: songId,
-          limitToFirst: 1
-        },
-        preserveSnapshot: true
-      }).subscribe(snapshots =>  {
-      if(snapshots.length > 0){
-        snapshots.forEach(snapshot => {
-        console.log(snapshot.key);
-        if(snapshot.key != null){
-          song = snapshot.key
-          console.log('Song already in db ' + song);
-          if (song) {
-            console.log(song);
-            this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
-            this.db.object('/Songs/'+song+'/leagues/'+leagueId).set(true);
-            this.loadLeague(leagueId)
-              .then(league => resolve(league))
-              .catch(error => reject(error));
-          }
-          else {
-            reject('song found but error');
-          }
-        }});}
-      else{
-        song = this.db.list('/Songs').push({
-        spotifyId: songId,
-        name: songName,
-        artist: songArtist,
-        pic: imageUrl
-        }).key;
-        if (song) {
-          console.log(song);
-          this.db.object('/Leagues/'+leagueId+'/users/'+userId+'/'+song).set(true);
-          this.db.object('/Songs/'+song+'/leagues/'+leagueId).set(true);
-          this.loadLeague(leagueId)
-            .then(league => resolve(league))
-            .catch(error => reject(error));
-        }
-        else {
-          reject('no song generated');
-        }
-      }
-
-    });
+        });
     });
   }
+
 
   deleteLeague(leagueId: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
@@ -182,15 +186,15 @@ export class LeagueData {
                     .remove()
                     .then(() => {
                       console.log('league '
-                                  + leagueId
-                                  + ' removed from song '
-                                  + songId);
+                        + leagueId
+                        + ' removed from song '
+                        + songId);
                     })
                     .catch(err => {
                       console.log('error removing league '
-                                  + leagueId
-                                  + ' from song '
-                                  + songId);
+                        + leagueId
+                        + ' from song '
+                        + songId);
                     });
                 }
               }
@@ -200,15 +204,15 @@ export class LeagueData {
             .remove()
             .then(() => {
               console.log('league '
-                          + leagueId
-                          + ' removed from user '
-                          + userId);
+                + leagueId
+                + ' removed from user '
+                + userId);
             })
             .catch(err => {
               console.log('error removing league '
-                          + leagueId
-                          + ' from user '
-                          + userId);
+                + leagueId
+                + ' from user '
+                + userId);
             });
         }
       }).then(() => {
@@ -219,4 +223,34 @@ export class LeagueData {
       }).catch(err => reject(err));
     });
   }
+
+  getOpponent(userId: string, leagueId: string): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
+      this.db.list('/Leagues/'+leagueId+'/users/').subscribe(user=>{
+        if (user.length > 0){
+          for(var i = 0; i < user.length; i++){
+            if (user[i].$key != userId){
+              console.log('user[i].$key: ' + user[i].$key);
+              this.userData.loadUser(user[i].$key).then(user =>
+                resolve(user))
+                .catch(err => reject(err));
+            }
+          }
+        }
+      });
+    });
+  }
+
+  getCreator(leagueId: string): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
+      this.db.object('/Leagues/' + leagueId + '/creator',
+        {preserveSnapshot: true}).subscribe(snapshot => {
+        console.log(snapshot.val());
+        this.userData.loadUser(snapshot.val()).then(user =>
+          resolve(user))
+          .catch(err => reject(err));
+      });
+    });
+  }
+
 }

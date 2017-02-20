@@ -8,6 +8,7 @@ export interface User {
 export interface League {
   id: string,
   name: string,
+  creator: string,
   users: any[],
   draftDate: Date,
   endTime: Date,
@@ -15,6 +16,7 @@ export interface League {
 };
 
 export interface Song {
+  id: string,
 	artist: string,
 	name: string,
 	spotifyId: string,

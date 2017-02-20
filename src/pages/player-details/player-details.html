@@ -25,12 +25,33 @@
         <img src= "{{ song.pic }}" alt="">
       </ion-card-content>
     </ion-card>
-      <ion-card (click)="goToSearch(user,league)">
+    <div *ngIf="( songs | async)?.length <= (opp_songs | async)?.length && creator == true 
+                  && (songs | async)?.length < 3">
+      <ion-card (click)="goToSearch(user, league)">
         <ion-card-content>
                   <ion-card-title>
                     Add New Song
                     </ion-card-title>
                 </ion-card-content>
               </ion-card>
+  </div>
+  <div *ngIf="( songs | async)?.length < (opp_songs | async)?.length && creator == false 
+               && (songs | async)?.length < 3">
+      <ion-card (click)="goToSearch(user, league)">
+        <ion-card-content>
+                  <ion-card-title>
+                    Add New Song
+                    </ion-card-title>
+                </ion-card-content>
+              </ion-card>
+  </div>
+  <div *ngIf="( songs | async)?.length > (opp_songs | async)?.length && creator == true
+               && (songs | async)?.length < 3">
+    Wait for opponent to choose another song.
+  </div>
+  <div *ngIf="( songs | async)?.length == (opp_songs | async)?.length && creator == false 
+               && (songs | async)?.length < 3">
+    Wait for opponent to choose another song.
+  </div>
 
 </ion-content>

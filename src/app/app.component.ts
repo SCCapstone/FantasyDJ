@@ -4,6 +4,10 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { TabsPage } from '../pages/tabs/tabs';
 
+import {
+  Push,
+  PushToken
+} from '@ionic/cloud-angular';
 
 @Component({
   template: `<ion-nav [root]="rootPage"></ion-nav>`
@@ -11,7 +15,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 export class FantasyDjApp {
   rootPage = TabsPage;
 
-  constructor(platform: Platform) {
+  constructor(platform: Platform, public push: Push) {
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -19,6 +23,20 @@ export class FantasyDjApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
+
+    this.push.register().then((t: PushToken) => {
+      return this.push.saveToken(t);
+    }).then((t: PushToken) => {
+      console.log('Token saved:', t.token);
+
+      this.push.rx.notification()
+        .subscribe((msg) => {
+          alert(msg.title + ': ' + msg.text);
+        });
+    }).catch(err => {
+      console.log('error initializing push notifications: ' + err);
+    });
   }
+
 }
 

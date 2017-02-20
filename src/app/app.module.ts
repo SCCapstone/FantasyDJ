@@ -11,14 +11,36 @@ import { PlayerDetailsPage } from '../pages/player-details/player-details';
 import { OpponentDetailsPage } from '../pages/opponent-details/opponent-details';
 import { CreateLeaguePage } from '../pages/create-league/create-league';
 import { SearchPage } from '../pages/search/search';
+import { AnalyticsPage } from '../pages/analytics/analytics';
 
 import { AngularFireModule } from 'angularfire2';
 
+import { IonicCloud } from '../providers/ionic-cloud-provider';
 import { OAuthService } from '../providers/oauth-service';
 import { SpotifyProvider } from '../providers/spotify-provider';
 import { UserData } from '../providers/user-provider';
 import { LeagueData } from '../providers/league-provider';
 import { SongData } from '../providers/song-provider';
+
+import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+
+const cloudSettings: CloudSettings = {
+  'core': {
+     'app_id': '1001d482'
+  },
+  'push': {
+    'sender_id': '385737243579',
+    'pluginConfig': {
+      'ios': {
+        'badge': true,
+        'sound': true
+      },
+      'android': {
+        'iconColor': '#343434'
+      }
+    }
+  }
+};
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB9Zq_1L_j0AR3aiMphTPUbDqVAWxe9yiE",
@@ -38,10 +60,12 @@ export const firebaseConfig = {
     PlayerDetailsPage,
     OpponentDetailsPage,
     CreateLeaguePage,
-    SearchPage
+    SearchPage,
+    AnalyticsPage
   ],
   imports: [
     IonicModule.forRoot(FantasyDjApp),
+    CloudModule.forRoot(cloudSettings),
     AngularFireModule.initializeApp(firebaseConfig)
   ],
   bootstrap: [IonicApp],
@@ -55,11 +79,13 @@ export const firebaseConfig = {
     PlayerDetailsPage,
     OpponentDetailsPage,
     CreateLeaguePage,
-    SearchPage
+    SearchPage,
+    AnalyticsPage
   ],
   providers: [
     OAuthService,
     SpotifyProvider,
+    IonicCloud,
     UserData,
     LeagueData,
     SongData

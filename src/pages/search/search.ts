@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { SpotifyProvider } from '../../providers/spotify-provider';
 import { SpotifySearchResult } from '../../models/spotify-models';
 import { League, User } from '../../models/fantasydj-models';
 
 import { LeagueData } from '../../providers/league-provider';
+import { SongData } from '../../providers/song-provider';
 
 /*
   Generated class for the Search page.
@@ -24,15 +25,19 @@ public tracks:any;
 
   user: User;
   league: League;
+  opponent_id: string;
   query: string = "";
   results: SpotifySearchResult;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              public alert: AlertController,
               private spotify: SpotifyProvider,
-              private leagueData: LeagueData) {
+              private leagueData: LeagueData,
+              private songData: SongData) {
     this.league = this.navParams.get('league');
     this.user = this.navParams.get('user');
+    this.alert = alert;
   }
 
 
@@ -55,8 +60,8 @@ public tracks:any;
   console.log('clicked card');
   }
 
-
   addSong(user, league, track) {
+    console.log(league);
     this.leagueData.addSong(
       user.id,
       league.id,
@@ -69,9 +74,19 @@ public tracks:any;
       console.log("Track id: " + track.id)
       this.navCtrl.pop();
     }).catch(err => {
+      this.showAlertPopup(err);
       console.log(err, 'error adding new song');
     });
   }
+
+  showAlertPopup(message){
+    let popup = this.alert.create({
+      title: message,
+      buttons: ['Okay']
+    });
+    popup.present();
+  }
+
 }
 
 

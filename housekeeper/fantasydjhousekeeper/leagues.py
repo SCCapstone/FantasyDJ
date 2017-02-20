@@ -14,7 +14,7 @@ def calc_points(stats):
         for stat in stats:
             cur_pop = stat.popularity
 
-            if prev_pop:
+            if prev_pop is not None:
                 change = cur_pop - prev_pop
                 points_per_day[str_from_date(stat.date)] = change
 
@@ -30,15 +30,22 @@ def calc_winner(points_by_song_by_user):
         raise ValueError('points_by_song_by_user cannot be null')
 
     # collapse points by song down to totals per user
-    score_user_tups = [
-        (sum(points.values()), user_id)
-        for user_id, points in points_by_song_by_user
-    ]
+    scores_by_user = {}
+    for user_id, points in points_by_song_by_user.items():
+        scores_by_user[user_id] = 0
+        for song, datepoints in points.items():
+            if datepoints == True:
+                # not enough scores to calculate winners
+                return None
+            scores_by_user[user_id] += sum(datepoints.values())
+
 
     # group users by their scores to determine if ties
     # have occurred
     users_by_score = {}
-    for tup in score_user_tups:
+    for tup in [
+        (score, user) for user, score in scores_by_user.items()
+    ]:
         if not users_by_score.has_key(tup[0]):
             users_by_score[tup[0]] = []
         users_by_score[tup[0]].append(tup[1])

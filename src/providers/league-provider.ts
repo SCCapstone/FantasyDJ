@@ -325,14 +325,11 @@ private mapDailyScores(item: any): Score {
     return Score;
   }
 
-loadPlaylistScores(leagueId: string, userId:string): Observable<Score[]>{
+loadPlaylistScores(leagueId: string): Observable<Score[]>{
       return this.db.list('/Leagues/' + leagueId + '/users/')
       .map(items => {
-        console.log('ENTER 2');
-        console.log(items);
           let scores: Score[] = [];
           for (let item of items) {
-            console.log(item);
             this.getScore(item)
               .then(score => scores.push(score))
               .catch(error => console.log(error));
@@ -361,9 +358,7 @@ private mapPlaylistScores(item: any): Score {
     };
     let total: number = 0;
     for (var score in item) {
-      console.log(score);
       if(score != '$key' && score != '$exists'){
-        console.log(item[score]);
         for(var date in item[score]){
           Score.scores.push(item[score][date]);
           total = total + Number(item[score][date]);

@@ -4,18 +4,17 @@ import { SearchPage } from '../search/search';
 import { Observable } from 'rxjs/Observable';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
-import { User, League, Song, Score } from '../../models/fantasydj-models';
+import { User, League, Song } from '../../models/fantasydj-models';
 
 import { SongData } from '../../providers/song-provider';
 import { UserData } from '../../providers/user-provider';
 import { LeagueData } from '../../providers/league-provider';
 
 /*
-  Generated class for the PlayerDetails page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+ Generated class for the PlayerDetails page.
+ See http://ionicframework.com/docs/v2/components/#navigation for more info on
+ Ionic pages and navigation.
+ */
 @Component({
   selector: 'page-player-details',
   templateUrl: 'player-details.html'
@@ -26,11 +25,9 @@ export class PlayerDetailsPage {
   league: League;
   creator: boolean;
   songs: Observable<Song[]>;
-  scores: Observable<Score[]>;
   users: FirebaseListObservable<any[]>;
   opp_songs: Observable<Song[]>;
   opponent: User;
-  dates: Date[];
 
 
   constructor(public navCtrl: NavController,
@@ -48,9 +45,7 @@ export class PlayerDetailsPage {
         this.creator = false;
       }
       console.log("this.creator: " + this.creator);
-    });  
-  
-    this.scores = this.leagueData.loadSongScores(this.league.id, this.user.id);
+    });
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.leagueData.getOpponent(this.user.id, this.league.id).then(opp =>{
       console.log(opp);
@@ -58,7 +53,7 @@ export class PlayerDetailsPage {
       this.opp_songs = this.songData.loadSongs(this.league.id, this.opponent.id);
       console.log("opponent_id: " + this.opponent.id);
     });
-     
+
   }
 
   ionViewDidLoad() {

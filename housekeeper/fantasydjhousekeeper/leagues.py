@@ -2,6 +2,7 @@ import logging
 from .entities import League
 from .songs import SongModel
 from .util import get_val, get_date, str_from_date, now
+import ioniccloud
 
 logger = logging.getLogger(__name__)
 
@@ -34,11 +35,10 @@ def calc_winner(points_by_song_by_user):
     for user_id, points in points_by_song_by_user.items():
         scores_by_user[user_id] = 0
         for song, datepoints in points.items():
-            if datepoints == True:
+            if datepoints is True:
                 # not enough scores to calculate winners
                 return None
             scores_by_user[user_id] += sum(datepoints.values())
-
 
     # group users by their scores to determine if ties
     # have occurred
@@ -46,7 +46,7 @@ def calc_winner(points_by_song_by_user):
     for tup in [
         (score, user) for user, score in scores_by_user.items()
     ]:
-        if not users_by_score.has_key(tup[0]):
+        if tup[0] not in users_by_score:
             users_by_score[tup[0]] = []
         users_by_score[tup[0]].append(tup[1])
 
@@ -139,4 +139,14 @@ class LeagueModel(object):
         ).set(points)
 
     def set_winner(self, league_id, user_id):
-        self.db.child('Leagues/%s/winner').set(user_id)
+        league = self.get_league(league_id)
+        self.db.child('Leagues/{}/winner'.format(league_id)).set(user_id)
+        ioniccloud.send_push(
+            user_id,
+            'Congratulations! You have won the league {}!'.format(league.name)
+        )
+        for loser in [user for user in league.users if user != user_id]:
+            ioniccloud.send_push(
+                loser,
+                'League {} has ended.'.format(league.name)
+            )

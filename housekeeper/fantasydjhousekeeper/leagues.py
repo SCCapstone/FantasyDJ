@@ -1,7 +1,7 @@
 import logging
 from .entities import League
 from .songs import SongModel
-from .util import get_val, get_date, str_from_date
+from .util import get_val, get_date, str_from_date, now
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +23,34 @@ def calc_points(stats):
         return points_per_day
 
     return True
+
+
+def calc_winner(points_by_song_by_user):
+    if points_by_song_by_user is None:
+        raise ValueError('points_by_song_by_user cannot be null')
+
+    # collapse points by song down to totals per user
+    score_user_tups = [
+        (sum(points.values()), user_id)
+        for user_id, points in points_by_song_by_user
+    ]
+
+    # group users by their scores to determine if ties
+    # have occurred
+    users_by_score = {}
+    for tup in score_user_tups:
+        if not users_by_score.has_key(tup[0]):
+            users_by_score[tup[0]] = []
+        users_by_score[tup[0]].append(tup[1])
+
+    # sort scores to find biggest
+    scores = sorted(users_by_score.keys(), reverse=True)
+    if len(users_by_score[scores[0]]) > 1:
+        # there was a tie. no one won. yet?
+        return False
+    else:
+        # there is a clear winner
+        return users_by_score[scores[0]][0]
 
 
 class LeagueModel(object):
@@ -53,19 +81,30 @@ class LeagueModel(object):
             self.db.child('Leagues/%s' % (league_id)).get()
         )
 
-    def get_active_leagues(self):
+    def __get_leagues(self):
         fbleagues = self.db.child('Leagues').get()
         leagues = [
             self.__league_from_result(fbleague)
             for fbleague in fbleagues.each()
         ]
+        return leagues
 
-        # now = datetime.now()
+    def get_active_leagues(self):
+        right_now = now()
         return [
-            league for league in leagues
+            league for league in self.__get_leagues()
             if league.winner is None
-            # and league.draftDate is not None
-            # and league.draftDate < now
+            and league.endTime is not None
+            and league.endTime > right_now
+        ]
+
+    def get_unfinished_leagues(self):
+        right_now = now()
+        return [
+            league for league in self.__get_leagues()
+            if league.winner is None
+            and league.endTime is not None
+            and league.endTime < right_now
         ]
 
     def get_playlist(self, league_id, user_id):
@@ -91,3 +130,6 @@ class LeagueModel(object):
         self.db.child(
             'Leagues/%s/users/%s/%s' % (league_id, user_id, song_id)
         ).set(points)
+
+    def set_winner(self, league_id, user_id):
+        self.db.child('Leagues/%s/winner').set(user_id)

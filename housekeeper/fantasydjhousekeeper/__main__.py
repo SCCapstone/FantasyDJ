@@ -44,5 +44,5 @@ elif args.push is not None:
         print('No user specified to receive push notification')
 
 else:
-    fantasydj.update_song_stats()
-    fantasydj.update_points()
+    fantasydj.update_active_leagues()
+    fantasydj.update_unfinished_leagues()

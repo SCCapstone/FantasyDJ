@@ -65,6 +65,10 @@ EPOCH_STR = '1970-01-01T00:00:00.000Z'
 EPOCH = date_from_str(EPOCH_STR)
 
 
+def now():
+    return datetime.now(tz.tzutc())
+
+
 def begin_of_day(dtime=None):
     if not dtime:
         dtime = datetime.now(tz.tzutc())

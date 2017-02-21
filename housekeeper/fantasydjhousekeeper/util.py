@@ -16,7 +16,11 @@ def get_val(d, k):
     try:
         return strip_to_none(d[k])
     except KeyError:
+        # obviously not there.
         return None
+    except AttributeError:
+        # not a string. don't strip.
+        return d[k]
 
 
 DATETIME_FMT = '%Y-%m-%dT%H:%M:%S.%fZ'

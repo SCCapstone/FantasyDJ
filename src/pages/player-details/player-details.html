@@ -6,8 +6,8 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Player Details for {{ user.id }}</ion-title>
+  <ion-navbar color="dark">
+    <ion-title>My songs in {{ league.name }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,37 +15,35 @@
 
 <ion-content padding>
 
-  <p>DJing since {{ user.dateCreated }}</p>
-    <ion-card *ngFor="let song of songs | async" >
-      <ion-item text-wrap>{{ song.name }} by {{ song.artist }} and {{getScore(league.id, user.id, song.id) | async }}</ion-item>
-    </ion-card>
-    <div *ngIf="( songs | async)?.length <= (opp_songs | async)?.length && creator == true 
-                  && (songs | async)?.length < 3">
-      <ion-card (click)="goToSearch(user, league)">
-        <ion-card-content>
-                  <ion-card-title>
-                    Add New Song
-                    </ion-card-title>
-                </ion-card-content>
-              </ion-card>
-  </div>
-  <div *ngIf="( songs | async)?.length < (opp_songs | async)?.length && creator == false 
-               && (songs | async)?.length < 3">
-      <ion-card (click)="goToSearch(user, league)">
-        <ion-card-content>
-                  <ion-card-title>
-                    Add New Song
-                    </ion-card-title>
-                </ion-card-content>
-              </ion-card>
-  </div>
-  <div *ngIf="( songs | async)?.length > (opp_songs | async)?.length && creator == true
-               && (songs | async)?.length < 3">
-    Wait for opponent to choose another song.
-  </div>
-  <div *ngIf="( songs | async)?.length == (opp_songs | async)?.length && creator == false 
-               && (songs | async)?.length < 3">
-    Wait for opponent to choose another song.
+  <ion-list>
+    <ion-item *ngFor="let song of songs | async">
+      <ion-thumbnail item-left>
+        <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
+      </ion-thumbnail>
+      <h2>{{ song.name }}</h2>
+      <p>{{ song.artist }}<p>
+      <p>{{getScore(league.id, user.id, song.id) | async }}</p>
+    </ion-item>
+
+    <ion-item *ngIf="(songs | async)?.length === 0">
+      <p>No songs chosen</p>
+    </ion-item>
+
+  </ion-list>
+
+  <div *ngIf="(songs | async)?.length < 3">
+
+    <button *ngIf="!creator && (songs | async)?.length < (opp_songs | async)?.length
+            || creator && (songs | async)?.length <= (opp_songs | async)?.length"
+            ion-button block (click)="goToSearch(user, league)">
+      Add New Song
+    </button>
+
+    <div *ngIf="!creator && (songs | async)?.length == (opp_songs | async)?.length
+                || creator && (songs | async)?.length > (opp_songs | async)?.length">
+      Wait for opponent to choose a song.
+    </div>
+
   </div>
 
 </ion-content>

@@ -6,30 +6,25 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="dark">
     <ion-title>{{ league.name }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
-
 <ion-content padding>
 
-  <h2>Players</h2>
+  <ion-item>
+    <p *ngIf="league.endTime">Ending at {{ league.endTime }}</p>
+    <button ion-button item-right (click)="deleteThisLeague()">Delete</button>
+  </ion-item>
 
-  <ion-card *ngFor="let user of users | async" (click)="goToPlayer(user, league)">
-    <ion-item text-wrap>{{ user.id }} </ion-item>
-      <ion-item text-wrap>{{ getScore(league.id, user.id) | async }}</ion-item>
-  </ion-card>
+  <ion-list>
+    <ion-item *ngFor="let user of users | async" (click)="goToPlayer(user, league)">
+      <ion-icon item-left name="person"></ion-icon>
+      <h2 text-wrap>{{ user.id }}</h2>
+      <h2 text-wrap>{{ getScore(league.id, user.id) | async }}</h2>
+    </ion-item>
+  </ion-list>
 
-  <p *ngIf="! users">None yet.</p>
-
-  <div *ngIf="league.endTime">
-    <h2>End Time</h2>
-    <p>{{ league.endTime }}</p>
-  </div>
-
-    <button>
-    <ion-item (click)="deleteThisLeague()" text-wrap> Delete </ion-item>
-  </button>
 </ion-content>

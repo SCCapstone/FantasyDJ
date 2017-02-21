@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, User } from '@ionic/cloud-angular';
+import { Auth, User, Push, PushToken } from '@ionic/cloud-angular';
 import { SpotifyProvider } from './spotify-provider';
 import { Http, Request, RequestOptions, Headers } from '@angular/http';
 
@@ -18,26 +18,48 @@ export class IonicCloud {
     'eyJqdGkiOiJmNmRlY2MzYS1mZDczLTRiOTEtODBiZS1mYTJkYmY5NzUyY' +
     'zMifQ.NlKK-MsTaIs6ioZpdnsYDTacZUGfry7Zj6Nw6u9ckwc'
 
+  private subscribed: boolean = false;
+
   constructor(private auth: Auth,
               private user: User,
+              private push: Push,
               private spotify: SpotifyProvider,
               private http: Http) {}
 
   public login(): Promise<User> {
     return new Promise<User>((resolve, reject) => {
-      this.spotify.loadCurrentUser().then(spotifyUser => {
-        this.auth.login(
-          'custom',
-          {spotifyId: spotifyUser.id},
-          authOptions
-        ).then(result => {
-          resolve(this.user);
-        }).catch(error => {
-          reject(error);
-        });
-      }).catch(error => {
-        reject(error);
-      });
+      this.spotify.loadCurrentUser()
+        .then(spotifyUser => {
+          return this.auth.login(
+            'custom',
+            {spotifyId: spotifyUser.id},
+            authOptions
+          );
+        })
+        .then(result => resolve(this.user))
+        .catch(error => reject(error))
+        .then(() => {
+          return this.initializePush();
+        })
+        .then(token => console.log('push notifications registered after login'))
+        .catch(error => console.log('error registering push notifications after login: ', error));
+    });
+  }
+
+  public initializePush(): Promise<PushToken> {
+    return new Promise<PushToken>((resolve, reject) => {
+      this.push.register()
+        .then(token => resolve(token))
+        .then(() => {
+          if (! this.subscribed) {
+            this.push.rx.notification()
+              .subscribe(msg => {
+                alert(msg.title + ': ' + msg.text);
+              });
+            this.subscribed = true;
+          }
+        })
+        .catch(error => reject(error));
     });
   }
 

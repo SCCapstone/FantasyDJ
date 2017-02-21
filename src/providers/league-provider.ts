@@ -10,6 +10,7 @@ import { SongData } from './song-provider';
 import { UserData } from './user-provider';
 import { League, User, Song } from '../models/fantasydj-models';
 import { SpotifyTrack } from '../models/spotify-models';
+
 import 'rxjs/add/operator/take';
 
 @Injectable()
@@ -347,4 +348,65 @@ getCreator(leagueId: string): Promise<User> {
   });
 }
 
+getStartDate(leagueId: string): Promise<string>{
+  return new Promise<string>((resolve, reject) => {
+    this.db.object('/Leagues/' + leagueId + '/draftDate').take(1).subscribe(
+    snapshot => {
+      resolve(snapshot.$value);
+    });
+  });
+}
+
+getDates(leagueId: string): Promise<Date[]> {
+  return new Promise<Date[]>((resolve, reject) => {
+  this.getStartDate(leagueId).then(date => {
+  console.log(date);
+  let start_date = new Date(date);
+  let current_date: Date = new Date();
+  this.getDatesInner(start_date, current_date).then(dates => resolve(dates));
+  });
+});
+ } 
+
+getDatesInner(startDate: Date, stopDate:Date): Promise<Date[]> {
+  return new Promise<Date[]>((resolve, reject) => {
+   let dateArray: Date[] = [];
+   let currentDate = startDate;
+    while (currentDate <= stopDate) {
+        dateArray.push( new Date(currentDate))
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    resolve(dateArray);
+});
+}
+
+public getPlaylistScore(leagueId: string, userId: string): Observable<number> {
+    return this.dbObj('Leagues', leagueId, 'users', userId)
+      .take(1)
+      .map(userRef => {
+        let total = 0;
+        for (var songId in userRef) {
+          if (! songId.startsWith('$')) {
+            for (var date in userRef[songId]) {
+              total += userRef[songId][date];
+            }
+          }
+        }
+        return total;
+      });
+  }
+
+public getSongScore(leagueId: string, userId: string, songId: string): Observable<number> {
+  return this.dbObj('Leagues', leagueId, 'users', userId, songId)
+          .take(1)
+          .map(songRef => {
+            let total = 0;
+            for(var date in songRef){
+              if (! date.startsWith('$')) {
+                total += songRef[date];
+              }
+            }
+            return total;
+          });
+  }
 }

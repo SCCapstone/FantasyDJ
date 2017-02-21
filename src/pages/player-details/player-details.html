@@ -22,6 +22,7 @@
       </ion-thumbnail>
       <h2>{{ song.name }}</h2>
       <p>{{ song.artist }}<p>
+      <p>{{getScore(league.id, user.id, song.id) | async }}</p>
     </ion-item>
 
     <ion-item *ngIf="(songs | async)?.length === 0">

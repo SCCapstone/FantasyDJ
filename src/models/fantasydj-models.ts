@@ -24,3 +24,9 @@ export interface Song {
 	leagues: any[],
   artwork?: string
 };
+
+export interface Score {
+  key: string,
+  scores: any[],
+  total: number
+};

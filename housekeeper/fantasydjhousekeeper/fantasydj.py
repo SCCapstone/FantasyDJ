@@ -107,6 +107,7 @@ class FantasyDJ(object):
 
                 if calc_winners:
                     self.league_model.set_winner(
+                        league.id,
                         calc_winner(points_by_song_by_user)
                     )
 

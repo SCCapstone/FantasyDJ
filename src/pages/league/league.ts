@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Rx';
 import { PlayerDetailsPage } from '../player-details/player-details';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/observable/range';
-import 'rxjs/add/observable/zip';
+import 'rxjs/rx';
+//import 'rxjs/add/Observable/zipArray';
 import { League, User, Score } from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
 import { UserData } from '../../providers/user-provider';
@@ -25,11 +24,8 @@ export class LeaguePage {
   league: League;
   playerDetailsPage = PlayerDetailsPage;
   users: Observable<User[]>;
-  scores: Observable<Score[]>;
   current: User = null;
   opponent: User;
-  test: Object;
-  source: Observable<{ id: number; total: number; }>;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -38,30 +34,12 @@ export class LeaguePage {
               private userData: UserData) {
     this.league = this.navParams.get('league');
     this.users = this.userData.loadUsers(this.league.id);
-    this.scores = this.leagueData.loadPlaylistScores(this.league.id);
     this.userData.loadCurrentUser().then(user => {
     this.current = user;
     this.leagueData.getOpponent(user.id, this.league.id).then(opp =>{
       this.opponent = opp;
     }).catch(error => console.log(error));
-    
-    //this.playlist_scores = this.leagueData.loadPlaylistScores(this.league.id);
-    
-
-    console.log(this.users);
-    console.log(this.scores);
-    Observable
-    .zip(this.users,
-         this.scores,
-         (id: number, total: number) => ({ id, total }))
-    .subscribe(x => console.log(x));
-
-
-
-    }).catch(error => console.log(error));
-
-    
-
+    }).catch(error => console.log(error));   
 }
 
   ionViewDidLoad() {
@@ -109,4 +87,10 @@ export class LeaguePage {
     });
     confirm.present();
   }
+
+  getScore(leagueId, userId){
+    return this.leagueData.getPlaylistScore(leagueId, userId);
+  }
+
+
 }

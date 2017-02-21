@@ -17,17 +17,9 @@
 
   <h2>Players</h2>
 
-    <ion-card *ngFor="let item of source | async" >
-      <ion-item text-wrap>{{ item }} </ion-item>
-    </ion-card>
-    <ion-item text-wrap>{{source}}</ion-item>
-    <ion-card *ngFor="let score of scores | async" >
-      <ion-item text-wrap>{{ score.total }} </ion-item>
-    </ion-card>
-
-
   <ion-card *ngFor="let user of users | async" (click)="goToPlayer(user, league)">
-    <ion-item text-wrap>{{ user.id }}</ion-item>
+    <ion-item text-wrap>{{ user.id }} </ion-item>
+      <ion-item text-wrap>{{ getScore(league.id, user.id) | async }}</ion-item>
   </ion-card>
 
   <p *ngIf="! users">None yet.</p>

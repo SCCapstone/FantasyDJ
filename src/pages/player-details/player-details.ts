@@ -26,7 +26,6 @@ export class PlayerDetailsPage {
   league: League;
   creator: boolean;
   songs: Observable<Song[]>;
-  scores: Observable<Score[]>;
   users: FirebaseListObservable<any[]>;
   opp_songs: Observable<Song[]>;
   opponent: User;
@@ -50,7 +49,6 @@ export class PlayerDetailsPage {
       console.log("this.creator: " + this.creator);
     });  
   
-    this.scores = this.leagueData.loadSongScores(this.league.id, this.user.id);
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.leagueData.getOpponent(this.user.id, this.league.id).then(opp =>{
       console.log(opp);
@@ -72,6 +70,10 @@ export class PlayerDetailsPage {
       league: league,
       user : user
     });
+  }
+
+  getScore(leagueId, userId, songId){
+    return this.leagueData.getSongScore(leagueId, userId, songId);
   }
 
 }

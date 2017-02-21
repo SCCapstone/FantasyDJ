@@ -286,88 +286,33 @@ getDatesInner(startDate: Date, stopDate:Date): Promise<Date[]> {
 });
 }
 
-loadSongScores(leagueId: string, userId:string): Observable<Score[]>{
-      return this.db.list('/Leagues/' + leagueId + '/users/' + userId)
-      .map(items => {
-          let scores: Score[] = [];
-          for (let item of items) {
-            this.getScores(item)
-              .then(score => scores.push(score))
-              .catch(error => console.log(error));
-          }  
-          return scores;       
-    });
-  }
-
-getScores(song: Object): Promise<Score> {
-    return new Promise<Score>((resolve, reject) => {
-      var score = this.mapDailyScores(song);
-          if (! score) {
-            reject('score not found');
+public getPlaylistScore(leagueId: string, userId: string): Observable<number> {
+    return this.dbObj('Leagues', leagueId, 'users', userId)
+      .take(1)
+      .map(userRef => {
+        let total = 0;
+        for (var songId in userRef) {
+          if (! songId.startsWith('$')) {
+            for (var date in userRef[songId]) {
+              total += userRef[songId][date];
+            }
           }
-          resolve(score);
-    });
-  }
-
-private mapDailyScores(item: any): Score {
-    let Score = <Score>{
-      key: item.$key,
-      scores: []
-    };
-    let total: number = 0;
-    for (var score in item) {
-      if(score != '$key' && score != '$exists'){
-        Score.scores.push(item[score]);
-        total = total + Number(item[score]);
-      }
-    }
-    Score.total = total;
-    return Score;
-  }
-
-loadPlaylistScores(leagueId: string): Observable<Score[]>{
-      return this.db.list('/Leagues/' + leagueId + '/users/')
-      .map(items => {
-          let scores: Score[] = [];
-          for (let item of items) {
-            this.getScore(item)
-              .then(score => scores.push(score))
-              .catch(error => console.log(error));
-          }  
-          return scores;       
-    });
-  }
-
-
-
-getScore(song: Object): Promise<Score> {
-    return new Promise<Score>((resolve, reject) => {
-      var score = this.mapPlaylistScores(song);
-          if (! score) {
-            reject('score not found');
-          }
-          resolve(score);
-    });
-  }
-
-
-private mapPlaylistScores(item: any): Score {
-    let Score = <Score>{
-      key: item.$key,
-      scores: []
-    };
-    let total: number = 0;
-    for (var score in item) {
-      if(score != '$key' && score != '$exists'){
-        for(var date in item[score]){
-          Score.scores.push(item[score][date]);
-          total = total + Number(item[score][date]);
         }
-      }
-    }
-    Score.total = total;
-    return Score;
+        return total;
+      });
   }
 
-  
+public getSongScore(leagueId: string, userId: string, songId: string): Observable<number> {
+  return this.dbObj('Leagues', leagueId, 'users', userId, songId)
+          .take(1)
+          .map(songRef => {
+            let total = 0;
+            for(var date in songRef){
+              if (! date.startsWith('$')) {
+                total += songRef[date];
+              }
+            }
+            return total;
+          });
+  }
 }

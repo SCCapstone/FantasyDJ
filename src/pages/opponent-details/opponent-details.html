@@ -18,6 +18,7 @@
   <p> {{ user.id }}'s playlist </p>
   <ion-card *ngFor="let song of songs | async" >
     <ion-item text-wrap>{{ song.name }} by {{ song.artist }}</ion-item>
+    <ion-item text-wrap>{{ getScore(league.id, user.id, song.id) | async }}</ion-item>
   </ion-card>
   <!--<ion-card (click)="goToSearch(user,league)">-->
     <!--<ion-card-content>-->

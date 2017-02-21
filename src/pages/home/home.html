@@ -1,12 +1,12 @@
 <ion-header>
   <ion-navbar color="dark">
-    <ion-title align="center">Leagues</ion-title>
+    <ion-title>Leagues</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
-  <button ion-button *ngIf="! currentUser" (click)="login()">Log In</button>
+  <button ion-button block *ngIf="! currentUser" (click)="login()">Log In</button>
 
   <div *ngIf="currentUser">
     <ion-list>

@@ -1,4 +1,3 @@
-
 <ion-header>
 
   <ion-navbar color="dark">
@@ -9,15 +8,12 @@
 
 <ion-content padding>
 
-
   <ion-searchbar
     [(ngModel)]="query"
     (ionInput)="search()"
     (debounce)="5000"
     placeholder="Ex. Guns 'N Roses">
   </ion-searchbar>
-
-
 
   <ion-list *ngIf="results && results.tracks" id="tracks" class="results">
     <ion-item *ngFor="let track of results.tracks.items" padding (click)="addSong(user, league, track)">
@@ -32,7 +28,6 @@
       </p>
     </ion-item>
   </ion-list>
-
 
 </ion-content>
 

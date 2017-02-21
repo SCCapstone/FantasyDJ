@@ -21,6 +21,7 @@
 
   <ion-list>
     <ion-item *ngFor="let user of users | async" (click)="goToPlayer(user, league)">
+      <ion-icon item-left name="person"></ion-icon>
       <h2 text-wrap>{{ user.id }}</h2>
     </ion-item>
   </ion-list>

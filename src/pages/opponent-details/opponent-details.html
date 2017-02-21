@@ -6,24 +6,27 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>{{ league.name}} member: {{ user.id }}</ion-title>
+  <ion-navbar color="dark">
+    <ion-title>{{ user.id }}'s  songs in {{ league.name}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
-
 <ion-content padding>
 
-  <p>{{ user.id }}'s playlist </p>
-  <ion-card *ngFor="let song of songs | async" >
-    <ion-card-content>
-      <ion-card-title>
-        {{ song.name }} by {{ song.artist }}
-      </ion-card-title>
-      <img src="{{ song.artwork }}"
-           alt="album artwork for {{ song.name }}"/>
-    </ion-card-content>
-  </ion-card>
+  <ion-list>
+    <ion-item *ngFor="let song of songs | async">
+      <ion-thumbnail item-left>
+        <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
+      </ion-thumbnail>
+      <h2>{{ song.name }}</h2>
+      <p>{{ song.artist }}<p>
+    </ion-item>
+
+    <ion-item *ngIf="(songs | async)?.length === 0">
+      <p>No songs chosen</p>
+    </ion-item>
+
+  </ion-list>
 
 </ion-content>

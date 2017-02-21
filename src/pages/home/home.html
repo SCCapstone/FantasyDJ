@@ -1,28 +1,21 @@
 <ion-header>
   <ion-navbar color="dark">
-    <ion-title align="center">FantasyDJ</ion-title>
+    <ion-title align="center">Leagues</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
-  <button *ngIf="! currentUser" class="btn btn-primary" id="btn-login" (click)="login()">Log In</button>
+  <button ion-button *ngIf="! currentUser" (click)="login()">Log In</button>
 
-  <p *ngIf="currentUser">Hello, {{ currentUser.id }}!</p>
-
-  <h2>Leagues</h2>
-
-  <ion-card *ngFor="let league of leagues | async" (click)="goToLeague(league)">
-
-    <ion-item text-wrap>
-      {{ league.name }}
-    </ion-item>
-  </ion-card>
-
-  <ion-card>
-      <ion-item text-wrap>
-        <button (click) = "newLeague()">Create new league</button>
+  <div *ngIf="currentUser">
+    <ion-list>
+      <ion-item *ngFor="let league of leagues | async" (click)="goToLeague(league)">
+        <h2>{{ league.name }}</h2>
+        <p>{{ league.users.join(" &amp; ") }}</p>
       </ion-item>
-  </ion-card>
+    </ion-list>
 
+    <button ion-button block (click) = "newLeague()">Create new league</button>
+  </div>
 </ion-content>

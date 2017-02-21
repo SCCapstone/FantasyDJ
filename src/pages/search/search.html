@@ -1,7 +1,7 @@
 
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="dark">
     <ion-title>Search</ion-title>
   </ion-navbar>
 
@@ -19,15 +19,19 @@
 
 
 
-  <div *ngIf="results && results.tracks" id="tracks" class="results">
-    <ion-card *ngFor="let track of results.tracks.items" padding (click)="addSong(user, league, track)">
-      <ion-card-title text-wrap>{{ track.name }}</ion-card-title>
-      <ion-item text-wrap>by {{ track.album.artists[0].name }}</ion-item>
-      <ion-item text-wrap>on {{ track.album.name }}</ion-item>
-      <img src="{{ track.album.images[0].url }}"
-           alt="album artwork for {{ track.name }}">
-    </ion-card>
-  </div>
+  <ion-list *ngIf="results && results.tracks" id="tracks" class="results">
+    <ion-item *ngFor="let track of results.tracks.items" padding (click)="addSong(user, league, track)">
+      <ion-thumbnail item-left>
+        <img src="{{ track.album.images[0].url }}"
+             alt="album artwork for {{ track.name }}">
+      </ion-thumbnail>
+      <h2 text-wrap>{{ track.name }}</h2>
+      <p>
+        by <strong>{{ track.album.artists[0].name }}</strong>
+        on <em>{{ track.album.name }}</em>
+      </p>
+    </ion-item>
+  </ion-list>
 
 
 </ion-content>

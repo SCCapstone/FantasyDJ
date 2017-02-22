@@ -11,11 +11,11 @@
   <div *ngIf="currentUser">
     <ion-list>
       <ion-item *ngFor="let league of leagues | async" (click)="goToLeague(league)">
+          <ion-icon *ngIf="(getScore(league.id, league.users[0]) | async) > (getScore(league.id, league.users[1]) | async)" item-left name="thumbs-up"></ion-icon>
+          <ion-icon *ngIf="(getScore(league.id, league.users[0]) | async) < (getScore(league.id, league.users[1]) | async)" item-left name="thumbs-down"></ion-icon>
+          <ion-icon *ngIf="(getScore(league.id, league.users[0]) | async) == (getScore(league.id, league.users[1]) | async)" item-left name="help-circle"></ion-icon>
         <h2>{{ league.name }}</h2>
         <p>{{ league.users.join(" &amp; ") }}</p>
-        <p *ngIf="(getScore(league.id, league.users[0]) | async) > (getScore(league.id, league.users[1]) | async)">Winning</p>
-        <p *ngIf="(getScore(league.id, league.users[0]) | async) < (getScore(league.id, league.users[1]) | async)">Losing</p>
-        <p *ngIf="(getScore(league.id, league.users[0]) | async) == (getScore(league.id, league.users[1]) | async)">Tied</p>
       </ion-item>
     </ion-list>
 

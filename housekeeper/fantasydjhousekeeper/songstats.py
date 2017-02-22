@@ -18,6 +18,8 @@ class SongStatModel(object):
                   .get()
         if not start_dt:
             start_dt = EPOCH
+        start_dt = begin_of_day(start_dt)
+
         if not end_dt:
             end_dt = begin_of_day()
 

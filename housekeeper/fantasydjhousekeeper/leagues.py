@@ -77,7 +77,7 @@ class LeagueModel(object):
             fbleague.key(),
             val['name'],
             [key_id for key_id in users.keys()],
-            get_date(val, 'draftDate'),
+            get_date(val, 'startTime'),
             get_date(val, 'endTime'),
             get_val(val, 'winner')
         )

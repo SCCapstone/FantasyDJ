@@ -50,7 +50,7 @@ export class SongDetailPage {
     this.stream = new Audio(this.url);}
 
   ionViewDidLoad() {
-    console.log('details of selected song');
+    console.log('details of selected song, along with a 30 second preview');
   }
 
   launchUrl(url) {

@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { PlayerDetailsPage } from '../player-details/player-details';
-
-import { League, User } from '../../models/fantasydj-models';
+//import 'rxjs/add/Observable/zipArray';
+import { League, User, Score } from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
 import { UserData } from '../../providers/user-provider';
 import {OpponentDetailsPage} from "../opponent-details/opponent-details";
@@ -23,6 +23,7 @@ export class LeaguePage {
   playerDetailsPage = PlayerDetailsPage;
   users: Observable<User[]>;
   current: User = null;
+  opponent: User;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -33,7 +34,9 @@ export class LeaguePage {
     this.users = this.userData.loadUsers(this.league.id);
     this.userData.loadCurrentUser().then(user => {
       this.current = user;
-
+      this.leagueData.getOpponent(user.id, this.league.id).then(opp =>{
+        this.opponent = opp;
+      }).catch(error => console.log(error));
     }).catch(error => console.log(error));
   }
 
@@ -82,4 +85,10 @@ export class LeaguePage {
     });
     confirm.present();
   }
+
+  getScore(leagueId, userId){
+    return this.leagueData.getPlaylistScore(leagueId, userId);
+  }
+
+
 }

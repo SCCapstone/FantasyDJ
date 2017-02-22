@@ -1,16 +1,14 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { SearchPage } from '../search/search';
-import {SongDetailPage} from "../song-detail/song-detail";
 import { Observable } from 'rxjs/Observable';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
-import { User, League, Song } from '../../models/fantasydj-models';
+import { User, League, Song, Score } from '../../models/fantasydj-models';
 
 import { SongData } from '../../providers/song-provider';
 import { UserData } from '../../providers/user-provider';
 import { LeagueData } from '../../providers/league-provider';
-
 
 /*
  Generated class for the PlayerDetails page.
@@ -30,6 +28,7 @@ export class PlayerDetailsPage {
   users: FirebaseListObservable<any[]>;
   opp_songs: Observable<Song[]>;
   opponent: User;
+  dates: Date[];
 
 
   constructor(public navCtrl: NavController,
@@ -48,6 +47,7 @@ export class PlayerDetailsPage {
       }
       console.log("this.creator: " + this.creator);
     });
+
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.leagueData.getOpponent(this.user.id, this.league.id).then(opp =>{
       console.log(opp);
@@ -71,11 +71,8 @@ export class PlayerDetailsPage {
     });
   }
 
-  goToSong(user, league){
-    this.navCtrl.push(SongDetailPage, {
-      league: league,
-      user : user
-    });
+  getScore(leagueId, userId, songId){
+    return this.leagueData.getSongScore(leagueId, userId, songId);
   }
 
 }

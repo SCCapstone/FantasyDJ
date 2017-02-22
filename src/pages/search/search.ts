@@ -62,18 +62,13 @@ export class SearchPage {
 
   addSong(user, league, track) {
     console.log(league);
-    this.leagueData.addSong(
+    this.leagueData.updatePlaylist(
       user.id,
       league.id,
-      track.id,
-      track.name,
-      track.album.artists[0].name
+      track
     ).then(song => {
       console.log('added song: ' + song.name);
       console.log("Track id: " + track.id)
-      this.leagueData.notifyOfPlayistUpdate(user.id, league.id)
-        .then(res => console.log('opponent notified of turn'))
-        .catch(error => console.log('error sending turn notification to opponent'));
       this.navCtrl.pop();
     }).catch(err => {
       this.showAlertPopup(err);

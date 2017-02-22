@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { User, League, Song } from '../../models/fantasydj-models';
 
 import { SongData } from '../../providers/song-provider';
+import { LeagueData } from '../../providers/league-provider';
 
 /*
  Generated class for the PlayerDetails page.
@@ -26,7 +27,8 @@ export class OpponentDetailsPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private songData: SongData) {
+              private songData: SongData,
+              private leagueData: LeagueData) {
     this.user = this.navParams.get('user');
     this.league = this.navParams.get('league');
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
@@ -38,11 +40,8 @@ export class OpponentDetailsPage {
     console.log(this.user)
   }
 
-  // goToSearch(user, league) {
-  //   this.navCtrl.push(SearchPage, {
-  //     league: league,
-  //     user : user
-  //   });
-  // }
+  getScore(leagueId, userId, songId) {
+    return this.leagueData.getSongScore(leagueId, userId, songId);
+  }
 
 }

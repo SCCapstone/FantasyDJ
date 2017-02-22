@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { PlayerDetailsPage } from '../player-details/player-details';
-import 'rxjs/rx';
 //import 'rxjs/add/Observable/zipArray';
 import { League, User, Score } from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';

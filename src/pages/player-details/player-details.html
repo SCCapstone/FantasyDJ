@@ -22,7 +22,7 @@
       </ion-thumbnail>
       <h2>{{ song.name }}</h2>
       <p>{{ song.artist }}<p>
-      <p>{{getScore(league.id, user.id, song.id) | async }}</p>
+      <p>Score: {{getScore(league.id, user.id, song.id) | async }}</p>
     </ion-item>
 
     <ion-item *ngIf="(songs | async)?.length === 0">
@@ -41,7 +41,7 @@
 
     <div *ngIf="!creator && (songs | async)?.length == (opp_songs | async)?.length
                 || creator && (songs | async)?.length > (opp_songs | async)?.length">
-      Wait for opponent to choose a song.
+      <ion-item>Wait for opponent to choose a song.</ion-item>
     </div>
 
   </div>

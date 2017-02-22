@@ -18,11 +18,13 @@ npm-debug.log*
 .sass-cache/
 .tmp/
 .versions/
+bower_components/
 coverage/
 dist/
 node_modules/
 tmp/
 temp/
+typings/
 hooks/
 platforms/
 plugins/
@@ -34,6 +36,7 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+typings.json
 
 *.pyc
 *.egg-info

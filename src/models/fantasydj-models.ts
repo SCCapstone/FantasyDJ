@@ -11,6 +11,7 @@ export interface League {
   creator: string,
   users: any[],
   draftDate: Date,
+  startTime: Date,
   endTime: Date,
   winner: string
 };
@@ -18,11 +19,19 @@ export interface League {
 export interface Song {
   id: string,
 	artist: string,
+  album: string,
 	name: string,
 	spotifyId: string,
 	leagues: any[],
   artwork?: string,
   preview: string
+};
+
+export interface SongStat {
+  id: string,
+  songId: string,
+  date: Date,
+  popularity: number
 };
 
 export interface Score {

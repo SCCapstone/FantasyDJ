@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { PlayerDetailsPage } from '../player-details/player-details';
-
-import { League, User } from '../../models/fantasydj-models';
+import { League, User, Score } from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
 import { UserData } from '../../providers/user-provider';
 import {OpponentDetailsPage} from "../opponent-details/opponent-details";
@@ -33,9 +32,8 @@ export class LeaguePage {
     this.users = this.userData.loadUsers(this.league.id);
     this.userData.loadCurrentUser().then(user => {
       this.current = user;
-
     }).catch(error => console.log(error));
-  }
+}
 
   ionViewDidLoad() {
     console.log('Hello League page');
@@ -82,4 +80,10 @@ export class LeaguePage {
     });
     confirm.present();
   }
+
+  getScore(leagueId, userId){
+    return this.leagueData.getPlaylistScore(leagueId, userId);
+  }
+
+
 }

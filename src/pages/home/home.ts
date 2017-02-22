@@ -75,4 +75,8 @@ export class HomePage {
     this.navCtrl.push(CreateLeaguePage);
   }
 
+  getScore(leagueId, userId){
+    return this.leagueData.getPlaylistScore(leagueId, userId);
+  }
+
 };

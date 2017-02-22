@@ -48,6 +48,7 @@ export class PlayerDetailsPage {
       }
       console.log("this.creator: " + this.creator);
     });
+
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.leagueData.getOpponent(this.user.id, this.league.id).then(opp =>{
       console.log(opp);
@@ -60,8 +61,8 @@ export class PlayerDetailsPage {
 
   ionViewDidLoad() {
     console.log('Hello PlayerDetails Page');
-    console.log(this.league)
-    console.log(this.user)
+    console.log(this.league);
+    console.log(this.user);
   }
 
   goToSearch(user, league) {
@@ -71,11 +72,15 @@ export class PlayerDetailsPage {
     });
   }
 
-  goToSong(user, league){
+  goToSong(user, league) {
     this.navCtrl.push(SongDetailPage, {
       league: league,
       user : user
     });
+  }
+
+  getScore(leagueId, userId, songId) {
+    return this.leagueData.getSongScore(leagueId, userId, songId);
   }
 
 }

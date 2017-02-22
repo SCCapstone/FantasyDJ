@@ -16,7 +16,11 @@ def get_val(d, k):
     try:
         return strip_to_none(d[k])
     except KeyError:
+        # obviously not there.
         return None
+    except AttributeError:
+        # not a string. don't strip.
+        return d[k]
 
 
 DATETIME_FMT = '%Y-%m-%dT%H:%M:%S.%fZ'
@@ -63,6 +67,10 @@ def date_from_str(str_val):
 
 EPOCH_STR = '1970-01-01T00:00:00.000Z'
 EPOCH = date_from_str(EPOCH_STR)
+
+
+def now():
+    return datetime.now(tz.tzutc())
 
 
 def begin_of_day(dtime=None):

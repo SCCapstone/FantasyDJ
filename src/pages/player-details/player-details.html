@@ -16,13 +16,13 @@
 
   <p>DJing since {{ user.dateCreated }}</p>
 
-  <ion-card *ngFor="let song of songs | async" >
+  <ion-card *ngFor="let song of songs | async">
     <ion-card-content>
       <ion-card-title>
         {{ song.name }} by {{ song.artist }}
       </ion-card-title>
       <img src= "{{ song.artwork }}"
-           alt="album artwork for {{ song.name }}">
+           alt="album artwork for {{ song.name }}" (click)="goToSong(user, league)">
     </ion-card-content>
   </ion-card>
 

@@ -23,6 +23,7 @@ import { LeagueData } from '../providers/league-provider';
 import { SongData } from '../providers/song-provider';
 
 import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+import {SongDetailPage} from "../pages/song-detail/song-detail";
 
 const cloudSettings: CloudSettings = {
   'core': {
@@ -61,6 +62,7 @@ export const firebaseConfig = {
     OpponentDetailsPage,
     CreateLeaguePage,
     SearchPage,
+    SongDetailPage,
     AnalyticsPage
   ],
   imports: [
@@ -80,6 +82,7 @@ export const firebaseConfig = {
     OpponentDetailsPage,
     CreateLeaguePage,
     SearchPage,
+    SongDetailPage,
     AnalyticsPage
   ],
   providers: [

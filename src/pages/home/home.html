@@ -5,7 +5,8 @@
 </ion-header>
 
 <ion-content padding>
-
+  <br>
+  <br>
   <button *ngIf="! currentUser" class="btn btn-primary" id="btn-login" (click)="login()">Log In</button>
 
   <p *ngIf="currentUser">Hello, {{ currentUser.id }}!</p>

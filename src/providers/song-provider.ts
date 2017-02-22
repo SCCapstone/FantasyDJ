@@ -31,6 +31,7 @@ export class SongData {
             this.spotify.loadTrack(song.spotifyId)
               .then(track => {
                 song.artwork = track.album.images[0].url;
+                song.preview = track.preview_url;
               })
               .catch(error => console.log(error));
           }
@@ -132,7 +133,8 @@ export class SongData {
 	    name: fbsong.name,
 	    spotifyId: fbsong.spotifyId,
 	    leagues: [],
-      pic: fbsong.pic
+      pic: fbsong.pic,
+      preview: fbsong.preview
     };
     for (var key in fbsong.leagues) {
       song.leagues.push(key);

@@ -179,9 +179,7 @@ export class LeagueData {
       let message: string = null;
       let recipients: Array<string> = [];
 
-      this.songData.createSong(spotifyTrack.id,
-                               spotifyTrack.name,
-                               spotifyTrack.artists[0].name)
+      this.songData.createSong(spotifyTrack)
         .then(songResult => {
           song = songResult;
           return this.leagueHasSong(leagueId, songResult.id);

@@ -21,6 +21,7 @@ import { SpotifyProvider } from '../providers/spotify-provider';
 import { UserData } from '../providers/user-provider';
 import { LeagueData } from '../providers/league-provider';
 import { SongData } from '../providers/song-provider';
+import { SongStatData } from '../providers/songstat-provider';
 
 import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
 
@@ -88,7 +89,8 @@ export const firebaseConfig = {
     IonicCloud,
     UserData,
     LeagueData,
-    SongData
+    SongData,
+    SongStatData
   ]
 })
 export class AppModule {}

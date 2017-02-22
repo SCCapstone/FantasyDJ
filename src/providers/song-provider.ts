@@ -3,7 +3,9 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 
 import { Song } from '../models/fantasydj-models';
+import { SpotifyTrack } from '../models/spotify-models';
 import { SpotifyProvider } from './spotify-provider';
+import { SongStatData } from './songstat-provider';
 
 
 @Injectable()
@@ -13,16 +15,12 @@ export class SongData {
   private cachedSongs: any = {};
 
   constructor(private db: AngularFireDatabase,
-              private spotify: SpotifyProvider) {
+              private spotify: SpotifyProvider,
+              private statData: SongStatData) {
     this.fbSongs = this.db.list('/Songs');
   }
 
-  /*private fbSongLeaguesUrl(songId: string,): string {
-    let url = '/Songs/' + songId + '/leagues';
-     return url;
-  }*/
-
-  loadSong(songId: string): Promise<Song> {
+  public loadSong(songId: string): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
       this.db.object('/Songs/' + songId)
         .map(this.mapFBSong)
@@ -45,7 +43,7 @@ export class SongData {
     });
   }
 
-  loadSongs(leagueId: string,
+  public loadSongs(leagueId: string,
             userId: string): Observable<Song[]> {
     return this.db.list('/Leagues/' + leagueId + '/users/' + userId)
       .map(items => {
@@ -59,7 +57,7 @@ export class SongData {
       });
   }
 
-  loadSongBySpotifyId(spotifyTrackId: string): Promise<Song> {
+  private loadSongBySpotifyId(spotifyTrackId: string): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
       console.log("loadSongBySpotifyId called");
 
@@ -98,20 +96,32 @@ export class SongData {
     });
   }
 
-  createSong(spotifyTrackId: string,
-             songName: string,
-             songArtist: string): Promise<Song> {
+  public createSong(track: SpotifyTrack): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
-      this.loadSongBySpotifyId(spotifyTrackId).then(song => {
+      this.loadSongBySpotifyId(track.id).then(song => {
         resolve(song);
       }).catch(err => {
         let songId = this.db.list('/Songs').push({
-          spotifyId: spotifyTrackId,
-          name: songName,
-          artist: songArtist
+          spotifyId: track.id,
+          name: track.name,
+          artist: track.artists[0].name,
+          album: track.album.name
         }).key;
         if (songId) {
-          resolve(this.loadSong(songId));
+          this.loadSong(songId)
+            .then(song => {
+              let date = new Date();
+              date.setUTCHours(0, 0, 0, 0);
+              this.statData.addSongStat(songId, date, track.popularity)
+                .then(songStat => {
+                  console.log(`added songstat for song ${songId} on ${date}`);
+                })
+                .catch(error => console.log(error));
+              resolve(song);
+            })
+            .catch(error => {
+              reject(error);
+            });
         }
         else {
           reject('song creation error');
@@ -129,18 +139,15 @@ export class SongData {
     let song = <Song>{
       id: fbsong.$key,
       artist: fbsong.artist,
-	    name: fbsong.name,
-	    spotifyId: fbsong.spotifyId,
-	    leagues: [],
-      pic: fbsong.pic
+      album: fbsong.album,
+      name: fbsong.name,
+      spotifyId: fbsong.spotifyId,
+      leagues: []
     };
     for (var key in fbsong.leagues) {
       song.leagues.push(key);
     }
     return song;
   }
-
-
-
 
 }

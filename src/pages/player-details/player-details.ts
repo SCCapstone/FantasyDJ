@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { SearchPage } from '../search/search';
+import { AnalyticsPage } from '../analytics/analytics';
 import { Observable } from 'rxjs/Observable';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
@@ -76,4 +77,7 @@ export class PlayerDetailsPage {
     return this.leagueData.getSongScore(leagueId, userId, songId);
   }
 
+  goToAnalytics() {
+    this.navCtrl.push(AnalyticsPage);
+  }
 }

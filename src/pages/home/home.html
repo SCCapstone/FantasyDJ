@@ -13,6 +13,9 @@
       <ion-item *ngFor="let league of leagues | async" (click)="goToLeague(league)">
         <h2>{{ league.name }}</h2>
         <p>{{ league.users.join(" &amp; ") }}</p>
+        <p *ngIf="(getScore(league.id, league.users[0]) | async) > (getScore(league.id, league.users[1]) | async)">Winning</p>
+        <p *ngIf="(getScore(league.id, league.users[0]) | async) < (getScore(league.id, league.users[1]) | async)">Losing</p>
+        <p *ngIf="(getScore(league.id, league.users[0]) | async) == (getScore(league.id, league.users[1]) | async)">Tied</p>
       </ion-item>
     </ion-list>
 

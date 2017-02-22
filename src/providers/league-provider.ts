@@ -409,4 +409,5 @@ public getSongScore(leagueId: string, userId: string, songId: string): Observabl
             return total;
           });
   }
+
 }

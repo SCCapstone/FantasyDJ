@@ -19,9 +19,11 @@
       <ion-thumbnail item-left>
         <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
       </ion-thumbnail>
-      <h2>{{ song.name }}</h2>
-      <p>{{ song.artist }}</p>
-      <p>{{ getScore(league.id, user.id, song.id) | async }}</p>
+      <div>
+        <h2>{{ song.name }}</h2>
+        <p>{{ song.artist }}</p>
+      </div>
+      <span item-right>{{ getScore(league.id, user.id, song.id) | async }}</span>
     </ion-item>
 
     <ion-item *ngIf="(songs | async)?.length === 0">

@@ -77,7 +77,10 @@ export class PlayerDetailsPage {
     return this.leagueData.getSongScore(leagueId, userId, songId);
   }
 
-  goToAnalytics() {
-    this.navCtrl.push(AnalyticsPage);
+  goToAnalytics(user, league) {
+    this.navCtrl.push(AnalyticsPage, {
+      league: league,
+      user : user
+    });
   }
 }

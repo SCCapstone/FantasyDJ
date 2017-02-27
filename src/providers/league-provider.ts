@@ -350,7 +350,16 @@ getCreator(leagueId: string): Promise<User> {
 
 getStartDate(leagueId: string): Promise<string>{
   return new Promise<string>((resolve, reject) => {
-    this.db.object('/Leagues/' + leagueId + '/draftDate').take(1).subscribe(
+    this.db.object('/Leagues/' + leagueId + '/startTime').take(1).subscribe(
+    snapshot => {
+      resolve(snapshot.$value);
+    });
+  });
+}
+
+getEndDate(leagueId: string): Promise<string>{
+  return new Promise<string>((resolve, reject) => {
+    this.db.object('/Leagues/' + leagueId + '/endTime').take(1).subscribe(
     snapshot => {
       resolve(snapshot.$value);
     });
@@ -362,8 +371,10 @@ getDates(leagueId: string): Promise<Date[]> {
   this.getStartDate(leagueId).then(date => {
   console.log(date);
   let start_date = new Date(date);
-  let current_date: Date = new Date();
-  this.getDatesInner(start_date, current_date).then(dates => resolve(dates));
+  this.getEndDate(leagueId).then(endDate => {
+    let end_date = new Date(endDate);
+    this.getDatesInner(start_date, end_date).then(dates => resolve(dates));
+  });
   });
 });
  } 
@@ -409,5 +420,58 @@ public getSongScore(leagueId: string, userId: string, songId: string): Observabl
             return total;
           });
   }
+
+getLeagueData(leagueId: string, userId: string): Promise<any[]> {
+  return new Promise<any[]>((resolve, reject) => {
+    let songArray: any[] = [];
+    this.dbObj('Leagues', leagueId, 'users', userId)
+    .take(1)
+    .forEach(songsRef => {
+      let counter: number = 0;
+      for (let songId in songsRef) {
+        let scores: number[] =[];
+        if(! songId.startsWith('$')){
+          for (let date in songsRef[songId]){
+            if(! date.startsWith('$')){
+              scores.push(songsRef[songId][date])
+            }
+          }
+        }
+        if(scores.length > 0){
+          songArray[counter] = scores;
+          counter = counter +1;
+        }
+      }
+      console.log(songArray);
+    })
+    .then(() => {
+      resolve(songArray);
+    })
+    .catch(error => reject(error));
+  });
+}
+
+getSongNames(leagueId: string, userId: string): Promise<any[]>{
+  return new Promise<any[]>((resolve, reject) => {
+    let nameArray: any[] = [];
+    this.dbObj('Leagues', leagueId, 'users', userId)
+    .take(1)
+    .forEach(songsRef => {
+      for(let songId in songsRef){
+        console.log(songId);
+        if(! songId.startsWith('$')){
+          this.songData.getSongName(songId).then(name => {
+            nameArray.push(name);
+          });
+        }
+      }
+    })
+    .then(() => {
+      resolve(nameArray);
+    })
+    .catch(error => reject(error));
+  });
+}
+
 
 }

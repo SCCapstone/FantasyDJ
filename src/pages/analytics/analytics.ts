@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import {Chart} from 'chart.js';
+import { NavController, NavParams } from 'ionic-angular';
+import { Chart } from 'chart.js';
+import { LeagueData } from '../../providers/league-provider';
+import { User, League} from '../../models/fantasydj-models';
+import { Observable } from 'rxjs/Observable';
+
 
 /*
   Generated class for the Analytics page.
@@ -8,57 +12,122 @@ import {Chart} from 'chart.js';
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 */
+
 @Component({
   selector: 'page-analytics',
   templateUrl: 'analytics.html'
 })
 export class AnalyticsPage {
-	public lineChartData:Array<any> = [
-    {data: [0, -3, 3, 0, 1], label: 'Song A'},
-    {data: [-2, 1, 0, 0, 1], label: 'Song B'},
-    {data: [0, 1, 1, 0, 1], label: 'Song C'}
-  ];
-  public lineChartLabels:Array<any> = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+  user: User;
+  league: League;
+  song1: number[];
+  song2: number[];
+  song3: number[];
+
+  lineChartData: Array<any> = [
+            {data: [], label: 'Song A'},
+            {data: [], label: 'Song B'},
+            {data: [], label: 'Song C'}
+          ];
+ 
+  public lineChartLabels:Array<any> = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
   public lineChartOptions:any = {
     responsive: true
   };
   public lineChartColors:Array<any> = [
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
+    { 
+      // light blue
+      backgroundColor: 'rgba(179, 198, 255, 0.2)',
+      borderColor: 'rgba(179, 198, 255, 1)',
+      pointBackgroundColor: 'rgba(179, 198, 255, 0.2)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+      pointHoverBorderColor: 'rgba(179, 198, 255, 1)'
     },
-    { // dark grey
-      backgroundColor: 'rgba(77,83,96,0.2)',
-      borderColor: 'rgba(77,83,96,1)',
-      pointBackgroundColor: 'rgba(77,83,96,1)',
+    {
+      // blue
+      backgroundColor: 'rgba(102, 153, 255, 0.2)',
+      borderColor: 'rgba(102, 153, 255, 1)',
+      pointBackgroundColor: 'rgba(102, 153, 255, 0.2)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(77,83,96,1)'
+      pointHoverBorderColor: 'rgba(102, 153, 255, 1)'
     },
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
+    { // darkest blue
+      backgroundColor: 'rgba(0, 32, 128, 0.2)',
+      borderColor: 'rgba(0, 32, 128, 1)',
+      pointBackgroundColor: 'rgba(0, 32, 128, 0.2)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+      pointHoverBorderColor: 'rgba(0, 32, 128, 1)'
     }
   ];
   public lineChartLegend:boolean = true;
   public lineChartType:string = 'line';
- 
 
 
+  constructor(public navCtrl: NavController,
+  			  public navParams: NavParams,
+  			  private leagueData: LeagueData) {
 
-  constructor(public navCtrl: NavController) {}
+  	this.user = this.navParams.get('user');
+    this.league = this.navParams.get('league');
+    
+    this.leagueData.getDates(this.league.id).then(dates => {
+      console.log(dates);
+      console.log(dates.map(this.dateToDay));
+      this.lineChartLabels = dates.map(this.dateToDay);
+    });
+
+  	this.leagueData.getLeagueData(this.league.id, this.user.id).then(scores => {
+  		console.log(scores);
+  		this.song1 = scores[0];
+  		this.song2 = scores[1];
+  		this.song3 = scores[2];	
+  	})
+    .then(() => {
+      this.song1 = this.song1.reduce(this.accumulate, []);
+      this.song2 = this.song2.reduce(this.accumulate, []);
+      this.song3 = this.song3.reduce(this.accumulate, []);
+    })
+    .then(() => {
+      this.leagueData.getSongNames(this.league.id, this.user.id).then(names => {
+        this.lineChartData = [
+        { data: this.song1, label: names[0] },
+        { data: this.song2, label: names[1] },
+        { data: this.song3, label: names[2] }
+      ];
+      })
+    .then(() => {
+      console.log(this.lineChartData);
+  	})
+  	.catch(err => console.log(err));
+    });
+  }
 
   ionViewDidLoad() {
     console.log('Hello Analytics Page');
   }
 
+  accumulate(r, a){
+        if (r.length > 0)
+          a += r[r.length - 1];
+        r.push(a);
+        return r;
+      }
+
+  dateToDay(date){
+    var dayDict = {"Mon": "Monday",
+                  "Tue": "Tuesday",
+                  "Wed": "Wednesday",
+                  "Thu": "Thursday",
+                  "Fri": "Friday",
+                  "Sat": "Saturday",
+                  "Sun": "Sunday"};
+
+    var day = date.toString().slice(0,3);
+    return(dayDict[day]);
+  }
 
 }

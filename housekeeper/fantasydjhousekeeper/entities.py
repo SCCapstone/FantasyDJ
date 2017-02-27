@@ -8,11 +8,11 @@ class User(object):
 
 class League(object):
 
-    def __init__(self, id, name, users, draftDate, endTime, winner):
+    def __init__(self, id, name, users, startTime, endTime, winner):
         self.id = id
         self.name = name
         self.users = users
-        self.draftDate = draftDate
+        self.startTime = startTime
         self.endTime = endTime
         self.winner = winner
 

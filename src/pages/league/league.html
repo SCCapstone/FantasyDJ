@@ -23,7 +23,7 @@
     <ion-item *ngFor="let user of users | async" (click)="goToPlayer(user, league)">
       <ion-icon item-left name="person"></ion-icon>
       <h2 text-wrap>{{ user.id }}</h2>
-      <h2 text-wrap>Score: {{ getScore(league.id, user.id) | async }}</h2>
+      <span item-right>{{ getScore(league.id, user.id) | async }}</span>
     </ion-item>
   </ion-list>
 

@@ -86,7 +86,7 @@ export class SpotifyProvider {
          types?: SpotifySearchType[],
          limit?: number,
          offset?: number): Promise<SpotifySearchResult> {
-    let searchParams = { q: query }
+    let searchParams = { q: encodeURIComponent(query) }
 
     searchParams['type'] = types ? types.join(',') : DEFAULT_SEARCH_TYPES;
 

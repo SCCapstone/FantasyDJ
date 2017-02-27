@@ -67,7 +67,7 @@ class FantasyDJ(object):
         points = calc_points(
             self.stat_model.get_song_stats(
                 song.id,
-                league.draftDate,
+                league.startTime,
                 league.endTime
             )
         )

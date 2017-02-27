@@ -28,6 +28,7 @@
     "angular-cli": "^1.0.0-beta.22-1",
     "angular2": "^2.0.0-beta.21",
     "angularfire2": "2.0.0-beta.6",
+    "chart.js": "^2.5.0",
     "firebase": "^3.6.9",
     "ionic-angular": "2.0.0",
     "ionic-native": "2.4.1",

@@ -150,4 +150,11 @@ export class SongData {
     return song;
   }
 
+  getSongName(songId: string): Promise<string>{
+    return new Promise<string>((resolve, reject) => {
+      this.loadSong(songId).then(song => {
+        resolve(song.name);
+      });
+    });
+  }
 }

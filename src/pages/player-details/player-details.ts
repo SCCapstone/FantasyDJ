@@ -9,6 +9,7 @@ import { User, League, Song, Score } from '../../models/fantasydj-models';
 import { SongData } from '../../providers/song-provider';
 import { UserData } from '../../providers/user-provider';
 import { LeagueData } from '../../providers/league-provider';
+import {SongDetailPage} from "../song-detail/song-detail";
 
 /*
  Generated class for the PlayerDetails page.
@@ -25,6 +26,7 @@ export class PlayerDetailsPage {
   league: League;
   creator: boolean;
   songs: Observable<Song[]>;
+  song:any
   users: FirebaseListObservable<any[]>;
   opp_songs: Observable<Song[]>;
   opponent: User;
@@ -47,7 +49,6 @@ export class PlayerDetailsPage {
       }
       console.log("this.creator: " + this.creator);
     });
-
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.leagueData.getOpponent(this.user.id, this.league.id).then(opp =>{
       console.log(opp);
@@ -60,8 +61,8 @@ export class PlayerDetailsPage {
 
   ionViewDidLoad() {
     console.log('Hello PlayerDetails Page');
-    console.log(this.league)
-    console.log(this.user)
+    console.log(this.league);
+    console.log(this.user);
   }
 
   goToSearch(user, league) {
@@ -71,7 +72,18 @@ export class PlayerDetailsPage {
     });
   }
 
-  getScore(leagueId, userId, songId){
+  goToSong(user, league, songId) {
+    this.song = this.songData.loadSong(songId);
+    this.navCtrl.push(SongDetailPage, {
+      song: this.song,
+      league: league,
+      user : user
+    });
+    console.log(this.song);
+
+  }
+
+  getScore(leagueId, userId, songId) {
     return this.leagueData.getSongScore(leagueId, userId, songId);
   }
 

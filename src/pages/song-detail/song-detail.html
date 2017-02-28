@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar color="dark">
-    <ion-title *ngFor="let song of songs | async">{{ song.name }}</ion-title>
+    <ion-title> Placeholder </ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -17,6 +17,7 @@
 
   <img src= "{{ song.artwork }}"
        alt="album artwork for {{ song.name }}" >
+
 
   <button ion-button full color="secondary" (click)='launchUrl(song.preview)'>Open In Spotify</button>
 
@@ -47,6 +48,5 @@
     </ion-grid>
 
   </ion-footer>
-
-
+8
 </ion-content>

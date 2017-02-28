@@ -33,9 +33,7 @@ export class SongDetailPage {
 
 
 
-  // static get parameters() {
-  //   return [[Platform]];
-  // }
+
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -46,7 +44,7 @@ export class SongDetailPage {
     this.user = this.navParams.get('user');
     this.league = this.navParams.get('league');
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
-    this.url = "https://p.scdn.co/mp3-preview/378ccd78be223f579b885d1f1195d29948514f9f?cid=be9a8fc1e71c45edb1cbf4d69759d6d3";
+    this.url = "";
     this.stream = new Audio(this.url);}
 
   ionViewDidLoad() {

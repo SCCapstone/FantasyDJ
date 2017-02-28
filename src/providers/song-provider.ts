@@ -43,6 +43,7 @@ export class SongData {
     });
   }
 
+
   public loadSongs(leagueId: string,
                    userId: string): Observable<Song[]> {
     return this.db.list('/Leagues/' + leagueId + '/users/' + userId)

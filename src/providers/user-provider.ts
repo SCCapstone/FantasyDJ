@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
+import { encode, decode } from 'firebase-encode';
+
 
 import { SpotifyProvider } from './spotify-provider';
 
@@ -17,7 +19,8 @@ export class UserData {
       this.spotify.loadCurrentUser().then(spotifyUser => {
         // since we have a spotify user, try to load
         // fantasy-dj user
-        this.loadUser(spotifyUser.id)
+        let encoded_id = encode(spotifyUser.id);
+        this.loadUser(encoded_id)
           .then(user => resolve(user))
           .catch(error => {
             // no fantasy-dj user, so let's create one
@@ -38,12 +41,12 @@ export class UserData {
         reject('no spotify user. unable to create user.');
         return;
       }
-
-      this.db.object('/UserProfiles/' + spotifyUser.id).update({
+      let encoded_id = encode(spotifyUser.id);
+      this.db.object('/UserProfiles/' + encoded_id).update({
         dateCreated: new Date(),
         userEmail: spotifyUser.email
       }).then(_ => {
-        this.loadUser(spotifyUser.id).then(user => resolve(user));
+        this.loadUser(encoded_id).then(user => resolve(user));
       }).catch(err => reject(err));
     });
   }
@@ -58,7 +61,7 @@ export class UserData {
         }
 
         let user = <User>{
-          id: fbuser.$key,
+          id: decode(fbuser.$key),
           email: fbuser.userEmail,
           leagues: [],
           dateCreated: fbuser.dateCreated

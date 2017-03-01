@@ -7,19 +7,19 @@
 <ion-header>
 
   <ion-navbar color="dark">
-    <ion-title> Placeholder </ion-title>
+    <ion-title> {{ songFire.name }} by: {{ songFire.artist }} </ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding *ngFor="let song of songs | async">
+<ion-content padding >
 
-  <img src= "{{ song.artwork }}"
-       alt="album artwork for {{ song.name }}" >
+  <img src= "{{ songFire.artwork }}"
+       alt="album artwork for {{ songFire.name }}" >
 
 
-  <button ion-button full color="secondary" (click)='launchUrl(song.preview)'>Open In Spotify</button>
+  <button ion-button full color="secondary" (click)='launchUrl(songFire.preview)'>Open In Spotify</button>
 
 
   <ion-footer >
@@ -30,7 +30,7 @@
 
         <ion-col width="10"></ion-col>
         <ion-col width="40">
-          <button ion-button icon-only color="dark" (click)="play()">
+          <button ion-button icon-only color="dark" (click)='play()'>
             <ion-icon name="play" color="white"></ion-icon>
           </button>
         </ion-col>

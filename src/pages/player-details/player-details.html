@@ -15,7 +15,7 @@
 <ion-content padding>
 
   <ion-list>
-    <ion-item *ngFor="let song of songs | async" (click)="goToSong(user, league,song.id)">
+    <ion-item *ngFor="let song of songs | async" (click)="goToSong(user, league,song)">
       <ion-thumbnail item-left>
         <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
       </ion-thumbnail>
@@ -46,5 +46,6 @@
     </div>
 
   </div>
+  <button ion-button block (click) = "goToAnalytics(user, league)">Analytics</button>
 
 </ion-content>

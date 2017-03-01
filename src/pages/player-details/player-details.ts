@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { SearchPage } from '../search/search';
+import { AnalyticsPage } from '../analytics/analytics';
 import { Observable } from 'rxjs/Observable';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
@@ -72,10 +73,12 @@ export class PlayerDetailsPage {
     });
   }
 
-  goToSong(user, league, songId) {
-    this.song = this.songData.loadSong(songId);
+  goToSong(user, league, song) {
+    console.log("This is the instance of song" ,song)
+    //this.song = song//this.songData.loadSong(song.id);
+    console.log("Going to song", song.id)
     this.navCtrl.push(SongDetailPage, {
-      song: this.song,
+      song: song,
       league: league,
       user : user
     });
@@ -87,4 +90,10 @@ export class PlayerDetailsPage {
     return this.leagueData.getSongScore(leagueId, userId, songId);
   }
 
+  goToAnalytics(user, league) {
+    this.navCtrl.push(AnalyticsPage, {
+      league: league,
+      user : user
+    });
+  }
 }

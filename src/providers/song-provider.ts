@@ -29,6 +29,7 @@ export class SongData {
             this.spotify.loadTrack(song.spotifyId)
               .then(track => {
                 song.artwork = track.album.images[0].url;
+                song.preview = track.preview_url;
               })
               .catch(error => console.log(error));
           }
@@ -151,4 +152,11 @@ export class SongData {
     return song;
   }
 
+  getSongName(songId: string): Promise<string>{
+    return new Promise<string>((resolve, reject) => {
+      this.loadSong(songId).then(song => {
+        resolve(song.name);
+      });
+    });
+  }
 }

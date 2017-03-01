@@ -30,6 +30,8 @@ export class SongDetailPage {
   stream:any;
   promise:any;
   url:any;
+  songFire:any;
+  song:any;
 
 
 
@@ -44,11 +46,13 @@ export class SongDetailPage {
     this.user = this.navParams.get('user');
     this.league = this.navParams.get('league');
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
-    this.url = "";
-    this.stream = new Audio(this.url);}
+    this.songFire = navParams.get("song");
+    this.song = this.songData.loadSong(this.songFire);
+    this.url = this.song.preview;
+    this.stream = new Audio(this.songFire.preview);}
 
   ionViewDidLoad() {
-    console.log('details of selected song, along with a 30 second preview');
+    console.log('SONG-DETAIL');
   }
 
   launchUrl(url) {
@@ -64,6 +68,7 @@ export class SongDetailPage {
 
 
   play() {
+    console.log("song ID ", this.songFire)
     this.stream.play();
     this.promise = new Promise((resolve,reject) => {
       this.stream.addEventListener('playing', () => {

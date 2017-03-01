@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
-import { encode, decode } from 'firebase-encode';
-
 
 import { SpotifyProvider } from './spotify-provider';
 
@@ -19,7 +17,7 @@ export class UserData {
       this.spotify.loadCurrentUser().then(spotifyUser => {
         // since we have a spotify user, try to load
         // fantasy-dj user
-        let encoded_id = encode(spotifyUser.id);
+        let encoded_id = this.encode(spotifyUser.id);
         this.loadUser(encoded_id)
           .then(user => resolve(user))
           .catch(error => {
@@ -41,7 +39,8 @@ export class UserData {
         reject('no spotify user. unable to create user.');
         return;
       }
-      let encoded_id = encode(spotifyUser.id);
+      let encoded_id = this.encode(spotifyUser.id);
+      console.log('/UserProfiles/'+ encoded_id);
       this.db.object('/UserProfiles/' + encoded_id).update({
         dateCreated: new Date(),
         userEmail: spotifyUser.email
@@ -59,9 +58,9 @@ export class UserData {
           reject('user ' + userId + ' does not exist');
           return;
         }
-
+        console.log(this.decode(fbuser.$key));
         let user = <User>{
-          id: decode(fbuser.$key),
+          id: this.decode(fbuser.$key),
           email: fbuser.userEmail,
           leagues: [],
           dateCreated: fbuser.dateCreated
@@ -86,6 +85,28 @@ export class UserData {
         }
         return users;
       });
+  }
+
+  encode(userId: string): string{
+    let dict = {'.': '2E%', '/': '3E%', '$':'4E%', '[':'5E%', ']': '6E%', '#':'7E%'};
+    let result: string = '';
+    for(var x = 0, c=''; c = userId.charAt(x); x++){ 
+      if(c in dict){
+        result = result + dict[c];
+      }
+      else result = result + c;
+    }
+    return result;
+  }
+
+  decode(userId: string): string{
+    userId= userId.replace(/2E%/g, '.');
+    userId= userId.replace(/3E%/g, '/');
+    userId= userId.replace(/4E%/g, '$');
+    userId= userId.replace(/5E%/g, '[');
+    userId= userId.replace(/6E%/g, ']');
+    userId= userId.replace(/7E%/g, '#');
+    return userId;
   }
 
 };

@@ -7,7 +7,6 @@ import { SearchPage } from '../search/search';
 
 import { Observable } from 'rxjs/Observable';
 
-import { SpotifyUser } from '../../models/spotify-models';
 import { User, League } from '../../models/fantasydj-models';
 
 import { OAuthService } from '../../providers/oauth-service';
@@ -27,15 +26,6 @@ export class HomePage {
   createLeaguePage = CreateLeaguePage;
   searchPage = SearchPage;
   currentUser: User = null;
-  testUser = <SpotifyUser>{
-    href: "test_href",
-    id: "test.id.test",
-    name: "test name",
-    uri: "test_uri",
-    images: [],
-    display_name: "test.user.name",
-    email: "test@test.com"
-  };
 
   // Refs
   leagues: Observable<League[]>;
@@ -47,7 +37,6 @@ export class HomePage {
               private spotify: SpotifyProvider,
               private userData: UserData,
               private leagueData: LeagueData) {
-    this.userData.createUser(this.testUser).then(user => console.log(user));
     this.init();
   }
 

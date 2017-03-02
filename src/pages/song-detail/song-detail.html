@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar color="dark">
-    <ion-title> {{ songFire.name }} by: {{ songFire.artist }} </ion-title>
+    <ion-title> {{ songFire.name }} by {{ songFire.artist }} </ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -16,7 +16,7 @@
 <ion-content padding >
 
   <img src= "{{ songFire.artwork }}"
-       alt="album artwork for {{ songFire.name }}" >
+       alt='url("../img/vinyl-music-play-spinning-21148.jpg")' >
 
 
   <button ion-button full color="secondary" (click)='launchUrl(songFire.preview)'>Open In Spotify</button>

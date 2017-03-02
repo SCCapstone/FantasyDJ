@@ -24,6 +24,7 @@ export class CreateLeaguePage {
   name: string;
   opponent: string;
   leagueForm: any;
+  pattern = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -32,7 +33,7 @@ export class CreateLeaguePage {
               private leagueData: LeagueData,
               private formBuilder: FormBuilder) {
     this.leagueForm = this.formBuilder.group({
-      name: ['', Validators.compose([Validators.pattern('[a-zA-Z ]*'), Validators.required])],
+      name: ['', Validators.compose([Validators.pattern(this.pattern), Validators.required])],
       opponent: ['', Validators.required],
     });
     if (this.authService.token) {

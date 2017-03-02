@@ -30,6 +30,7 @@
     "angularfire2": "2.0.0-beta.6",
     "chart.js": "^2.5.0",
     "firebase": "^3.6.9",
+    "firebase-encode": "0.0.5",
     "ionic-angular": "2.0.0",
     "ionic-native": "2.4.1",
     "ionicons": "3.0.0",

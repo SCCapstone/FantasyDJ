@@ -1,5 +1,6 @@
 from datetime import datetime
 from dateutil import parser, tz
+from dateutil.relativedelta import relativedelta
 import re
 
 
@@ -23,7 +24,8 @@ def get_val(d, k):
         return d[k]
 
 
-DATETIME_FMT = '%Y-%m-%dT%H:%M:%S.%fZ'
+DATETIME_OUT_FMT = '%Y-%m-%dT%H:%M:%S.%f'
+DATETIME_FMT = DATETIME_OUT_FMT + 'Z'
 DATE_FMT = '%Y-%m-%d'
 
 PAT_DATE = '\d{4}(-\d{2}){2}'
@@ -85,8 +87,18 @@ def begin_of_day(dtime=None):
     )
 
 
-def str_from_date(dt):
+def next_day(dtime):
+    return dtime + relativedelta(days=1)
+
+
+def one_week_earlier(dtime):
+    return dtime - relativedelta(days=7)
+
+
+def str_from_date(dt, in_ts_format=False):
     if dt:
+        if in_ts_format:
+            return dt.strftime(DATETIME_OUT_FMT)[:-3] + 'Z'
         return dt.strftime(DATE_FMT)
     return None
 

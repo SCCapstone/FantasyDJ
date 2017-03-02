@@ -1,8 +1,22 @@
 import logging
 from .entities import SongStat
-from .util import str_from_date, get_date, EPOCH, begin_of_day
+from .util import str_from_date, get_date, EPOCH, begin_of_day, next_day
+import random
 
 logger = logging.getLogger(__name__)
+
+
+def generate_fake_stats(song_id, start_dt, end_dt):
+    stats = []
+    start_dt = begin_of_day(start_dt)
+    end_dt = begin_of_day(end_dt)
+
+    cur_dt = start_dt
+    while cur_dt <= end_dt:
+        stats.append(SongStat('-Key', song_id, cur_dt, random.randint(0, 1)))
+        cur_dt = next_day(cur_dt)
+
+    return stats
 
 
 class SongStatModel(object):

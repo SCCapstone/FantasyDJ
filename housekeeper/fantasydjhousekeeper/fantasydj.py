@@ -86,12 +86,12 @@ class FantasyDJ(object):
             points
         )
 
-        print('song %s by %s (%s), points: %s' % (
+        print(u'song %s by %s (%s), points: %s' % (
             song.name,
             song.artist,
             song.spotifyId,
             points
-        ))
+        )).encode('UTF-8')
 
         return points
 

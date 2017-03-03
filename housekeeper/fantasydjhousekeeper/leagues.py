@@ -125,6 +125,7 @@ class LeagueModel(object):
         return [
             league for league in self.__get_leagues()
             if league.name.startswith('x')
+            and league.endTime is not None
             and league.isTest is None
         ]
 

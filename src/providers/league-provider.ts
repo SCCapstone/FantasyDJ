@@ -242,7 +242,7 @@ export class LeagueData {
       return new Promise<League>((resolve, reject) => {
         let startTime: Date = new Date();
         let endTime: Date = new Date(
-          startTime.getTime() + (1 * 24 * 60 * 60 * 1000)
+          startTime.getTime() + (7 * 24 * 60 * 60 * 1000)
         );
         let dates = {
           startTime: startTime,
@@ -362,7 +362,7 @@ export class LeagueData {
           resolve(snapshot.$value);
         });
      });
-  }     
+  }
 
 public isCreator(leagueId: string, userId: string): Observable<boolean>{
   return this.dbObj('Leagues', leagueId, 'creator')

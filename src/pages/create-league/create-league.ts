@@ -24,7 +24,7 @@ export class CreateLeaguePage {
   name: string;
   opponent: string;
   leagueForm: any;
-  pattern = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+  pattern = /^.*\S.*$/;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,

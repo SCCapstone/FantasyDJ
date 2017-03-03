@@ -338,10 +338,20 @@ export class LeagueData {
     return new Promise<User>((resolve, reject) => {
       this.db.object('/Leagues/' + leagueId + '/creator',
         {preserveSnapshot: true}).subscribe(snapshot => {
-        console.log(snapshot.val());
         this.userData.loadUser(snapshot.val()).then(user =>
           resolve(user))
           .catch(err => reject(err));
+      });
+    });
+  }
+
+  getWinner(leagueId: string): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
+      this.db.object('/Leagues/' + leagueId + '/winner',
+        {preserveSnapshot: true}).subscribe(snapshot => {
+        this.userData.loadUser(snapshot.val()).then(user =>
+          resolve(user))
+          .catch(err => resolve(null));
       });
     });
   }
@@ -369,6 +379,18 @@ public isCreator(leagueId: string, userId: string): Observable<boolean>{
           .take(1)
           .map(ref => {
             if (ref.$value == userId) {
+                return true;
+            }
+            else return false
+          });
+}
+
+isWinner(leagueId: string, userId: string): Observable<boolean>{
+  return this.dbObj('Leagues', leagueId, 'winner')
+          .take(1)
+          .map(ref => {
+            if(ref.$value == null) return null;
+            else if (ref.$value == userId) {
                 return true;
             }
             else return false

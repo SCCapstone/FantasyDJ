@@ -85,4 +85,8 @@ export class HomePage {
     return this.leagueData.isCreator(leagueId, userId);
   }
 
+  isWinner(leagueId, userId){
+    return this.leagueData.isWinner(leagueId, userId);
+  }
+
 };

@@ -24,6 +24,7 @@ export class LeaguePage {
   users: Observable<User[]>;
   current: User = null;
   opponent: User;
+  winner_flag = null;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -34,10 +35,21 @@ export class LeaguePage {
     this.users = this.userData.loadUsers(this.league.id);
     this.userData.loadCurrentUser().then(user => {
       this.current = user;
+      this.leagueData.getWinner(this.league.id).then(winner => {
+      if(winner != null){
+        console.log('winner: ' + winner.id);
+        if(winner.id == this.current.id){
+          this.winner_flag = true;
+        }
+        else this.winner_flag = false;
+      }
+    });
       this.leagueData.getOpponent(user.id, this.league.id).then(opp =>{
         this.opponent = opp;
       }).catch(error => console.log(error));
     }).catch(error => console.log(error));
+
+    
   }
 
   ionViewDidLoad() {

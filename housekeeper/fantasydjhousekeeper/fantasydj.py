@@ -3,7 +3,7 @@ from .config import firebase_config
 import logging
 from .leagues import LeagueModel, calc_points, calc_winner
 from .songs import SongModel
-from .songstats import SongStatModel
+from .songstats import SongStatModel, generate_fake_stats
 from .util import str_from_date
 from .spotify import Spotify
 
@@ -63,14 +63,22 @@ class FantasyDJ(object):
         )
         self.stat_model.add_song_stat(song.id, popularity)
 
-    def __update_points(self, league, song, user_id):
-        points = calc_points(
-            self.stat_model.get_song_stats(
+    def __update_points(self, league, song, user_id, is_test=False):
+        song_stats = None
+        if is_test:
+            song_stats = generate_fake_stats(
                 song.id,
                 league.startTime,
                 league.endTime
             )
-        )
+        else:
+            song_stats = self.stat_model.get_song_stats(
+                song.id,
+                league.startTime,
+                league.endTime
+            )
+
+        points = calc_points(song_stats)
         self.league_model.set_points(
             league.id,
             user_id,
@@ -78,17 +86,21 @@ class FantasyDJ(object):
             points
         )
 
-        print('song %s by %s (%s), points: %s' % (
+        print(u'song %s by %s (%s), points: %s' % (
             song.name,
             song.artist,
             song.spotifyId,
-            points))
+            points
+        )).encode('UTF-8')
 
         return points
 
-    def __update_leagues(self, leagues, calc_winners=False):
-        for league in leagues:
-            logger.info('entering unfinished league {}'.format(league.name))
+    def __update_leagues(self, leagues, calc_winners=False, is_test=False):
+        for orig_league in leagues:
+            logger.info('entering unfinished league {}'.format(orig_league.name))
+            league = orig_league
+            if is_test:
+                league = self.league_model.update_test_league(orig_league.id)
             if league.users is not None:
                 points_by_song_by_user = {}
                 for user_id in league.users:
@@ -99,11 +111,13 @@ class FantasyDJ(object):
                             'entering playlist for user {}'.format(user_id)
                         )
                         for song in songs:
-                            self.__update_song_stats(song)
+                            if not is_test:
+                                self.__update_song_stats(song)
                             points_by_song_by_user[user_id][song.id] = \
                                 self.__update_points(league,
                                                      song,
-                                                     user_id)
+                                                     user_id,
+                                                     is_test)
 
                 if calc_winners:
                     self.league_model.set_winner(
@@ -116,3 +130,8 @@ class FantasyDJ(object):
 
     def update_unfinished_leagues(self):
         self.__update_leagues(self.league_model.get_unfinished_leagues(), True)
+
+    def update_test_leagues(self):
+        self.__update_leagues(
+            self.league_model.get_new_test_leagues(), True, True
+        )

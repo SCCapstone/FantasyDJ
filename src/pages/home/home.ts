@@ -15,6 +15,7 @@ import { IonicCloud } from '../../providers/ionic-cloud-provider';
 import { UserData } from '../../providers/user-provider';
 import { LeagueData } from '../../providers/league-provider';
 
+
 @Component({
   selector: 'page-home',
   templateUrl: './home.html'

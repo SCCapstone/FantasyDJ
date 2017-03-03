@@ -8,13 +8,14 @@ class User(object):
 
 class League(object):
 
-    def __init__(self, id, name, users, startTime, endTime, winner):
+    def __init__(self, id, name, users, startTime, endTime, winner, isTest):
         self.id = id
         self.name = name
         self.users = users
         self.startTime = startTime
         self.endTime = endTime
         self.winner = winner
+        self.isTest = isTest
 
 
 class Song(object):

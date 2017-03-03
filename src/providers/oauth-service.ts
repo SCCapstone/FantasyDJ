@@ -91,7 +91,7 @@ export class OAuthService {
         window.open(self.url, self.browserTarget) :
         window.cordova.InAppBrowser.open(self.url,
                                          self.browserTarget,
-                                         'location=no,clearsessioncache=yes,clearcache=yes');
+                                         'location=no');
       browserRef.addEventListener('loadstart', (event) => {
         if ((event.url).indexOf(self.callback) === 0) {
           browserRef.removeEventListener('exit', (event) => {});

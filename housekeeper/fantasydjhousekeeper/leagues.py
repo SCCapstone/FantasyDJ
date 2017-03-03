@@ -1,7 +1,7 @@
 import logging
 from .entities import League
 from .songs import SongModel
-from .util import get_val, get_date, str_from_date, now
+from .util import get_val, get_date, str_from_date, now, one_week_earlier
 import ioniccloud
 
 logger = logging.getLogger(__name__)
@@ -60,6 +60,10 @@ def calc_winner(points_by_song_by_user):
         return users_by_score[scores[0]][0]
 
 
+def is_test_league(league):
+    return league.isTest is not None or league.name.startswith('x')
+
+
 class LeagueModel(object):
 
     def __init__(self, db):
@@ -79,7 +83,8 @@ class LeagueModel(object):
             [key_id for key_id in users.keys()],
             get_date(val, 'startTime'),
             get_date(val, 'endTime'),
-            get_val(val, 'winner')
+            get_val(val, 'winner'),
+            get_val(val, 'isTest')
         )
         return league
 
@@ -100,7 +105,8 @@ class LeagueModel(object):
         right_now = now()
         return [
             league for league in self.__get_leagues()
-            if league.winner is None
+            if not is_test_league(league)
+            and league.winner is None
             and league.endTime is not None
             and league.endTime > right_now
         ]
@@ -109,9 +115,18 @@ class LeagueModel(object):
         right_now = now()
         return [
             league for league in self.__get_leagues()
-            if league.winner is None
+            if not is_test_league(league)
+            and league.winner is None
             and league.endTime is not None
             and league.endTime < right_now
+        ]
+
+    def get_new_test_leagues(self):
+        return [
+            league for league in self.__get_leagues()
+            if league.name.startswith('x')
+            and league.endTime is not None
+            and league.isTest is None
         ]
 
     def get_playlist(self, league_id, user_id):
@@ -150,3 +165,18 @@ class LeagueModel(object):
                 loser,
                 'League {} has ended.'.format(league.name)
             )
+
+    def update_test_league(self, league_id):
+        league = self.get_league(league_id)
+
+        self.db.child('Leagues/{}/isTest'.format(league_id)).set(True)
+
+        start_str = str_from_date(
+            one_week_earlier(league.startTime), True
+        )
+        self.db.child('Leagues/{}/startTime'.format(league_id)).set(start_str)
+
+        end_str = str_from_date(league.startTime, True)
+        self.db.child('Leagues/{}/endTime'.format(league_id)).set(end_str)
+
+        return self.get_league(league_id)

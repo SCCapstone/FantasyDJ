@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Chart } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts/ng2-charts'
 import { LeagueData } from '../../providers/league-provider';
 import { User, League} from '../../models/fantasydj-models';
 import { Observable } from 'rxjs/Observable';
@@ -18,6 +18,9 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: 'analytics.html'
 })
 export class AnalyticsPage {
+
+  @ViewChild(BaseChartDirective)
+  public chart: BaseChartDirective;
 
   user: User;
   league: League;
@@ -78,6 +81,8 @@ export class AnalyticsPage {
       console.log(dates);
       console.log(dates.map(this.dateToDay));
       this.lineChartLabels = dates.map(this.dateToDay);
+      console.log(this.lineChartLabels);
+      this.chart.chart.update();
     });
 
   	this.leagueData.getLeagueData(this.league.id, this.user.id).then(scores => {

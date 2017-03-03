@@ -11,11 +11,17 @@
   <div *ngIf="currentUser">
     <ion-list>
       <ion-item *ngFor="let league of leagues | async" (click)="goToLeague(league)">
-        <ion-icon *ngIf="(getScore(league.id, league.users[0]) | async) > (getScore(league.id, league.users[1]) | async)" item-left name="thumbs-up"></ion-icon>
-        <ion-icon *ngIf="(getScore(league.id, league.users[0]) | async) < (getScore(league.id, league.users[1]) | async)" item-left name="thumbs-down"></ion-icon>
-        <ion-icon *ngIf="(getScore(league.id, league.users[0]) | async) == (getScore(league.id, league.users[1]) | async)" item-left name="help-circle"></ion-icon>
-
-        <div>
+      <div>
+      <ng-container *ngIf="(isCreator(league.id, currentUser.id) | async) == true">
+        <ion-icon *ngIf="(getScore(league.id, currentUser.id) | async) > (getScore(league.id, league.users[1]) | async)" item-left name="thumbs-up"></ion-icon>
+        <ion-icon *ngIf="(getScore(league.id, currentUser.id) | async) < (getScore(league.id, league.users[1]) | async)" item-left name="thumbs-down"></ion-icon>
+        <ion-icon *ngIf="(getScore(league.id, currentUser.id) | async) == (getScore(league.id, league.users[1]) | async)" item-left name="help-circle"></ion-icon>
+      </ng-container>
+      <ng-container *ngIf="(isCreator(league.id, currentUser.id) | async) == false">
+        <ion-icon *ngIf="(getScore(league.id, currentUser.id) | async) > (getScore(league.id, league.users[0]) | async)" item-left name="thumbs-up"></ion-icon>
+        <ion-icon *ngIf="(getScore(league.id, currentUser.id) | async) < (getScore(league.id, league.users[0]) | async)" item-left name="thumbs-down"></ion-icon>
+        <ion-icon *ngIf="(getScore(league.id, currentUser.id) | async) == (getScore(league.id, league.users[0]) | async)" item-left name="help-circle"></ion-icon>
+      </ng-container>
           <h2>{{ league.name }}</h2>
           <p>{{ league.users.join(" &amp; ") }}</p>
         </div>

@@ -346,6 +346,17 @@ getCreator(leagueId: string): Promise<User> {
   });
 }
 
+public isCreator(leagueId: string, userId: string): Observable<boolean>{
+  return this.dbObj('Leagues', leagueId, 'creator')
+          .take(1)
+          .map(ref => {
+            if (ref.$value == userId) {
+                return true;
+            }
+            else return false
+          });
+}
+
 getStartDate(leagueId: string): Promise<string>{
   return new Promise<string>((resolve, reject) => {
     this.db.object('/Leagues/' + leagueId + '/startTime').take(1).subscribe(

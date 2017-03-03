@@ -26,6 +26,7 @@ export class HomePage {
   createLeaguePage = CreateLeaguePage;
   searchPage = SearchPage;
   currentUser: User = null;
+  index: number = null;
 
   // Refs
   leagues: Observable<League[]>;
@@ -78,6 +79,10 @@ export class HomePage {
 
   getScore(leagueId, userId){
     return this.leagueData.getPlaylistScore(leagueId, userId);
+  }
+
+  isCreator(leagueId, userId){
+    return this.leagueData.isCreator(leagueId, userId);
   }
 
 };

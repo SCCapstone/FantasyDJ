@@ -10,13 +10,13 @@ import { User, League, Song, Score } from '../../models/fantasydj-models';
 import { SongData } from '../../providers/song-provider';
 import { UserData } from '../../providers/user-provider';
 import { LeagueData } from '../../providers/league-provider';
+import {SongDetailPage} from "../song-detail/song-detail";
 
 /*
-  Generated class for the PlayerDetails page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+ Generated class for the PlayerDetails page.
+ See http://ionicframework.com/docs/v2/components/#navigation for more info on
+ Ionic pages and navigation.
+ */
 @Component({
   selector: 'page-player-details',
   templateUrl: 'player-details.html'
@@ -27,6 +27,7 @@ export class PlayerDetailsPage {
   league: League;
   creator: boolean;
   songs: Observable<Song[]>;
+  song:any
   users: FirebaseListObservable<any[]>;
   opp_songs: Observable<Song[]>;
   opponent: User;
@@ -48,8 +49,7 @@ export class PlayerDetailsPage {
         this.creator = false;
       }
       console.log("this.creator: " + this.creator);
-    });  
-  
+    });
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.leagueData.getOpponent(this.user.id, this.league.id).then(opp =>{
       console.log(opp);
@@ -57,13 +57,13 @@ export class PlayerDetailsPage {
       this.opp_songs = this.songData.loadSongs(this.league.id, this.opponent.id);
       console.log("opponent_id: " + this.opponent.id);
     });
-     
+
   }
 
   ionViewDidLoad() {
     console.log('Hello PlayerDetails Page');
-    console.log(this.league)
-    console.log(this.user)
+    console.log(this.league);
+    console.log(this.user);
   }
 
   goToSearch(user, league) {
@@ -73,7 +73,20 @@ export class PlayerDetailsPage {
     });
   }
 
-  getScore(leagueId, userId, songId){
+  goToSong(user, league, song) {
+    console.log("This is the instance of song" ,song)
+    //this.song = song//this.songData.loadSong(song.id);
+    console.log("Going to song", song.id)
+    this.navCtrl.push(SongDetailPage, {
+      song: song,
+      league: league,
+      user : user
+    });
+    console.log(this.song);
+
+  }
+
+  getScore(leagueId, userId, songId) {
     return this.leagueData.getSongScore(leagueId, userId, songId);
   }
 

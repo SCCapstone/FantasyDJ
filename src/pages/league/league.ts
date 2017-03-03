@@ -9,11 +9,10 @@ import { UserData } from '../../providers/user-provider';
 import {OpponentDetailsPage} from "../opponent-details/opponent-details";
 
 /*
-  Generated class for the League page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+ Generated class for the League page.
+ See http://ionicframework.com/docs/v2/components/#navigation for more info on
+ Ionic pages and navigation.
+ */
 @Component({
   selector: 'page-league',
   templateUrl: 'league.html'
@@ -34,12 +33,12 @@ export class LeaguePage {
     this.league = this.navParams.get('league');
     this.users = this.userData.loadUsers(this.league.id);
     this.userData.loadCurrentUser().then(user => {
-    this.current = user;
-    this.leagueData.getOpponent(user.id, this.league.id).then(opp =>{
-      this.opponent = opp;
+      this.current = user;
+      this.leagueData.getOpponent(user.id, this.league.id).then(opp =>{
+        this.opponent = opp;
+      }).catch(error => console.log(error));
     }).catch(error => console.log(error));
-    }).catch(error => console.log(error));   
-}
+  }
 
   ionViewDidLoad() {
     console.log('Hello League page');

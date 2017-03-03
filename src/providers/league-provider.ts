@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase,
-         FirebaseListObservable,
-         FirebaseObjectObservable} from 'angularfire2';
+  FirebaseListObservable,
+  FirebaseObjectObservable} from 'angularfire2';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -72,25 +72,25 @@ export class LeagueData {
       if (leagueId) {
         console.log(leagueId);
         this.loadLeague(leagueId).then(league => {
-            this.db.object(this.fbUserLeaguesUrl(creatorId, leagueId))
-              .set(true)
-              .then(_ => {
-                this.db.object(this.fbUserLeaguesUrl(opponentId, leagueId))
-                  .set(false)
-                  .then(_ => {
-                    this.ionicCloud.sendPush(
-                      opponentId,
-                      creatorId +
-                        ' has invited you to league ' +
-                        league.name
-                    )
+          this.db.object(this.fbUserLeaguesUrl(creatorId, leagueId))
+            .set(true)
+            .then(_ => {
+              this.db.object(this.fbUserLeaguesUrl(opponentId, leagueId))
+                .set(false)
+                .then(_ => {
+                  this.ionicCloud.sendPush(
+                    opponentId,
+                    creatorId +
+                    ' has invited you to league ' +
+                    league.name
+                  )
                     .then(_ => resolve(league))
                     .catch(err => reject(err));
-                  })
-                  .catch(error => reject(error));
-              })
-              .catch(error => reject(error));
-          }).catch(error => reject(error));
+                })
+                .catch(error => reject(error));
+            })
+            .catch(error => reject(error));
+        }).catch(error => reject(error));
       }
       else {
         reject('no leagueId generated');
@@ -240,23 +240,23 @@ export class LeagueData {
   private setLeagueDatesIfFull(leagueId: string, full: boolean): Promise<League> {
     if (full) {
       return new Promise<League>((resolve, reject) => {
-          let startTime: Date = new Date();
-          let endTime: Date = new Date(
-            startTime.getTime() + (1 * 24 * 60 * 60 * 1000)
-          );
-          let dates = {
-            startTime: startTime,
-            endTime: endTime
-          };
+        let startTime: Date = new Date();
+        let endTime: Date = new Date(
+          startTime.getTime() + (1 * 24 * 60 * 60 * 1000)
+        );
+        let dates = {
+          startTime: startTime,
+          endTime: endTime
+        };
 
-          this.dbObj('Leagues', leagueId).update(dates)
-            .then(() => {
-              return this.loadLeague(leagueId);
-            })
-            .then(league => {
-              resolve(league);
-            })
-            .catch(error => reject(error));
+        this.dbObj('Leagues', leagueId).update(dates)
+          .then(() => {
+            return this.loadLeague(leagueId);
+          })
+          .then(league => {
+            resolve(league);
+          })
+          .catch(error => reject(error));
       });
     }
     else {
@@ -279,15 +279,15 @@ export class LeagueData {
                     .remove()
                     .then(() => {
                       console.log('league '
-                                  + leagueId
-                                  + ' removed from song '
-                                  + songId);
+                        + leagueId
+                        + ' removed from song '
+                        + songId);
                     })
                     .catch(err => {
                       console.log('error removing league '
-                                  + leagueId
-                                  + ' from song '
-                                  + songId);
+                        + leagueId
+                        + ' from song '
+                        + songId);
                     });
                 }
               }
@@ -297,15 +297,15 @@ export class LeagueData {
             .remove()
             .then(() => {
               console.log('league '
-                          + leagueId
-                          + ' removed from user '
-                          + userId);
+                + leagueId
+                + ' removed from user '
+                + userId);
             })
             .catch(err => {
               console.log('error removing league '
-                          + leagueId
-                          + ' from user '
-                          + userId);
+                + leagueId
+                + ' from user '
+                + userId);
             });
         }
       }).then(() => {
@@ -317,34 +317,52 @@ export class LeagueData {
     });
   }
 
-getOpponent(userId: string, leagueId: string): Promise<User> {
-  return new Promise<User>((resolve, reject) => {
-  this.db.list('/Leagues/'+leagueId+'/users/').subscribe(user=>{
-      if (user.length > 0){
-        for(var i = 0; i < user.length; i++){
-          if (user[i].$key != userId){
-            console.log('user[i].$key: ' + user[i].$key);
-            this.userData.loadUser(user[i].$key).then(user =>
-              resolve(user))
-              .catch(err => reject(err));
+  getOpponent(userId: string, leagueId: string): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
+      this.db.list('/Leagues/'+leagueId+'/users/').subscribe(user=>{
+        if (user.length > 0){
+          for(var i = 0; i < user.length; i++){
+            if (user[i].$key != userId){
+              console.log('user[i].$key: ' + user[i].$key);
+              this.userData.loadUser(user[i].$key).then(user =>
+                resolve(user))
+                .catch(err => reject(err));
+            }
           }
         }
-      }
+      });
     });
-    });
-}
+  }
 
-getCreator(leagueId: string): Promise<User> {
-  return new Promise<User>((resolve, reject) => {
-  this.db.object('/Leagues/' + leagueId + '/creator',
-    {preserveSnapshot: true}).subscribe(snapshot => {
-      console.log(snapshot.val());
-      this.userData.loadUser(snapshot.val()).then(user =>
-        resolve(user))
-        .catch(err => reject(err));
+  getCreator(leagueId: string): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
+      this.db.object('/Leagues/' + leagueId + '/creator',
+        {preserveSnapshot: true}).subscribe(snapshot => {
+        console.log(snapshot.val());
+        this.userData.loadUser(snapshot.val()).then(user =>
+          resolve(user))
+          .catch(err => reject(err));
+      });
     });
-  });
-}
+  }
+
+  getStartDate(leagueId: string): Promise<string>{
+    return new Promise<string>((resolve, reject) => {
+      this.db.object('/Leagues/' + leagueId + '/startTime').take(1).subscribe(
+        snapshot => {
+          resolve(snapshot.$value);
+        });
+    });
+  }
+
+  getEndDate(leagueId: string): Promise<string>{
+    return new Promise<string>((resolve, reject) => {
+      this.db.object('/Leagues/' + leagueId + '/endTime').take(1).subscribe(
+        snapshot => {
+          resolve(snapshot.$value);
+        });
+     });
+  }     
 
 public isCreator(leagueId: string, userId: string): Observable<boolean>{
   return this.dbObj('Leagues', leagueId, 'creator')
@@ -357,50 +375,32 @@ public isCreator(leagueId: string, userId: string): Observable<boolean>{
           });
 }
 
-getStartDate(leagueId: string): Promise<string>{
-  return new Promise<string>((resolve, reject) => {
-    this.db.object('/Leagues/' + leagueId + '/startTime').take(1).subscribe(
-    snapshot => {
-      resolve(snapshot.$value);
+  getDates(leagueId: string): Promise<Date[]> {
+    return new Promise<Date[]>((resolve, reject) => {
+      this.getStartDate(leagueId).then(date => {
+        console.log(date);
+        let start_date = new Date(date);
+        this.getEndDate(leagueId).then(endDate => {
+          let end_date = new Date(endDate);
+          this.getDatesInner(start_date, end_date).then(dates => resolve(dates));
+        });
+      });
     });
-  });
-}
+  }
 
-getEndDate(leagueId: string): Promise<string>{
-  return new Promise<string>((resolve, reject) => {
-    this.db.object('/Leagues/' + leagueId + '/endTime').take(1).subscribe(
-    snapshot => {
-      resolve(snapshot.$value);
-    });
-  });
-}
-
-getDates(leagueId: string): Promise<Date[]> {
-  return new Promise<Date[]>((resolve, reject) => {
-  this.getStartDate(leagueId).then(date => {
-  console.log(date);
-  let start_date = new Date(date);
-  this.getEndDate(leagueId).then(endDate => {
-    let end_date = new Date(endDate);
-    this.getDatesInner(start_date, end_date).then(dates => resolve(dates));
-  });
-  });
-});
- } 
-
-getDatesInner(startDate: Date, stopDate:Date): Promise<Date[]> {
-  return new Promise<Date[]>((resolve, reject) => {
-   let dateArray: Date[] = [];
-   let currentDate = startDate;
-    while (currentDate <= stopDate) {
+  getDatesInner(startDate: Date, stopDate:Date): Promise<Date[]> {
+    return new Promise<Date[]>((resolve, reject) => {
+      let dateArray: Date[] = [];
+      let currentDate = startDate;
+      while (currentDate <= stopDate) {
         dateArray.push( new Date(currentDate))
         currentDate.setDate(currentDate.getDate() + 1);
-    }
-    resolve(dateArray);
-});
-}
+      }
+      resolve(dateArray);
+    });
+  }
 
-public getPlaylistScore(leagueId: string, userId: string): Observable<number> {
+  public getPlaylistScore(leagueId: string, userId: string): Observable<number> {
     return this.dbObj('Leagues', leagueId, 'users', userId)
       .take(1)
       .map(userRef => {
@@ -416,71 +416,71 @@ public getPlaylistScore(leagueId: string, userId: string): Observable<number> {
       });
   }
 
-public getSongScore(leagueId: string, userId: string, songId: string): Observable<number> {
-  return this.dbObj('Leagues', leagueId, 'users', userId, songId)
-          .take(1)
-          .map(songRef => {
-            let total = 0;
-            for(var date in songRef){
-              if (! date.startsWith('$')) {
-                total += songRef[date];
-              }
-            }
-            return total;
-          });
-  }
-
-getLeagueData(leagueId: string, userId: string): Promise<any[]> {
-  return new Promise<any[]>((resolve, reject) => {
-    let songArray: any[] = [];
-    this.dbObj('Leagues', leagueId, 'users', userId)
-    .take(1)
-    .forEach(songsRef => {
-      let counter: number = 0;
-      for (let songId in songsRef) {
-        let scores: number[] =[];
-        if(! songId.startsWith('$')){
-          for (let date in songsRef[songId]){
-            if(! date.startsWith('$')){
-              scores.push(songsRef[songId][date])
-            }
+  public getSongScore(leagueId: string, userId: string, songId: string): Observable<number> {
+    return this.dbObj('Leagues', leagueId, 'users', userId, songId)
+      .take(1)
+      .map(songRef => {
+        let total = 0;
+        for(var date in songRef){
+          if (! date.startsWith('$')) {
+            total += songRef[date];
           }
         }
-        if(scores.length > 0){
-          songArray[counter] = scores;
-          counter = counter +1;
-        }
-      }
-      console.log(songArray);
-    })
-    .then(() => {
-      resolve(songArray);
-    })
-    .catch(error => reject(error));
-  });
-}
+        return total;
+      });
+  }
 
-getSongNames(leagueId: string, userId: string): Promise<any[]>{
-  return new Promise<any[]>((resolve, reject) => {
-    let nameArray: any[] = [];
-    this.dbObj('Leagues', leagueId, 'users', userId)
-    .take(1)
-    .forEach(songsRef => {
-      for(let songId in songsRef){
-        console.log(songId);
-        if(! songId.startsWith('$')){
-          this.songData.getSongName(songId).then(name => {
-            nameArray.push(name);
-          });
-        }
-      }
-    })
-    .then(() => {
-      resolve(nameArray);
-    })
-    .catch(error => reject(error));
-  });
-}
+  getLeagueData(leagueId: string, userId: string): Promise<any[]> {
+    return new Promise<any[]>((resolve, reject) => {
+      let songArray: any[] = [];
+      this.dbObj('Leagues', leagueId, 'users', userId)
+        .take(1)
+        .forEach(songsRef => {
+          let counter: number = 0;
+          for (let songId in songsRef) {
+            let scores: number[] =[];
+            if(! songId.startsWith('$')){
+              for (let date in songsRef[songId]){
+                if(! date.startsWith('$')){
+                  scores.push(songsRef[songId][date])
+                }
+              }
+            }
+            if(scores.length > 0){
+              songArray[counter] = scores;
+              counter = counter +1;
+            }
+          }
+          console.log(songArray);
+        })
+        .then(() => {
+          resolve(songArray);
+        })
+        .catch(error => reject(error));
+    });
+  }
+
+  getSongNames(leagueId: string, userId: string): Promise<any[]>{
+    return new Promise<any[]>((resolve, reject) => {
+      let nameArray: any[] = [];
+      this.dbObj('Leagues', leagueId, 'users', userId)
+        .take(1)
+        .forEach(songsRef => {
+          for(let songId in songsRef){
+            console.log(songId);
+            if(! songId.startsWith('$')){
+              this.songData.getSongName(songId).then(name => {
+                nameArray.push(name);
+              });
+            }
+          }
+        })
+        .then(() => {
+          resolve(nameArray);
+        })
+        .catch(error => reject(error));
+    });
+  }
 
 
 }

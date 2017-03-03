@@ -23,7 +23,8 @@ export interface Song {
 	name: string,
 	spotifyId: string,
 	leagues: any[],
-  artwork?: string
+  artwork?: string,
+  preview: string
 };
 
 export interface SongStat {

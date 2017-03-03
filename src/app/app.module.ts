@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { FantasyDjApp } from './app.component';
-import { ChartsModule } from "ng2-charts/ng2-charts";
-
+import { ChartsModule } from 'ng2-charts/ng2-charts';
+//
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
@@ -25,6 +25,7 @@ import { SongData } from '../providers/song-provider';
 import { SongStatData } from '../providers/songstat-provider';
 
 import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+import {SongDetailPage} from "../pages/song-detail/song-detail";
 
 const cloudSettings: CloudSettings = {
   'core': {
@@ -63,6 +64,7 @@ export const firebaseConfig = {
     OpponentDetailsPage,
     CreateLeaguePage,
     SearchPage,
+    SongDetailPage,
     AnalyticsPage
   ],
   imports: [
@@ -83,6 +85,7 @@ export const firebaseConfig = {
     OpponentDetailsPage,
     CreateLeaguePage,
     SearchPage,
+    SongDetailPage,
     AnalyticsPage
   ],
   providers: [

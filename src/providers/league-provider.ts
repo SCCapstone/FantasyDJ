@@ -380,6 +380,7 @@ public isCreator(leagueId: string, userId: string): Observable<boolean>{
       this.getStartDate(leagueId).then(date => {
         console.log(date);
         let start_date = new Date(date);
+        start_date.setDate(start_date.getDate() + 1);
         this.getEndDate(leagueId).then(endDate => {
           let end_date = new Date(endDate);
           this.getDatesInner(start_date, end_date).then(dates => resolve(dates));

@@ -23,6 +23,7 @@
                 [chartType]="lineChartType"></canvas>
     </div>
   </div>
+<!--
   <div class="col-md-6" style="margin-bottom: 10px">
     <table class="table table-responsive table-condensed">
       <tr>
@@ -36,7 +37,23 @@
       </tr>
     </table>
   </div>
+-->
+
 </div>
+<ion-grid>
+<ion-row>
+  <ion-col>
+    <strong>Popularity Changes By Day</strong>
+  </ion-col>
+</ion-row>
+<ion-row>
+    <ion-col *ngFor="let label of lineChartLabels"><strong>{{label}}</strong>
+    </ion-col>
+  </ion-row>
+<ion-row *ngFor="let d of tableData">
+  <ion-col *ngFor="let label of lineChartLabels; let j=index">{{d && d.data[j]}}</ion-col>
+</ion-row>
+</ion-grid>
 </div>
 </ion-header>
 

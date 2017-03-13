@@ -42,8 +42,32 @@ export class AnalyticsPage {
  
   public lineChartLabels:Array<any> = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
   public lineChartOptions:any = {
+    legend: {labels:{fontColor:"white", fontSize: 15}},
+    scales: {
+          xAxes: [{
+            ticks: {
+              fontColor: "white",
+              fontSize: 12,
+            },
+            gridLines: {
+              color: 'rgba(255,255,255,1)',
+              lineWidth: 1
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              fontColor: "white",
+              fontSize: 12,
+            },
+            gridLines: {
+              color: 'rgba(255,255,255,1)',
+              lineWidth: 1
+            }
+          }]
+        },
     responsive: true
   };
+
   public lineChartColors:Array<any> = [
     { 
       // light blue
@@ -72,6 +96,7 @@ export class AnalyticsPage {
       pointHoverBorderColor: 'rgba(0, 32, 128, 1)'
     }
   ];
+
   public lineChartLegend:boolean = true;
   public lineChartType:string = 'line';
 

@@ -3,10 +3,12 @@ import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { PlayerDetailsPage } from '../player-details/player-details';
 //import 'rxjs/add/Observable/zipArray';
-import { League, User, Score } from '../../models/fantasydj-models';
+import { League, User, Score, Song } from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
 import { UserData } from '../../providers/user-provider';
+import { SongData } from '../../providers/song-provider';
 import {OpponentDetailsPage} from "../opponent-details/opponent-details";
+import { AnalyticsPage } from '../analytics/analytics';
 
 /*
  Generated class for the League page.
@@ -25,16 +27,21 @@ export class LeaguePage {
   current: User = null;
   opponent: User;
   winner_flag = null;
+  songs: Observable<Song[]>;
+  opp_songs: Observable<Song[]>;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private leagueData: LeagueData,
               public alertCtrl: AlertController,
-              private userData: UserData) {
+              private userData: UserData,
+              private songData: SongData) {
     this.league = this.navParams.get('league');
+    this.current = this.navParams.get('currentUser');
     this.users = this.userData.loadUsers(this.league.id);
     this.userData.loadCurrentUser().then(user => {
       this.current = user;
+      this.songs = this.songData.loadSongs(this.league.id, this.current.id);
       this.leagueData.getWinner(this.league.id).then(winner => {
       if(winner != null){
         console.log('winner: ' + winner.id);
@@ -46,6 +53,7 @@ export class LeaguePage {
     });
       this.leagueData.getOpponent(user.id, this.league.id).then(opp =>{
         this.opponent = opp;
+        this.opp_songs = this.songData.loadSongs(this.league.id, this.opponent.id);
       }).catch(error => console.log(error));
     }).catch(error => console.log(error));
 
@@ -102,5 +110,15 @@ export class LeaguePage {
     return this.leagueData.getPlaylistScore(leagueId, userId);
   }
 
+  getSongScore(leagueId, userId, songId) {
+    return this.leagueData.getSongScore(leagueId, userId, songId);
+  }
+
+  goToAnalytics(user, league, opponent) {
+    this.navCtrl.push(AnalyticsPage, {
+      league: league,
+      user : user
+    });
+  }
 
 }

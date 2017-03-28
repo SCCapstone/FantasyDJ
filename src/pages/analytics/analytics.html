@@ -9,7 +9,14 @@
   <ion-navbar color="dark">
     <ion-title>analytics</ion-title>
   </ion-navbar>
-  <ion-card></ion-card>
+  <ng-container *ngFor="let x of users | async">
+    <button *ngIf="x.id == user.id" ion-button (click)="redraw(x, league)">{{x.id}}
+    </button>
+  </ng-container>
+  <ng-container *ngFor="let x of users | async">
+    <button *ngIf="x.id != user.id" ion-button (click)="redraw(x, league)">{{x.id}}
+    </button>
+  </ng-container>
   <div class="analytics">
   <div class="row">
   <div class="col-md-6">

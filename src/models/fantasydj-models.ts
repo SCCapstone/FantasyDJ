@@ -1,8 +1,11 @@
+import { Observable } from 'rxjs/Observable';
+
 export interface User {
   id?: string,
   email?: string,
   leagues?: any[],
-  dateCreated: Date
+  dateCreated: Date,
+  songs?: Observable<any[]>
 };
 
 export interface League {

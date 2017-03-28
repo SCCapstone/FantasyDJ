@@ -334,6 +334,36 @@ export class LeagueData {
     });
   }
 
+  /*getOpponentObservable(userId: string, leagueId: string): Observable<string> {
+    return this.dbObj('Leagues', leagueId, '/users/')
+          .map(ref => {
+            console.log(ref);
+            for(let user in ref){
+              if(user != userId){
+                console.log(user);
+                return user;
+              }
+            }
+            return null;
+          });
+  }*/
+
+  public getOpponentId(userId: string, leagueId: string): Observable<string> {
+    return this.dbObj('Leagues', leagueId, 'users')
+      .take(1)
+      .map(usersRef => {
+        let final_id = null;
+        for (var id in usersRef) {
+          if (! id.startsWith('$')) {
+            if (id != userId){
+              final_id = id;
+            }
+          }
+        }
+        return id;
+      });
+  }
+
   getCreator(leagueId: string): Promise<User> {
     return new Promise<User>((resolve, reject) => {
       this.db.object('/Leagues/' + leagueId + '/creator',

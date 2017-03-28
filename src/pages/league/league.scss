@@ -1,3 +1,59 @@
 page-league {
 
+.league {
+	background-color: #1a1a1a;
+}
+
+ion-grid {
+	color: white;
+}
+
+ion-icon {
+	font-size: 30px;
+}
+
+.artist{
+	font-size: 10px;
+	opacity: 0.6;
+}
+.name{
+	font-size: 11px;
+}
+.score{
+	font-size: 10px;
+}
+
+.winner{
+	color: green;
+	border-style: solid;
+	border-width: thin;
+	width: 100%;
+	text-align: center;
+}
+
+.loser{
+	color: red;
+	border-style: solid;
+	border-width: thin;
+	width:100%;
+	text-align: center;
+}
+
+#analytics_button{
+	width: 100%;
+	background-color: 	#31c356;
+}
+
+#delete_button{
+	width: 100%;
+	background-color: 	#31c356;
+}
+
+.banner{
+	background-color: 	#31c356;
+	color: white;
+	text-align: center;
+	padding: 2px;
+}
+
 }

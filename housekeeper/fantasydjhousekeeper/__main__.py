@@ -6,6 +6,12 @@ parser = argparse.ArgumentParser(
     description='FantasyDJ nightly housekeeping process'
 )
 parser.add_argument(
+    '-P',
+    '--popular',
+    action='store_true',
+    help='update daily top songs, currently US-only'
+)
+parser.add_argument(
     '-T',
     '--testdata',
     action='store_true',
@@ -51,6 +57,9 @@ elif args.push is not None:
 
 elif args.testdata:
     fantasydj.update_test_leagues()
+
+elif args.popular:
+    fantasydj.update_popular_tracks()
 
 else:
     fantasydj.update_active_leagues()

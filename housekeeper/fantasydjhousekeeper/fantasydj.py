@@ -4,6 +4,7 @@ import logging
 from .leagues import LeagueModel, calc_points, calc_winner
 from .songs import SongModel
 from .songstats import SongStatModel, generate_fake_stats
+from .popular import PopularModel
 from .util import str_from_date
 from .spotify import Spotify
 
@@ -20,6 +21,7 @@ class FantasyDJ(object):
         self.league_model = LeagueModel(db)
         self.song_model = SongModel(db)
         self.stat_model = SongStatModel(db)
+        self.popular_model = PopularModel(db)
         self.spotify = Spotify()
 
     def print_song_stats(self, provided_song_id=None, spotify_track_id=None):
@@ -135,3 +137,6 @@ class FantasyDJ(object):
         self.__update_leagues(
             self.league_model.get_new_test_leagues(), True, True
         )
+
+    def update_popular_tracks(self):
+        self.popular_model.update_popular()

@@ -4,39 +4,8 @@ page-analytics {
   background-color: #1a1a1a;
 }
 
-table {
-  border-collapse: collapse;
-  margin-left:auto; 
-  margin-right:auto;
-}
-
-td {
-  padding: 0.5rem;
-  text-align: center;
-}
-
-th {
-  padding: 1em;
-  background-color: rgba(102, 153, 255, 1);
-  color: white;
-  padding: 0.5rem;
-  text-align: center;
-}
-
-table th:nth-child(odd) {
-	background-color: rgba(0, 32, 128, 1);
-}
-
-#header2 {
-	background-color: rgba(102, 153, 255, 1);
-}
-
-table tr:nth-child(even) {            
-    background-color: rgba(102, 153, 255, 0.2);     
-}
- 
-table tr:nth-child(odd) {            
-	background-color:rgba(102, 153, 255, 0.1);      
+ion-segment{
+  color: green;
 }
 
 ion-row {
@@ -48,6 +17,11 @@ ion-row {
 button {
   margin: 0px;
   padding: 0px;
+}
+
+#buttons{
+  margin:auto;
+  text-align:center;
 }
 
 }

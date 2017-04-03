@@ -30,6 +30,7 @@ export class AnalyticsPage {
   song1: number[];
   song2: number[];
   song3: number[];
+  data_flag: string;
 
   lineChartData: Array<any> = [
             {data: [], label: 'Song A'},
@@ -74,29 +75,29 @@ export class AnalyticsPage {
   public lineChartColors:Array<any> = [
     { 
       // light blue
-      backgroundColor: 'rgba(179, 198, 255, 0.2)',
-      borderColor: 'rgba(179, 198, 255, 1)',
-      pointBackgroundColor: 'rgba(179, 198, 255, 0.2)',
+      backgroundColor: 'rgba(153, 230, 172, 0.2)',
+      borderColor: 'rgba(153, 230, 172, 1)',
+      pointBackgroundColor: 'rgba(153, 230, 172, 0.2)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(179, 198, 255, 1)'
+      pointHoverBorderColor: 'rgba(153, 230, 172, 1)'
     },
     {
-      // blue
-      backgroundColor: 'rgba(102, 153, 255, 0.2)',
-      borderColor: 'rgba(102, 153, 255, 1)',
-      pointBackgroundColor: 'rgba(102, 153, 255, 0.2)',
+      // green
+      backgroundColor: 'rgba(49, 195, 86, 0.2)',
+      borderColor: 'rgba(49, 195, 86, 1)',
+      pointBackgroundColor: 'rgba(49, 195, 86, 0.2)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(102, 153, 255, 1)'
+      pointHoverBorderColor: 'rgba(49, 195, 86, 1)'
     },
     { // darkest blue
-      backgroundColor: 'rgba(0, 32, 128, 0.2)',
-      borderColor: 'rgba(0, 32, 128, 1)',
-      pointBackgroundColor: 'rgba(0, 32, 128, 0.2)',
+      backgroundColor: 'rgba(214, 245, 222, 0.2)',
+      borderColor: 'rgba(214, 245, 222, 1)',
+      pointBackgroundColor: 'rgba(214, 245, 222, 0.2)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(0, 32, 128, 1)'
+      pointHoverBorderColor: 'rgba(214, 245, 222, 1)'
     }
   ];
 
@@ -113,6 +114,7 @@ export class AnalyticsPage {
     this.league = this.navParams.get('league');
     this.opponent = this.navParams.get('opponent');
     this.users = this.userData.loadUsers(this.league.id);
+    this.data_flag = 'user';
     
     this.leagueData.getDates(this.league.id).then(dates => {
       console.log(dates);
@@ -177,9 +179,8 @@ export class AnalyticsPage {
     return(day);
   }
 
-  redraw(user, league){
-    console.log("User:" + user);
-    console.log("league:" + league);
+  redraw(user, league, flag){
+    this.data_flag = flag;
     this.leagueData.getLeagueData(league.id, user.id).then(scores => {
       console.log(scores);
       this.song1 = scores[0];
@@ -212,8 +213,5 @@ export class AnalyticsPage {
     });
   }
 
-  getOpponent(userId, leagueId){
-    return this.leagueData.getOpponentId(userId, leagueId);
-  }
 
 }

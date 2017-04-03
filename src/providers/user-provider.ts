@@ -85,7 +85,7 @@ export class UserData {
         for (let item of items) {
           this.loadUser(item.$key)
             .then(user => {
-              user.songs = this.songData.loadSongs(leagueId, user.id);
+              //user.songs = this.songData.loadSongs(leagueId, user.id);
               return user;
             })
             .then(user => users.push(user))

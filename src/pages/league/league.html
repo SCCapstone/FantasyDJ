@@ -16,59 +16,127 @@
 <div class='league'>
 
   <div class="banner">
-    <p class="banner"*ngIf="league.endTime && winner_flag == null">Ending at {{ league.endTime }}</p>
+    <p class="banner"*ngIf="league.endTime && winner_flag == null">Ending at {{ transformDate(league.endTime) }}</p>
     <p class="banner" *ngIf="league.endTime && winner_flag != null">Ended at {{
-      league.endTime }}</p>
+      transformDate(league.endTime) }}</p>
   </div>
     <ion-grid no-padding>
-    <ion-row >
-      <ion-col *ngFor="let user of users | async" (click)="goToPlayer(user, league)">
-        <ion-row>
-        <ion-col width-20>
+    <ion-row>
+      <ion-col class="person">
+      <ion-row>
+        <ion-col>
           <ion-icon item-left name="person"></ion-icon>
         </ion-col>
-        <ion-col width-80>
+
+        <ion-col>
           <ion-row>
-            <ion-col>{{ user.id }}</ion-col>
+            <ion-col>{{ current.id }}</ion-col>
           </ion-row>
+
           <ion-row>
-            <ion-col class="score">Score: {{ getScore(league.id, user.id) | async }}
+            <ion-col class="score">Score: {{ getScore(league.id, current.id) | async }}
             </ion-col>
           </ion-row>
         </ion-col>
       </ion-row>
-      <ion-row *ngIf="current.id == user.id && winner_flag == true">
-              <div class="winner">Winner</div>
-            </ion-row>
-            <ion-row *ngIf="current.id == user.id && winner_flag == false">
-              <div class="loser">Loser</div>
-            </ion-row>
-            <ion-row *ngIf="current.id != user.id && winner_flag == false">
-              <div class="winner">Winner</div>
-            </ion-row>
-             <ion-row *ngIf="current.id != user.id && winner_flag == true">
-              <div class="loser">Loser</div>
-            </ion-row>
-      <ion-row *ngFor="let song of user.songs | async">
-        <ion-col >
+       </ion-col>
+
+        <ion-col id="vs">
+          <ion-row>
+              <div class="diamond">
+                <div class="diamond-inner"> vs. </div>
+              </div>
+          </ion-row>
+        </ion-col>
+
+      <ion-col class="person">
+      <ion-row>
+        <ion-col>
+          <ion-icon item-left name="person"></ion-icon>
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-col>{{ opponent.id }}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="score">Score: {{ getScore(league.id, opponent.id) | async }}
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      </ion-col>
+      </ion-row>
+
+      <ng-container *ngIf="winner_flag == true">
+       <ion-row>
+              <ion-col class="no-padding"><div class="winner">Winner</div></ion-col>
+              <ion-col class="no-padding"><div class="loser">Loser</div></ion-col>
+       </ion-row>
+     </ng-container>
+     <ng-container *ngIf="winner_flag == false">
         <ion-row>
-          <ion-col>
+            <ion-col><div class="loser">Loser</div></ion-col>
+            <ion-col><div class="winner">Winner</div></ion-col>
+        </ion-row>
+      </ng-container>
+
+
+
+      <ion-row>
+      <ion-col id="col_1" width-50>
+      <ion-row *ngFor="let song of songs | async">
+        <ion-col>
+        <ion-row>
+          <ion-col width-85>
             <ion-thumbnail>
             <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
           </ion-thumbnail>
         </ion-col>
+        </ion-row>
+        <ion-row class ="name">{{ song.name }}</ion-row>
+        <ion-row class="artist">{{ song.artist }}</ion-row>
+        <ion-row class="score">Score: {{getSongScore(league.id, current.id, song.id) | async }}</ion-row>
+        </ion-col>
+      </ion-row>
+      <div *ngIf="(songs | async)?.length < 3 && current.id == current.id">
+          <button id="add_button" *ngIf="!creator && (songs | async)?.length < (opp_songs | async)?.length
+                  || creator && (songs | async)?.length <= (opp_songs | async)?.length"
+                  ion-button block (click)="goToSearch(current, league)">
+            Add New Song
+          </button>
+
+          <div *ngIf="!creator && (songs | async)?.length == (opp_songs | async)?.length
+                      || creator && (songs | async)?.length > (opp_songs | async)?.length">
+            <ion-item text-wrap id="wait_message">Wait for opponent to choose a song.</ion-item>
+          </div>
+      </div>
+    </ion-col>
+
+
+
+    <ion-col width-50>
+      <ion-row *ngFor="let song of opp_songs | async">
         <ion-col>
-          Score: {{getSongScore(league.id, user.id, song.id) | async }}
+        <ion-row>
+          <ion-col width-85>
+            <ion-thumbnail>
+            <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
+          </ion-thumbnail>
         </ion-col>
         </ion-row>
         <ion-row class ="name">{{ song.name }}</ion-row>
         <ion-row class="artist">{{ song.artist }}</ion-row>
+        <ion-row class="score">Score: {{getSongScore(league.id, opponent.id, song.id) | async }}</ion-row>
         </ion-col>
       </ion-row>
     </ion-col>
+
+
+
+
     </ion-row>
     </ion-grid>
- <button id="analytics_button" ion-button (click)="goToAnalytics(current, league, opponent)">Generate graph</button>
+ <button *ngIf="analytics_flag == true" id="analytics_button" ion-button (click)="goToAnalytics(current, league, opponent)">Generate graph</button>
  <button id="delete_button" ion-button (click)="deleteThisLeague()">Delete League</button>
 </div>
 </ion-content>

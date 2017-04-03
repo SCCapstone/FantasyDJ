@@ -67,10 +67,13 @@ export class HomePage {
   }
 
   goToLeague(league, currentUser) {
-    this.navCtrl.push(LeaguePage, {
-      league: league,
-      currentUser : currentUser
+    this.leagueData.getOpponent(currentUser, league.id).then(opp =>{
+      this.navCtrl.push(LeaguePage, {
+        league: league,
+        currentUser : currentUser,
+        opponent: opp
     });
+      }).catch(error => console.log(error));
   }
 
   newLeague(){

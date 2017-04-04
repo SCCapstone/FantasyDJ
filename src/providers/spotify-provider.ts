@@ -18,6 +18,7 @@ import {
   DEFAULT_SEARCH_TYPES } from '../models/spotify-models';
 
 const KEY_ACCESSTOKEN = 'access_token';
+const KEY_REFRESHTOKEN = 'refresh_token';
 
 @Injectable()
 export class SpotifyProvider {
@@ -25,8 +26,6 @@ export class SpotifyProvider {
   private oauth: Oauth;
   private spotifyOauthProvider: Spotify;
   private _apiUrl: string;
-  private _headers: Headers;
-  private _token: string;
 
   constructor(private http: Http,
               private platform: Platform) {
@@ -41,7 +40,8 @@ export class SpotifyProvider {
       appScope: [
         'user-read-private',
         'user-read-email'
-      ]
+      ],
+      responseType: 'code'
     });
   }
 

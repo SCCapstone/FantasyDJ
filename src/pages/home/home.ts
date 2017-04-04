@@ -27,9 +27,12 @@ export class HomePage {
   searchPage = SearchPage;
   currentUser: User = null;
   index: number = null;
+  flag: string = 'current';
 
   // Refs
   leagues: Observable<League[]>;
+  currentLeagues: Observable<League[]>;
+  pastLeagues: Observable<League[]>;
 
   constructor(public navCtrl: NavController,
               private platform: Platform,
@@ -51,6 +54,8 @@ export class HomePage {
         });
         this.currentUser = user;
         this.leagues = this.leagueData.loadLeagues(user.id);
+        this.currentLeagues = this.leagueData.loadCurrentLeagues(user.id);
+        this.pastLeagues = this.leagueData.loadPastLeagues(user.id);
       }).catch(error => console.log(error));
     }
   }

@@ -3,6 +3,11 @@ import { Platform } from 'ionic-angular';
 import { Http, Request, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import { Spotify } from 'ng2-cordova-oauth/provider/spotify';
+import { Oauth } from 'ng2-cordova-oauth/oauth';
+import { OauthBrowser } from 'ng2-cordova-oauth/platform/browser';
+import { OauthCordova } from 'ng2-cordova-oauth/platform/cordova';
+
 import {
   SpotifyUser,
   SpotifyArtist,
@@ -12,30 +17,79 @@ import {
   SpotifySearchType,
   DEFAULT_SEARCH_TYPES } from '../models/spotify-models';
 
-import { OAuthService } from './oauth-service';
+const KEY_ACCESSTOKEN = 'access_token';
 
 @Injectable()
 export class SpotifyProvider {
 
+  private oauth: Oauth;
+  private spotifyOauthProvider: Spotify;
   private _apiUrl: string;
   private _headers: Headers;
+  private _token: string;
 
   constructor(private http: Http,
-              private platform: Platform,
-              private authService: OAuthService) {
+              private platform: Platform) {
     this._apiUrl = this.platform.is('core') ?
       '/spotify' :
       'https://api.spotify.com/v1';
+    this.oauth = this.platform.is('core') ? new OauthBrowser() : new OauthCordova();
+    this.spotifyOauthProvider = new Spotify({
+      clientId: 'be9a8fc1e71c45edb1cbf4d69759d6d3',
+      redirectUri: this.platform.is('android') ?
+        'http://localhost/callback' : 'http://localhost:8100/',
+      appScope: [
+        'user-read-private',
+        'user-read-email'
+      ]
+    });
+  }
+
+  public loggedIn(logInIfNot: boolean): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.loadCurrentUser().then(_ => {
+        resolve();
+      }).catch(error => {
+        if (logInIfNot) {
+          this.login().then(token => {
+            resolve();
+          }).catch(error => reject(error));
+        }
+        else {
+          reject(error);
+        }
+      });
+    });
+  }
+
+  public login(): Promise<string> {
+    return new Promise((resolve, reject) =>  {
+      this.platform.ready().then(() => {
+        return this.oauth.logInVia(
+          this.spotifyOauthProvider,
+          {
+            clearsessioncache: 'no'
+          }
+        );
+      }).then(success => {
+        let token = success[KEY_ACCESSTOKEN];
+        localStorage.setItem(KEY_ACCESSTOKEN, token);
+        resolve(token);
+      }, error => {
+        console.log('error: ' + error);
+        reject(error);
+      });
+    });
+  }
+
+  get token(): string {
+    return localStorage.getItem(KEY_ACCESSTOKEN);
   }
 
   get headers(): Headers {
-    if (! this._headers) {
-      this._headers = new Headers({
-        'Authorization': 'Bearer ' + this.authService.token
-      });
-      console.log(JSON.stringify(this._headers));
-    }
-    return this._headers;
+    return new Headers({
+      'Authorization': 'Bearer ' + this.token
+    });
   }
 
   private api<T>(loc: string): Promise<T> {
@@ -53,7 +107,7 @@ export class SpotifyProvider {
           obj => resolve(obj),
           error => {
             if (error.status && error.status === 401) {
-              this.authService.loginToSpotify()
+              this.login()
                 .then(_ => {
                   window.location.reload();
                 })

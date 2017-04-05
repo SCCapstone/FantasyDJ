@@ -16,7 +16,7 @@
   </ion-searchbar>
 
   <ion-list *ngIf="results && results.tracks" id="tracks" class="results">
-    <ion-item *ngFor="let track of results.tracks.items" (click)="songPick(track)">
+    <ion-item *ngFor="let track of results.tracks.items" >
       <ion-thumbnail item-left>
         <img src="{{ track.album.images[0].url }}"
              alt="album artwork for {{ track.name }}">
@@ -27,7 +27,7 @@
         on <em>{{ track.album.name }}</em>
       </p>
 
-      <button ion-button color="secondary" (click)="addSong(user, league, track)">Add to Playlist</button>
+      <button ion-button color="secondary" (click)="addSong(user, league, track)">Add to Playlist</button> <button ion-button color="secondary" (click)="songPick(track)">Preview</button>
     </ion-item>
   </ion-list>
 

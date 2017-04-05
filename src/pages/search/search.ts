@@ -50,6 +50,7 @@ export class SearchPage {
     this.alert = alert;
     this.stream = new Audio(this.url);
     this.url = "x";
+    this.running = false;
   }
 
 
@@ -78,13 +79,17 @@ export class SearchPage {
 
 
   songPick(track) {
+    if(this.running){
+      this.pause()
+    }
+
     this.currentTrack = track.id
     console.log("current track: ",this.currentTrack);
     this.spotify.loadTrack(this.currentTrack).then(song => {
       console.log('song ' + song.preview_url + ' songpick success');
       this.url = song.preview_url;
       this.stream = new Audio(this.url);
-
+      this.running = true;
       this.stream.play();
       this.promise = new Promise((resolve,reject) => {
         this.stream.addEventListener('playing', () => {

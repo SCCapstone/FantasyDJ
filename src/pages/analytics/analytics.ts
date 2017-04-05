@@ -33,11 +33,41 @@ export class AnalyticsPage {
             {data: [], label: 'Song B'},
             {data: [], label: 'Song C'}
           ];
+
+  tableData: Array<any> = [
+            {data: [], label: 'Song A'},
+            {data: [], label: 'Song B'},
+            {data: [], label: 'Song C'}
+  ];
  
   public lineChartLabels:Array<any> = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
   public lineChartOptions:any = {
+    legend: {labels:{fontColor:"white", fontSize: 15}},
+    scales: {
+          xAxes: [{
+            ticks: {
+              fontColor: "white",
+              fontSize: 12,
+            },
+            gridLines: {
+              color: 'rgba(255,255,255,1)',
+              lineWidth: 1
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              fontColor: "white",
+              fontSize: 12,
+            },
+            gridLines: {
+              color: 'rgba(255,255,255,1)',
+              lineWidth: 1
+            }
+          }]
+        },
     responsive: true
   };
+
   public lineChartColors:Array<any> = [
     { 
       // light blue
@@ -66,6 +96,7 @@ export class AnalyticsPage {
       pointHoverBorderColor: 'rgba(0, 32, 128, 1)'
     }
   ];
+
   public lineChartLegend:boolean = true;
   public lineChartType:string = 'line';
 
@@ -89,7 +120,12 @@ export class AnalyticsPage {
   		console.log(scores);
   		this.song1 = scores[0];
   		this.song2 = scores[1];
-  		this.song3 = scores[2];	
+  		this.song3 = scores[2];
+      this.tableData = [
+        { data: this.song1, label: '' },
+        { data: this.song2, label: '' },
+        { data: this.song3, label: '' }
+      ];
   	})
     .then(() => {
       this.song1 = this.song1.reduce(this.accumulate, []);
@@ -132,7 +168,7 @@ export class AnalyticsPage {
                   "Sun": "Sunday"};
 
     var day = date.toString().slice(0,3);
-    return(dayDict[day]);
+    return(day);
   }
 
 }

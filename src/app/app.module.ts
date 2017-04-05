@@ -17,7 +17,6 @@ import { AnalyticsPage } from '../pages/analytics/analytics';
 import { AngularFireModule } from 'angularfire2';
 
 import { IonicCloud } from '../providers/ionic-cloud-provider';
-import { OAuthService } from '../providers/oauth-service';
 import { SpotifyProvider } from '../providers/spotify-provider';
 import { UserData } from '../providers/user-provider';
 import { LeagueData } from '../providers/league-provider';
@@ -89,7 +88,6 @@ export const firebaseConfig = {
     AnalyticsPage
   ],
   providers: [
-    OAuthService,
     SpotifyProvider,
     IonicCloud,
     UserData,

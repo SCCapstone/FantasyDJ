@@ -15,8 +15,6 @@ import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@ang
 import { App, Config, Form, IonicModule, Keyboard, DomController, MenuController, NavController, Platform } from 'ionic-angular';
 import { ConfigMock, PlatformMock } from './mocks';
 
-
-
 import { LeagueDataMock } from './providers/league-provider.mock';
 import { LeagueData } from './providers/league-provider';
 
@@ -28,9 +26,6 @@ import { UserData } from './providers/user-provider';
 
 import { SpotifyProviderMock } from './providers/spotify-provider.mock';
 import { SpotifyProvider } from './providers/spotify-provider';
-
-import { OAuthServiceMock } from './providers/oauth-service.mock';
-import { OAuthService } from './providers/oauth-service';
 
 // Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
 declare var __karma__: any;
@@ -81,7 +76,6 @@ export class TestUtils {
         App, Form, Keyboard, DomController, MenuController, NavController,
         {provide: Platform, useClass: PlatformMock},
         {provide: Config, useClass: ConfigMock},
-        {provide: OAuthService, useClass: OAuthServiceMock},
         {provide: SpotifyProvider, useClass: SpotifyProviderMock},
         {provide: LeagueData, useClass: LeagueDataMock},
         {provide: SongData, useClass: SongDataMock},

@@ -10,6 +10,7 @@ git clone https://github.com/SCCapstone2/FantasyDJ
 ### use `npm` to install dependencies:
 ```
 cd FantasyDJ
+npm install -g typescript cordova ionic
 npm install
 ```
 
@@ -18,15 +19,38 @@ npm install
 ionic serve
 ```
 
-### build for android:
+### Android
+
+#### setup:
+```
+cordova platform add android
+```
+
+#### build:
 ```
 ionic build android
 ```
 
-### emulate on android:
+#### emulate:
 ```
 ionic emulate android
 ```
 
 ### ios: 
-like above, but replace `android` with `ios`
+
+#### setup (including cocoapods):
+```
+sudo gem install cocoapods
+cordova platform add ios
+npm install -g ios-sim ios-deploy
+```
+
+#### build:
+```
+ionic build ios
+```
+
+#### emulate:
+```
+ionic emulate ios
+```

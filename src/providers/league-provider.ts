@@ -242,7 +242,7 @@ export class LeagueData {
       return new Promise<League>((resolve, reject) => {
         let startTime: Date = new Date();
         let endTime: Date = new Date(
-          startTime.getTime() + (1 * 24 * 60 * 60 * 1000)
+          startTime.getTime() + (7 * 24 * 60 * 60 * 1000)
         );
         let dates = {
           startTime: startTime,
@@ -338,10 +338,20 @@ export class LeagueData {
     return new Promise<User>((resolve, reject) => {
       this.db.object('/Leagues/' + leagueId + '/creator',
         {preserveSnapshot: true}).subscribe(snapshot => {
-        console.log(snapshot.val());
         this.userData.loadUser(snapshot.val()).then(user =>
           resolve(user))
           .catch(err => reject(err));
+      });
+    });
+  }
+
+  getWinner(leagueId: string): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
+      this.db.object('/Leagues/' + leagueId + '/winner',
+        {preserveSnapshot: true}).subscribe(snapshot => {
+        this.userData.loadUser(snapshot.val()).then(user =>
+          resolve(user))
+          .catch(err => resolve(null));
       });
     });
   }
@@ -361,14 +371,38 @@ export class LeagueData {
         snapshot => {
           resolve(snapshot.$value);
         });
-    });
+     });
   }
+
+public isCreator(leagueId: string, userId: string): Observable<boolean>{
+  return this.dbObj('Leagues', leagueId, 'creator')
+          .take(1)
+          .map(ref => {
+            if (ref.$value == userId) {
+                return true;
+            }
+            else return false
+          });
+}
+
+isWinner(leagueId: string, userId: string): Observable<boolean>{
+  return this.dbObj('Leagues', leagueId, 'winner')
+          .take(1)
+          .map(ref => {
+            if(ref.$value == null) return null;
+            else if (ref.$value == userId) {
+                return true;
+            }
+            else return false
+          });
+}
 
   getDates(leagueId: string): Promise<Date[]> {
     return new Promise<Date[]>((resolve, reject) => {
       this.getStartDate(leagueId).then(date => {
         console.log(date);
         let start_date = new Date(date);
+        start_date.setDate(start_date.getDate() + 1);
         this.getEndDate(leagueId).then(endDate => {
           let end_date = new Date(endDate);
           this.getDatesInner(start_date, end_date).then(dates => resolve(dates));

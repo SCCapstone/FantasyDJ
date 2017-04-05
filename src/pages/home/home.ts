@@ -9,7 +9,6 @@ import { Observable } from 'rxjs/Observable';
 
 import { User, League } from '../../models/fantasydj-models';
 
-import { OAuthService } from '../../providers/oauth-service';
 import { SpotifyProvider } from '../../providers/spotify-provider';
 import { IonicCloud } from '../../providers/ionic-cloud-provider';
 import { UserData } from '../../providers/user-provider';
@@ -26,13 +25,13 @@ export class HomePage {
   createLeaguePage = CreateLeaguePage;
   searchPage = SearchPage;
   currentUser: User = null;
+  index: number = null;
 
   // Refs
   leagues: Observable<League[]>;
 
   constructor(public navCtrl: NavController,
               private platform: Platform,
-              private authService: OAuthService,
               private ionicCloud: IonicCloud,
               private spotify: SpotifyProvider,
               private userData: UserData,
@@ -41,7 +40,7 @@ export class HomePage {
   }
 
   private init() {
-    if (this.authService.token) {
+    if (this.spotify.accessToken) {
       this.userData.loadCurrentUser().then(user => {
         this.ionicCloud.login().then(ionicUser => {
           console.log('login to ionic cloud success: ' + ionicUser);
@@ -55,11 +54,8 @@ export class HomePage {
   }
 
   login() {
-    this.platform.ready().then(() => {
-      this.authService.loginToSpotify()
-        .then(token => {
-          this.init();
-        });
+    this.spotify.login().then(token => {
+      this.init();
     }).catch(error => {
       console.log(error);
     });
@@ -78,6 +74,14 @@ export class HomePage {
 
   getScore(leagueId, userId){
     return this.leagueData.getPlaylistScore(leagueId, userId);
+  }
+
+  isCreator(leagueId, userId){
+    return this.leagueData.isCreator(leagueId, userId);
+  }
+
+  isWinner(leagueId, userId){
+    return this.leagueData.isWinner(leagueId, userId);
   }
 
 };

@@ -20,6 +20,8 @@
   </ion-item>
 
   <ion-list>
+    <ion-item *ngIf="winner_flag == true"> You won! </ion-item>
+    <ion-item *ngIf="winner_flag == false"> You lost. </ion-item>
     <ion-item *ngFor="let user of users | async" (click)="goToPlayer(user, league)">
       <ion-icon item-left name="person"></ion-icon>
       <h2 text-wrap>{{ user.id }}</h2>

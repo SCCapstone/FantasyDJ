@@ -27,21 +27,28 @@ ion-icon {
 }
 
 .winner{
-	background-color: green;
+	background-color: #248f3e;
 	color: white;
 	width: 100%;
 	text-align: center;
 }
 
 .loser{
-	background-color: red;
+	background-color: #b30000;
+	color: white;
+	width:100%;
+	text-align: center;
+}
+
+.tied{
+	background-color: #404040;
 	color: white;
 	width:100%;
 	text-align: center;
 }
 
 .no-padding{
-	padding:0px;
+	padding: 2px;
 }
 
 #analytics_button{
@@ -51,11 +58,11 @@ ion-icon {
 
 #delete_button{
 	width: 100%;
-	background-color: 	#31c356;
+	background-color: 	#404040;
 }
 
 #add_button{
-	background-color: 	#404040;
+	background-color: 	#31c356;
 }
 
 #wait_message{
@@ -86,10 +93,22 @@ ion-icon {
 	margin:auto;
 }
 
-.diamond {
+#vsp{
+	text-align: center;
+}
 
-	margin: auto;
-	margin:5px;
+#vs-row{
+	text-align: center;
+	margin:auto;
+}
+
+#testspan{
+	width: 100%;
+	margin:auto;
+	text-align:center;
+}
+
+.diamond {
 	width:20px;
 	height:20px;
 	background:white;

@@ -17,7 +17,7 @@
   <ion-list>
     <ion-item *ngFor="let song of songs | async" (click)="goToSong(user, league,song)">
       <ion-thumbnail item-left>
-        <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
+        <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}" onerror="this.src='https://d2lm6fxwu08ot6.cloudfront.net/img-thumbs/960w/X4NBV7RY6G.jpg'">
       </ion-thumbnail>
       <div>
         <h2>{{ song.name }}</h2>

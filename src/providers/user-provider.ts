@@ -5,12 +5,16 @@ import { Observable } from 'rxjs/Observable';
 import { SpotifyProvider } from './spotify-provider';
 
 import { SpotifyUser } from '../models/spotify-models';
-import { User } from '../models/fantasydj-models';
+import { User, Song } from '../models/fantasydj-models';
+import { SongData } from '../providers/song-provider';
+
 
 @Injectable()
 export class UserData {
 
-  constructor(private db: AngularFireDatabase, private spotify: SpotifyProvider) {}
+  constructor(private db: AngularFireDatabase, 
+              private spotify: SpotifyProvider,
+              private songData: SongData) {}
 
   loadCurrentUser(): Promise<User> {
     return new Promise<User>((resolve, reject) => {
@@ -80,6 +84,10 @@ export class UserData {
         let users: User[] = [];
         for (let item of items) {
           this.loadUser(item.$key)
+            .then(user => {
+              //user.songs = this.songData.loadSongs(leagueId, user.id);
+              return user;
+            })
             .then(user => users.push(user))
             .catch(error => console.log(error));
         }

@@ -1,3 +1,136 @@
 page-league {
 
+.league {
+	background-color: #1a1a1a;
+}
+
+ion-grid {
+	color: white;
+}
+
+ion-icon {
+	font-size: 30px;
+}
+
+#vs-row{
+}
+
+.artist{
+	font-size: 10px;
+	opacity: 0.6;
+}
+.name{
+	font-size: 11px;
+}
+.score{
+	font-size: 10px;
+}
+
+.winner{
+	background-color: #248f3e;
+	color: white;
+	width: 100%;
+	text-align: center;
+}
+
+.loser{
+	background-color: #b30000;
+	color: white;
+	width:100%;
+	text-align: center;
+}
+
+.tied{
+	background-color: #404040;
+	color: white;
+	width:100%;
+	text-align: center;
+}
+
+.no-padding{
+	padding: 2px;
+}
+
+#analytics_button{
+	width: 100%;
+	background-color: 	#31c356;
+}
+
+#delete_button{
+	width: 100%;
+	background-color: 	#404040;
+}
+
+#add_button{
+	background-color: 	#31c356;
+}
+
+#wait_message{
+	background-color: 	#31c356;
+	font-size: 10px;
+	color: white;
+}
+
+.banner{
+	background-color: 	#31c356;
+	color: white;
+	text-align: center;
+	padding: 2px;
+}
+
+#col_1{
+	border-right-style: solid;
+	border-color: grey;
+}
+
+.person {
+	width:45%;
+	margin:auto;
+}
+
+#vs{
+	width:10%;
+	margin:auto;
+}
+
+#vsp{
+	text-align: center;
+}
+
+#vs-row{
+	text-align: center;
+	margin:auto;
+}
+
+#testspan{
+	width: 100%;
+	margin:auto;
+	text-align:center;
+}
+
+.diamond {
+	width:20px;
+	height:20px;
+	background:white;
+	transform:rotate(45deg);
+	-ms-transform:rotate(45deg);
+	-webkit-transform:rotate(45deg);
+}
+.diamond-inner {
+	margin: auto;
+	color:black;
+	font-weight:bold;
+	font-size:10px;
+	line-height:11px;
+	text-align:center;
+	transform:rotate(-45deg);
+	-ms-transform:rotate(-45deg);
+	-webkit-transform:rotate(-45deg);
+	width:20px;
+	height:20px;
+	display:table-cell;
+	vertical-align:middle;
+	text-align:center;
+}
+
 }

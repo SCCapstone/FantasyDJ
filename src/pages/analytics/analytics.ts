@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { BaseChartDirective } from 'ng2-charts/ng2-charts'
 import { LeagueData } from '../../providers/league-provider';
+import { UserData } from '../../providers/user-provider';
 import { User, League} from '../../models/fantasydj-models';
 import { Observable } from 'rxjs/Observable';
 
@@ -24,9 +25,12 @@ export class AnalyticsPage {
 
   user: User;
   league: League;
+  opponent: User;
+  users: Observable<User[]>;
   song1: number[];
   song2: number[];
   song3: number[];
+  data_flag: string;
 
   lineChartData: Array<any> = [
             {data: [], label: 'Song A'},
@@ -71,29 +75,29 @@ export class AnalyticsPage {
   public lineChartColors:Array<any> = [
     { 
       // light blue
-      backgroundColor: 'rgba(179, 198, 255, 0.2)',
-      borderColor: 'rgba(179, 198, 255, 1)',
-      pointBackgroundColor: 'rgba(179, 198, 255, 0.2)',
+      backgroundColor: 'rgba(153, 230, 172, 0.2)',
+      borderColor: 'rgba(153, 230, 172, 1)',
+      pointBackgroundColor: 'rgba(153, 230, 172, 0.2)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(179, 198, 255, 1)'
+      pointHoverBorderColor: 'rgba(153, 230, 172, 1)'
     },
     {
-      // blue
-      backgroundColor: 'rgba(102, 153, 255, 0.2)',
-      borderColor: 'rgba(102, 153, 255, 1)',
-      pointBackgroundColor: 'rgba(102, 153, 255, 0.2)',
+      // green
+      backgroundColor: 'rgba(49, 195, 86, 0.2)',
+      borderColor: 'rgba(49, 195, 86, 1)',
+      pointBackgroundColor: 'rgba(49, 195, 86, 0.2)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(102, 153, 255, 1)'
+      pointHoverBorderColor: 'rgba(49, 195, 86, 1)'
     },
     { // darkest blue
-      backgroundColor: 'rgba(0, 32, 128, 0.2)',
-      borderColor: 'rgba(0, 32, 128, 1)',
-      pointBackgroundColor: 'rgba(0, 32, 128, 0.2)',
+      backgroundColor: 'rgba(214, 245, 222, 0.2)',
+      borderColor: 'rgba(214, 245, 222, 1)',
+      pointBackgroundColor: 'rgba(214, 245, 222, 0.2)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(0, 32, 128, 1)'
+      pointHoverBorderColor: 'rgba(214, 245, 222, 1)'
     }
   ];
 
@@ -103,10 +107,14 @@ export class AnalyticsPage {
 
   constructor(public navCtrl: NavController,
   			  public navParams: NavParams,
-  			  private leagueData: LeagueData) {
+  			  private leagueData: LeagueData,
+          private userData: UserData) {
 
   	this.user = this.navParams.get('user');
     this.league = this.navParams.get('league');
+    this.opponent = this.navParams.get('opponent');
+    this.users = this.userData.loadUsers(this.league.id);
+    this.data_flag = 'user';
     
     this.leagueData.getDates(this.league.id).then(dates => {
       console.log(dates);
@@ -170,5 +178,40 @@ export class AnalyticsPage {
     var day = date.toString().slice(0,3);
     return(day);
   }
+
+  redraw(user, league, flag){
+    this.data_flag = flag;
+    this.leagueData.getLeagueData(league.id, user.id).then(scores => {
+      console.log(scores);
+      this.song1 = scores[0];
+      this.song2 = scores[1];
+      this.song3 = scores[2];
+      this.tableData = [
+        { data: this.song1, label: '' },
+        { data: this.song2, label: '' },
+        { data: this.song3, label: '' }
+      ];
+    })
+    .then(() => {
+      this.song1 = this.song1.reduce(this.accumulate, []);
+      this.song2 = this.song2.reduce(this.accumulate, []);
+      this.song3 = this.song3.reduce(this.accumulate, []);
+    })
+    .then(() => {
+      this.leagueData.getSongNames(league.id, user.id).then(names => {
+        this.lineChartData = [
+        { data: this.song1, label: names[0] },
+        { data: this.song2, label: names[1] },
+        { data: this.song3, label: names[2] }
+      ];
+      console.log(this.lineChartData);
+      })
+    .then(() => {
+      console.log(this.lineChartData);
+    })
+    .catch(err => console.log(err));
+    });
+  }
+
 
 }

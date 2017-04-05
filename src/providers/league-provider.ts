@@ -54,6 +54,42 @@ export class LeagueData {
       });
   }
 
+  loadCurrentLeagues(userId: string): Observable<League[]> {
+    return this.db.list(this.fbUserLeaguesUrl(userId))
+      .map(items => {
+        let leagues: League[] = [];
+        for (let item of items) {
+          this.loadLeague(item.$key)
+            .then(league => {
+              if(league.winner == null){
+              leagues.push(league);}
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+        return leagues;
+      });
+  }
+
+  loadPastLeagues(userId: string): Observable<League[]> {
+    return this.db.list(this.fbUserLeaguesUrl(userId))
+      .map(items => {
+        let leagues: League[] = [];
+        for (let item of items) {
+          this.loadLeague(item.$key)
+            .then(league => {
+              if(league.winner){
+              leagues.push(league);}
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+        return leagues;
+      });
+  }
+
   createLeague(name: string,
                creatorId: string,
                opponentId: string): Promise<League> {

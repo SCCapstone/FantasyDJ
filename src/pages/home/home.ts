@@ -26,9 +26,12 @@ export class HomePage {
   searchPage = SearchPage;
   currentUser: User = null;
   index: number = null;
+  flag: string = 'current';
 
   // Refs
   leagues: Observable<League[]>;
+  currentLeagues: Observable<League[]>;
+  pastLeagues: Observable<League[]>;
 
   constructor(public navCtrl: NavController,
               private platform: Platform,
@@ -49,6 +52,8 @@ export class HomePage {
         });
         this.currentUser = user;
         this.leagues = this.leagueData.loadLeagues(user.id);
+        this.currentLeagues = this.leagueData.loadCurrentLeagues(user.id);
+        this.pastLeagues = this.leagueData.loadPastLeagues(user.id);
       }).catch(error => console.log(error));
     }
   }
@@ -62,10 +67,13 @@ export class HomePage {
   }
 
   goToLeague(league, currentUser) {
-    this.navCtrl.push(LeaguePage, {
-      league: league,
-      currentUser : currentUser
+    this.leagueData.getOpponent(currentUser, league.id).then(opp =>{
+      this.navCtrl.push(LeaguePage, {
+        league: league,
+        currentUser : currentUser,
+        opponent: opp
     });
+      }).catch(error => console.log(error));
   }
 
   newLeague(){

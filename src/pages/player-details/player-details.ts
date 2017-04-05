@@ -49,7 +49,6 @@ export class PlayerDetailsPage {
       else {
         this.creator = false;
       }
-      console.log("this.creator: " + this.creator);
     });
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.leagueData.getOpponent(this.user.id, this.league.id).then(opp =>{

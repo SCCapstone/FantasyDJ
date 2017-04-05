@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Http, Request, Headers } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/map';
 
 
@@ -82,23 +80,6 @@ export class SpotifyProvider {
 
   private get isImplicitGrant(): boolean {
     return this.platform.is('core') && !useAuthCodeInCore;
-  }
-
-  public loggedIn(logInIfNot: boolean): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.loadCurrentUser().then(_ => {
-        resolve();
-      }).catch(error => {
-        if (logInIfNot) {
-          this.refreshOrLogin()
-            .then(() => resolve())
-            .catch(error => reject(error));
-        }
-        else {
-          reject(error);
-        }
-      });
-    });
   }
 
   public login(): Promise<void> {

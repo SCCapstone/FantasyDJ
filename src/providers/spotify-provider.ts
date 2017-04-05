@@ -40,8 +40,16 @@ const CLIENT_SECRET = '9b25b58435784d3cb34c048879e77aeb';
  * keys for accessing tokens in localstorage
  */
 const KEY_ACCESSTOKEN = 'access_token';
-const KEY_ACCESSTOKEN_EXPDT = 'access_token_expires';
 const KEY_REFRESHTOKEN = 'refresh_token';
+
+/**
+ * For easy(ish) testing of Authorization Code flow in the
+ * browser rather than on mobile. Start chrome like so to
+ * enable CORS:
+ *
+ * chrome --args --disable-web-security --user-data-dir
+ */
+const useAuthCodeInCore = false;
 
 @Injectable()
 export class SpotifyProvider {
@@ -65,11 +73,15 @@ export class SpotifyProvider {
         'user-read-private',
         'user-read-email'
       ],
-      responseType: 'code'
+      responseType: this.isImplicitGrant ? 'token' : 'code'
     });
     this.encodedCredentials = new Buffer(
       CLIENT_ID + ':' + CLIENT_SECRET
     ).toString('base64');
+  }
+
+  private get isImplicitGrant(): boolean {
+    return this.platform.is('core') && !useAuthCodeInCore;
   }
 
   public loggedIn(logInIfNot: boolean): Promise<void> {
@@ -96,11 +108,17 @@ export class SpotifyProvider {
           clearsessioncache: 'no'
         });
       }).then(success => {
-        return this.requestTokens(GrantTypes.authorization_code, (<AuthSuccess>success).code);
+        if (this.isImplicitGrant) {
+          return Promise.resolve(<TokenResponse>success);
+        }
+        else {
+          return this.requestTokens(GrantTypes.authorization_code, (<AuthSuccess>success).code);
+        }
       }).then(response => {
         localStorage.setItem(KEY_ACCESSTOKEN, response.access_token);
-        this.setAccessTokenExpiresAt(response.expires_in);
-        localStorage.setItem(KEY_REFRESHTOKEN, response.refresh_token);
+        if (!this.isImplicitGrant) {
+          localStorage.setItem(KEY_REFRESHTOKEN, response.refresh_token);
+        }
         resolve();
       }).catch(error => reject(error));
     });
@@ -109,7 +127,7 @@ export class SpotifyProvider {
   private refreshOrLogin(): Promise<void> {
     let action: Promise<void>;
 
-    if (this.refreshToken) {
+    if (!this.isImplicitGrant && this.refreshToken) {
       action = this.refreshAccessToken()
         .then(() => Promise.resolve())
         .catch(error => {
@@ -129,7 +147,6 @@ export class SpotifyProvider {
     return new Promise<void>((resolve, reject) => {
       this.requestTokens(GrantTypes.refresh_token).then(response => {
         localStorage.setItem(KEY_ACCESSTOKEN, response.access_token);
-        this.setAccessTokenExpiresAt(response.expires_in);
         resolve();
       }).catch(error => reject(error));
     });
@@ -175,29 +192,12 @@ export class SpotifyProvider {
     return new Request(reqOpts);
   }
 
-  private setAccessTokenExpiresAt(seconds: number) {
-    localStorage.setItem(
-      KEY_ACCESSTOKEN_EXPDT,
-      new Date(new Date().getTime() + seconds*1000).toISOString()
-    );
-  }
-
   get accessToken(): string {
     return localStorage.getItem(KEY_ACCESSTOKEN);
   }
 
   get refreshToken(): string {
     return localStorage.getItem(KEY_REFRESHTOKEN);
-  }
-
-  get accessTokenExpires(): Date {
-    let dateStr = localStorage.getItem(KEY_ACCESSTOKEN_EXPDT);
-    if (dateStr) {
-      return new Date(dateStr);
-    }
-    else {
-      return null;
-    }
   }
 
   get headers(): Headers {

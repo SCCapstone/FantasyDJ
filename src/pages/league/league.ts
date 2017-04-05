@@ -10,6 +10,8 @@ import { SongData } from '../../providers/song-provider';
 import {OpponentDetailsPage} from "../opponent-details/opponent-details";
 import { AnalyticsPage } from '../analytics/analytics';
 import { SearchPage } from '../search/search';
+import {SongDetailPage} from "../song-detail/song-detail";
+
 
 
 /*
@@ -75,7 +77,7 @@ export class LeaguePage {
         this.analytics_flag = true;
       }
     });
-    
+
   }
 
   ionViewDidLoad() {
@@ -97,6 +99,17 @@ export class LeaguePage {
         league: league
       });
     }
+  }
+
+
+  goToSong(user, league, song) {
+    console.log("This is the instance of song" ,song)
+    console.log("Going to song", song.id)
+    this.navCtrl.push(SongDetailPage, {
+      song: song,
+      league: league,
+      user : user
+    });
   }
 
   deleteThisLeague() {

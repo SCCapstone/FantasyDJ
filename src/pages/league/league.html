@@ -1,6 +1,6 @@
 <!--
    Generated template for the League page.
-   
+
    See http://ionicframework.com/docs/v2/components/#navigation for more info on
    Ionic pages and navigation.
    -->
@@ -117,7 +117,7 @@
                   <ion-col>
                      <ion-row>
                         <ion-col width-85>
-                           <ion-thumbnail>
+                           <ion-thumbnail (click)="goToSong(user, league, song)">
                               <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
                            </ion-thumbnail>
                         </ion-col>

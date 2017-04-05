@@ -81,7 +81,6 @@ export class PlayerDetailsPage {
 
   goToSong(user, league, song) {
     console.log("This is the instance of song" ,song)
-    //this.song = song//this.songData.loadSong(song.id);
     console.log("Going to song", song.id)
     this.navCtrl.push(SongDetailPage, {
       song: song,

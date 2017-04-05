@@ -45,7 +45,7 @@ export class SongDetailPage {
   {
     this.user = this.navParams.get('user');
     this.league = this.navParams.get('league');
-    this.songs = this.songData.loadSongs(this.league.id, this.user.id);
+    //this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.songFire = navParams.get("song");
     this.song = this.songData.loadSong(this.songFire);
     this.url = this.song.preview;
@@ -64,6 +64,11 @@ export class SongDetailPage {
       });
     });
     }
+
+
+  ionViewDidLeave() {
+    this.stream.pause();
+  }
 
 
   play() {

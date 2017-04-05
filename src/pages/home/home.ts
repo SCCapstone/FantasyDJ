@@ -40,7 +40,7 @@ export class HomePage {
   }
 
   private init() {
-    if (this.spotify.token) {
+    if (this.spotify.accessToken) {
       this.userData.loadCurrentUser().then(user => {
         this.ionicCloud.login().then(ionicUser => {
           console.log('login to ionic cloud success: ' + ionicUser);

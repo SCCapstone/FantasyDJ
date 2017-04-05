@@ -24,6 +24,7 @@
     "@ionic/cloud-angular": "0.11.0",
     "@ionic/storage": "1.1.7",
     "@types/jasmine": "2.5.41",
+    "@types/node": "^7.0.12",
     "@types/request": "0.0.33",
     "angularfire2": "2.0.0-beta.6",
     "chart.js": "^2.5.0",

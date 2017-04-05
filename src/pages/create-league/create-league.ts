@@ -36,7 +36,7 @@ export class CreateLeaguePage {
       name: ['', Validators.compose([Validators.pattern(this.pattern), Validators.required])],
       opponent: ['', Validators.required],
     });
-    if (this.spotify.token) {
+    if (this.spotify.accessToken) {
       this.userData.loadCurrentUser().then(user => {
         this.currentUser = user;
       }).catch(error => console.log(error));

@@ -78,7 +78,7 @@ export class SpotifyProvider {
         resolve();
       }).catch(error => {
         if (logInIfNot) {
-          this.login()
+          this.refreshOrLogin()
             .then(() => resolve())
             .catch(error => reject(error));
         }
@@ -104,6 +104,25 @@ export class SpotifyProvider {
         resolve();
       }).catch(error => reject(error));
     });
+  }
+
+  private refreshOrLogin(): Promise<void> {
+    let action: Promise<void>;
+
+    if (this.refreshToken) {
+      action = this.refreshAccessToken()
+        .then(() => Promise.resolve())
+        .catch(error => {
+          console.log('attempt to refresh token failed. trying full login',
+                      error);
+          return this.login();
+        });
+    }
+    else {
+      action = this.login();
+    }
+
+    return action;
   }
 
   private refreshAccessToken(): Promise<void> {
@@ -187,7 +206,7 @@ export class SpotifyProvider {
     });
   }
 
-  private api<T>(loc: string): Promise<T> {
+  private api<T>(loc: string, retry: boolean = true): Promise<T> {
     let req = new Request({
       url: this._apiUrl + loc,
       method: 'get',
@@ -201,15 +220,15 @@ export class SpotifyProvider {
         .subscribe(
           obj => resolve(obj),
           error => {
-            if (error.status && error.status === 401) {
-              this.login()
-                .then(_ => {
-                  window.location.reload();
-                })
-                .catch(err => reject(err));
+            if (error.status && error.status === 401 && retry) {
+              this.refreshOrLogin().then(() => {
+                return this.api(loc, false);
+              }).then(res => resolve(<T>res))
+                .catch(error => reject(error));
             }
-
-            reject(error)
+            else {
+              reject(error);
+            }
           },
           () => console.log('spotify api call complete'));
     });

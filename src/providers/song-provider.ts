@@ -59,7 +59,7 @@ export class SongData {
       });
   }
 
-  private loadSongBySpotifyId(spotifyTrackId: string): Promise<Song> {
+  public loadSongBySpotifyId(spotifyTrackId: string): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
       console.log("loadSongBySpotifyId called");
 
@@ -107,7 +107,8 @@ export class SongData {
           spotifyId: track.id,
           name: track.name,
           artist: track.artists[0].name,
-          album: track.album.name
+          album: track.album.name,
+          preview: track.preview_url
         }).key;
         if (songId) {
           this.loadSong(songId)
@@ -144,7 +145,8 @@ export class SongData {
       album: fbsong.album,
       name: fbsong.name,
       spotifyId: fbsong.spotifyId,
-      leagues: []
+      leagues: [],
+      preview: fbsong.preview_url
     };
     for (var key in fbsong.leagues) {
       song.leagues.push(key);

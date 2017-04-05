@@ -3,7 +3,6 @@ import { Platform } from 'ionic-angular';
 import { Http, Request, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-
 import { Spotify } from 'ng2-cordova-oauth/provider/spotify';
 import { Oauth } from 'ng2-cordova-oauth/oauth';
 import { OauthBrowser } from 'ng2-cordova-oauth/platform/browser';

@@ -3,6 +3,19 @@ import { Platform } from 'ionic-angular';
 import { Http, Request, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import { Spotify } from 'ng2-cordova-oauth/provider/spotify';
+import { Oauth } from 'ng2-cordova-oauth/oauth';
+import { OauthBrowser } from 'ng2-cordova-oauth/platform/browser';
+import { OauthCordova } from 'ng2-cordova-oauth/platform/cordova';
+
+import {
+  GrantType,
+  GrantTypes,
+  AuthSuccess,
+  AuthError,
+  TokenRequestBody,
+  TokenResponse } from '../models/spotify-auth-models';
+
 import {
   SpotifyUser,
   SpotifyArtist,
@@ -12,33 +25,168 @@ import {
   SpotifySearchType,
   DEFAULT_SEARCH_TYPES } from '../models/spotify-models';
 
-import { OAuthService } from './oauth-service';
+declare const Buffer;
+
+/**
+ * Spotify API client credentials for FantasyDJ
+ */
+const CLIENT_ID = 'be9a8fc1e71c45edb1cbf4d69759d6d3';
+const CLIENT_SECRET = '9b25b58435784d3cb34c048879e77aeb';
+
+/**
+ * keys for accessing tokens in localstorage
+ */
+const KEY_ACCESSTOKEN = 'access_token';
+const KEY_REFRESHTOKEN = 'refresh_token';
+
+/**
+ * For easy(ish) testing of Authorization Code flow in the
+ * browser rather than on mobile. Start chrome like so to
+ * enable CORS:
+ *
+ * chrome --args --disable-web-security --user-data-dir
+ */
+const useAuthCodeInCore = false;
 
 @Injectable()
 export class SpotifyProvider {
 
+  private oauth: Oauth;
+  private spotifyOauthProvider: Spotify;
   private _apiUrl: string;
-  private _headers: Headers;
+  private encodedCredentials: string;
 
   constructor(private http: Http,
-              private platform: Platform,
-              private authService: OAuthService) {
+              private platform: Platform) {
     this._apiUrl = this.platform.is('core') ?
       '/spotify' :
       'https://api.spotify.com/v1';
+    this.oauth = this.platform.is('core') ? new OauthBrowser() : new OauthCordova();
+    this.spotifyOauthProvider = new Spotify({
+      clientId: CLIENT_ID,
+      redirectUri: this.platform.is('android') ?
+        'http://localhost/callback' : 'http://localhost:8100/',
+      appScope: [
+        'user-read-private',
+        'user-read-email'
+      ],
+      responseType: this.isImplicitGrant ? 'token' : 'code'
+    });
+    this.encodedCredentials = new Buffer(
+      CLIENT_ID + ':' + CLIENT_SECRET
+    ).toString('base64');
+  }
+
+  private get isImplicitGrant(): boolean {
+    return this.platform.is('core') && !useAuthCodeInCore;
+  }
+
+  public login(): Promise<void> {
+    return new Promise((resolve, reject) =>  {
+      this.platform.ready().then(() => {
+        return this.oauth.logInVia(this.spotifyOauthProvider, {
+          clearsessioncache: 'no'
+        });
+      }).then(success => {
+        if (this.isImplicitGrant) {
+          return Promise.resolve(<TokenResponse>success);
+        }
+        else {
+          return this.requestTokens(GrantTypes.authorization_code, (<AuthSuccess>success).code);
+        }
+      }).then(response => {
+        localStorage.setItem(KEY_ACCESSTOKEN, response.access_token);
+        if (!this.isImplicitGrant) {
+          localStorage.setItem(KEY_REFRESHTOKEN, response.refresh_token);
+        }
+        resolve();
+      }).catch(error => reject(error));
+    });
+  }
+
+  private refreshOrLogin(): Promise<void> {
+    let action: Promise<void>;
+
+    if (!this.isImplicitGrant && this.refreshToken) {
+      action = this.refreshAccessToken()
+        .then(() => Promise.resolve())
+        .catch(error => {
+          console.log('attempt to refresh token failed. trying full login',
+                      error);
+          return this.login();
+        });
+    }
+    else {
+      action = this.login();
+    }
+
+    return action;
+  }
+
+  private refreshAccessToken(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.requestTokens(GrantTypes.refresh_token).then(response => {
+        localStorage.setItem(KEY_ACCESSTOKEN, response.access_token);
+        resolve();
+      }).catch(error => reject(error));
+    });
+  }
+
+  private requestTokens(grantType: GrantType, code?: string): Promise<TokenResponse> {
+    return new Promise<TokenResponse>((resolve, reject) => {
+      this.http.request(this.getAuthRequest(grantType, code))
+        .map(success => <TokenResponse>(success.json()))
+        .subscribe(
+          response => resolve(response),
+          error => reject(error),
+          () => console.log('requestTokens completed')
+        );
+    });
+  }
+
+  private getAuthRequest(grantType: GrantType, code?: string) {
+    let body: TokenRequestBody = {
+      grant_type: grantType,
+      code: code || null,
+      redirect_uri: (grantType === GrantTypes.authorization_code ?
+                     this.spotifyOauthProvider.options.redirectUri : null),
+      refresh_token: (grantType === GrantTypes.refresh_token ?
+                      this.refreshToken : null)
+    };
+    let bodyStr = Object.keys(body).map(k => {
+      return encodeURIComponent(k) + '=' + encodeURIComponent(body[k]);
+    }).join('&');
+
+    let reqOpts = {
+      url: 'https://accounts.spotify.com/api/token',
+      method: 'post',
+      body: bodyStr,
+      headers: new Headers({
+        'Authorization': 'Basic ' + this.encodedCredentials,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      })
+    };
+
+    console.log('request options: ' + JSON.stringify(reqOpts));
+
+    return new Request(reqOpts);
+  }
+
+  get accessToken(): string {
+    return localStorage.getItem(KEY_ACCESSTOKEN);
+  }
+
+  get refreshToken(): string {
+    return localStorage.getItem(KEY_REFRESHTOKEN);
   }
 
   get headers(): Headers {
-    if (! this._headers) {
-      this._headers = new Headers({
-        'Authorization': 'Bearer ' + this.authService.token
-      });
-      console.log(JSON.stringify(this._headers));
-    }
-    return this._headers;
+    return new Headers({
+      'Authorization': 'Bearer ' + this.accessToken
+    });
   }
 
-  private api<T>(loc: string): Promise<T> {
+  private api<T>(loc: string, retry: boolean = true): Promise<T> {
     let req = new Request({
       url: this._apiUrl + loc,
       method: 'get',
@@ -52,15 +200,15 @@ export class SpotifyProvider {
         .subscribe(
           obj => resolve(obj),
           error => {
-            if (error.status && error.status === 401) {
-              this.authService.loginToSpotify()
-                .then(_ => {
-                  window.location.reload();
-                })
-                .catch(err => reject(err));
+            if (error.status && error.status === 401 && retry) {
+              this.refreshOrLogin().then(() => {
+                return this.api(loc, false);
+              }).then(res => resolve(<T>res))
+                .catch(error => reject(error));
             }
-
-            reject(error)
+            else {
+              reject(error);
+            }
           },
           () => console.log('spotify api call complete'));
     });

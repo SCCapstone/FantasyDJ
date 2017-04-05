@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams  } from 'ionic-angular';
-import { OAuthService } from '../../providers/oauth-service';
+import { SpotifyProvider } from '../../providers/spotify-provider';
 
 import { User} from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
@@ -24,11 +24,11 @@ export class CreateLeaguePage {
   name: string;
   opponent: string;
   leagueForm: any;
-  pattern = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+  pattern = /^.*\S.*$/;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private authService: OAuthService,
+              private spotify: SpotifyProvider,
               private userData: UserData,
               private leagueData: LeagueData,
               private formBuilder: FormBuilder) {
@@ -36,7 +36,7 @@ export class CreateLeaguePage {
       name: ['', Validators.compose([Validators.pattern(this.pattern), Validators.required])],
       opponent: ['', Validators.required],
     });
-    if (this.authService.token) {
+    if (this.spotify.accessToken) {
       this.userData.loadCurrentUser().then(user => {
         this.currentUser = user;
       }).catch(error => console.log(error));

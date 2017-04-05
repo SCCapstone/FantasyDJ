@@ -58,6 +58,10 @@ export class SearchPage {
     console.log('Landed on Search Page');
   }
 
+  ionViewDidLeave() {
+    this.stream.pause();
+  }
+
 
   search() {
     if (this.query.length > 0) {
@@ -81,7 +85,7 @@ export class SearchPage {
 
     this.currentTrack = track.id
     console.log("current track: ",this.currentTrack);
-    this.song = this.spotify.loadTrack(this.currentTrack).then(song => {
+    this.spotify.loadTrack(this.currentTrack).then(song => {
       console.log('song ' + song.preview_url + ' songpick success');
       this.url = song.preview_url;
       this.stream = new Audio(this.url);

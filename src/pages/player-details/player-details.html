@@ -46,6 +46,6 @@
     </div>
 
   </div>
-  <button ion-button block (click) = "goToAnalytics(user, league)">Analytics</button>
+  <button *ngIf="analytics_flag == true" ion-button block (click) = "goToAnalytics(user, league)">Analytics</button>
 
 </ion-content>

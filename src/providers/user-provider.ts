@@ -5,19 +5,24 @@ import { Observable } from 'rxjs/Observable';
 import { SpotifyProvider } from './spotify-provider';
 
 import { SpotifyUser } from '../models/spotify-models';
-import { User } from '../models/fantasydj-models';
+import { User, Song } from '../models/fantasydj-models';
+import { SongData } from '../providers/song-provider';
+
 
 @Injectable()
 export class UserData {
 
-  constructor(private db: AngularFireDatabase, private spotify: SpotifyProvider) {}
+  constructor(private db: AngularFireDatabase, 
+              private spotify: SpotifyProvider,
+              private songData: SongData) {}
 
   loadCurrentUser(): Promise<User> {
     return new Promise<User>((resolve, reject) => {
       this.spotify.loadCurrentUser().then(spotifyUser => {
         // since we have a spotify user, try to load
         // fantasy-dj user
-        this.loadUser(spotifyUser.id)
+        let encoded_id = this.encode(spotifyUser.id);
+        this.loadUser(encoded_id)
           .then(user => resolve(user))
           .catch(error => {
             // no fantasy-dj user, so let's create one
@@ -38,12 +43,13 @@ export class UserData {
         reject('no spotify user. unable to create user.');
         return;
       }
-
-      this.db.object('/UserProfiles/' + spotifyUser.id).update({
+      let encoded_id = this.encode(spotifyUser.id);
+      console.log('/UserProfiles/'+ encoded_id);
+      this.db.object('/UserProfiles/' + encoded_id).update({
         dateCreated: new Date(),
         userEmail: spotifyUser.email
       }).then(_ => {
-        this.loadUser(spotifyUser.id).then(user => resolve(user));
+        this.loadUser(encoded_id).then(user => resolve(user));
       }).catch(err => reject(err));
     });
   }
@@ -56,9 +62,9 @@ export class UserData {
           reject('user ' + userId + ' does not exist');
           return;
         }
-
+        console.log(this.decode(fbuser.$key));
         let user = <User>{
-          id: fbuser.$key,
+          id: this.decode(fbuser.$key),
           email: fbuser.userEmail,
           leagues: [],
           dateCreated: fbuser.dateCreated
@@ -78,11 +84,37 @@ export class UserData {
         let users: User[] = [];
         for (let item of items) {
           this.loadUser(item.$key)
+            .then(user => {
+              //user.songs = this.songData.loadSongs(leagueId, user.id);
+              return user;
+            })
             .then(user => users.push(user))
             .catch(error => console.log(error));
         }
         return users;
       });
+  }
+
+  encode(userId: string): string{
+    let dict = {'.': '2E%', '/': '3E%', '$':'4E%', '[':'5E%', ']': '6E%', '#':'7E%'};
+    let result: string = '';
+    for(var x = 0, c=''; c = userId.charAt(x); x++){ 
+      if(c in dict){
+        result = result + dict[c];
+      }
+      else result = result + c;
+    }
+    return result;
+  }
+
+  decode(userId: string): string{
+    userId= userId.replace(/2E%/g, '.');
+    userId= userId.replace(/3E%/g, '/');
+    userId= userId.replace(/4E%/g, '$');
+    userId= userId.replace(/5E%/g, '[');
+    userId= userId.replace(/6E%/g, ']');
+    userId= userId.replace(/7E%/g, '#');
+    return userId;
   }
 
 };

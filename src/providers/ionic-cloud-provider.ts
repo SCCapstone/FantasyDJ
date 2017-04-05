@@ -49,15 +49,21 @@ export class IonicCloud {
   public initializePush(): Promise<PushToken> {
     return new Promise<PushToken>((resolve, reject) => {
       this.push.register()
-        .then(token => resolve(token))
-        .then(() => {
+        .then(token => {
+          return this.push.saveToken(token);
+        })
+        .then(token => {
+          console.log('then after saving token');
           if (! this.subscribed) {
+            console.log('was not subscribed to push notifications. subscribing');
             this.push.rx.notification()
               .subscribe(msg => {
+                console.log('should be displaying message: ' + msg.text);
                 alert(msg.title + ': ' + msg.text);
               });
             this.subscribed = true;
           }
+          resolve(token);
         })
         .catch(error => reject(error));
     });

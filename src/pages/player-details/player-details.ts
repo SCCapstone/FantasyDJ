@@ -32,6 +32,7 @@ export class PlayerDetailsPage {
   opp_songs: Observable<Song[]>;
   opponent: User;
   dates: Date[];
+  analytics_flag = false;
 
 
   constructor(public navCtrl: NavController,
@@ -48,7 +49,6 @@ export class PlayerDetailsPage {
       else {
         this.creator = false;
       }
-      console.log("this.creator: " + this.creator);
     });
     this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.leagueData.getOpponent(this.user.id, this.league.id).then(opp =>{
@@ -56,6 +56,12 @@ export class PlayerDetailsPage {
       this.opponent = opp;
       this.opp_songs = this.songData.loadSongs(this.league.id, this.opponent.id);
       console.log("opponent_id: " + this.opponent.id);
+    });
+
+    this.leagueData.getLeagueData(this.league.id, this.user.id).then(data => {
+      if( data.length > 0 ){
+        this.analytics_flag = true;
+      }
     });
 
   }

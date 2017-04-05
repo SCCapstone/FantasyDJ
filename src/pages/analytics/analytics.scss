@@ -1,7 +1,27 @@
 page-analytics {
 
 .analytics {
-  background-color: white;
+  background-color: #1a1a1a;
+}
+
+ion-segment{
+  color: green;
+}
+
+ion-row {
+  color: white;
+  text-align: center;
+  border: thin solid white;
+}
+
+button {
+  margin: 0px;
+  padding: 0px;
+}
+
+#buttons{
+  margin:auto;
+  text-align:center;
 }
 
 }

@@ -7,13 +7,31 @@
 </ion-header>
 
 <ion-content padding>
-
+<div class="search">
   <ion-searchbar
     [(ngModel)]="query"
     (ionInput)="search()"
     (debounce)="5000"
     placeholder="Ex. Guns 'N Roses">
   </ion-searchbar>
+
+    <h5 *ngIf="!results">
+       Top Hits
+    </h5>
+
+  <ion-list *ngIf="!results">
+    <ion-item *ngFor="let track of popular_tracks | async" padding color="dark">
+      <ion-thumbnail item-left>
+        <img src="{{ track.album.images[0].url }}"
+             alt="album artwork for {{ track.name }}">
+      </ion-thumbnail>
+      <h2 text-wrap>{{ track.name }}</h2>
+      <p>
+        by <strong>{{ track.album.artists[0].name }}</strong>
+        on <em>{{ track.album.name }}</em>
+      </p>
+    </ion-item>
+  </ion-list>
 
   <ion-list *ngIf="results && results.tracks" id="tracks" class="results">
     <ion-item *ngFor="let track of results.tracks.items" padding (click)="addSong(user, league, track)">
@@ -28,6 +46,6 @@
       </p>
     </ion-item>
   </ion-list>
-
+</div>
 </ion-content>
 

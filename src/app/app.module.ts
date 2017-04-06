@@ -22,6 +22,7 @@ import { UserData } from '../providers/user-provider';
 import { LeagueData } from '../providers/league-provider';
 import { SongData } from '../providers/song-provider';
 import { SongStatData } from '../providers/songstat-provider';
+import { PopularData } from '../providers/popular-provider';
 
 import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
 import {SongDetailPage} from "../pages/song-detail/song-detail";
@@ -93,7 +94,8 @@ export const firebaseConfig = {
     UserData,
     LeagueData,
     SongData,
-    SongStatData
+    SongStatData,
+    PopularData
   ]
 })
 export class AppModule {}

@@ -13,25 +13,26 @@ export class PopularData {
 
   constructor(private db: AngularFireDatabase,
               private spotify: SpotifyProvider) {
-    this.fbPopularTracks = this.db.list('/Popular/tracks');
+    this.fbPopularTracks = this.db.list('/Popular/tracks', {
+      query: {
+        orderByKey: true,
+        limitToFirst: 25
+      }
+    });
   }
 
   public loadPopularTracks(): Observable<SpotifyTrack[]> {
   	return this.fbPopularTracks.map(items => {
         let tracks: SpotifyTrack[] = [];
-        let counter = 0;
-        for (let item of items) {
-          console.log('Counter: ' + counter);
-          if(counter < 25){
-            this.spotify.loadTrack(item.$value)
-              .then(track => {
-                tracks.push(track);
-                })
-              .catch(error => {
-                console.log(error);
-              });
-            counter = counter + 1;
-        }}
+        items.forEach(item => {
+          this.spotify.loadTrack(item.$value)
+            .then(track => {
+              tracks.push(track);
+              })
+            .catch(error => {
+              console.log(error);
+            });
+        });
         return tracks;
       });
   }

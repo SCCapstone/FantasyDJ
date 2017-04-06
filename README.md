@@ -25,11 +25,11 @@ Welcome to fantasyDJ
 * Deployment instructions: see [BUILDING.md](./BUILDING.md)
 
 ### Who do I talk to? ###
-* Designers:
+#### Designers:
 *   Julia Strout jstrout@email.sc.edu
 *   Philip Oliver-Paull: oliverpa@email.sc.edu
 *   Tom Brower: browert2@email.sc.edu
 
-* Client: 
+#### Client: 
 *   Steve Rubin: KonstantinRubin@engineer.com
 

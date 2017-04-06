@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Auth, User, Push, PushToken } from '@ionic/cloud-angular';
+import { Auth, User, Push, PushToken, AuthLoginOptions } from '@ionic/cloud-angular';
 import { SpotifyProvider } from './spotify-provider';
 import { Http, Request, RequestOptions, Headers } from '@angular/http';
 
-const authOptions = {
-  inAppBrowserSettings: {
-    hidden: true
+const authOptions = <AuthLoginOptions>{
+  'inAppBrowserOptions': {
+    'hidden': true
   }
 };
 

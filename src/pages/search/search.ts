@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
 import { SpotifyProvider } from '../../providers/spotify-provider';
-import { SpotifySearchResult } from '../../models/spotify-models';
+import { SpotifySearchResult, SpotifyTrack } from '../../models/spotify-models';
 import { League, User } from '../../models/fantasydj-models';
+
 
 import { LeagueData } from '../../providers/league-provider';
 import { SongData } from '../../providers/song-provider';
+import { PopularData } from '../../providers/popular-provider';
 
 
 /*
@@ -28,6 +31,7 @@ export class SearchPage {
   league: League;
   opponent_id: string;
   query: string = "";
+  popular_tracks: Observable<SpotifyTrack[]>;
   results: SpotifySearchResult;
   playing: boolean = true;
   currentTrack: any;
@@ -44,13 +48,16 @@ export class SearchPage {
               public alert: AlertController,
               private spotify: SpotifyProvider,
               private leagueData: LeagueData,
-              private songData: SongData) {
+              private songData: SongData,
+              private popularData: PopularData) {
     this.league = this.navParams.get('league');
     this.user = this.navParams.get('user');
     this.alert = alert;
+    this.popular_tracks = this.popularData.loadPopularTracks();
     this.stream = new Audio(this.url);
     this.url = "x";
     this.running = false;
+
   }
 
 

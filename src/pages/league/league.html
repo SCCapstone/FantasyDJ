@@ -117,7 +117,7 @@
                   <ion-col>
                      <ion-row>
                         <ion-col width-85>
-                           <ion-thumbnail>
+                           <ion-thumbnail (click)="goToSong(user, league, song)">
                              <img src="{{ song.artwork }}"
                                   alt="album artwork for {{ song.name }}"
                                   onerror="this.src='/img/default-artwork.jpg'">
@@ -147,7 +147,7 @@
                   <ion-col>
                      <ion-row>
                         <ion-col width-85>
-                           <ion-thumbnail>
+                           <ion-thumbnail (click)="goToSong(user, league, song)">
                               <img src="{{ song.artwork }}"
                                    alt="album artwork for {{ song.name }}"
                                    onerror="this.src='/img/default-artwork.jpg'">

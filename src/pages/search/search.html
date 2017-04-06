@@ -45,13 +45,13 @@
         on <em>{{ track.album.name }}</em>
       </p>
 
-      <button ion-button color="secondary" (click)="addSong(user, league, track)">Add to Playlist</button> <button ion-button color="secondary" (click)="songPick(track)">Preview</button>
+      <button ion-button color="secondary" (click)="addSong(user, league, track)">Add</button> <button ion-button color="secondary" (click)="songPick(track)">Preview</button>
     </ion-item>
   </ion-list>
 </div>
 </ion-content>
 
-  <ion-footer>
+  <ion-footer >
 
     <ion-grid>
 
@@ -61,7 +61,7 @@
         </ion-col>
 
         <ion-col width="70" text-center>
-          <button ion-button full color="secondary" (click)="pause()"><ion-icon name="pause"></ion-icon></button>
+          <button *ngIf="this.running === true" ion-button full color="secondary" (click)="pause()"><ion-icon name="pause"></ion-icon></button>
           <!--<button *ngIf="currentTrack.playing" (click)="pauseTrack()" color="light" clear ion-button icon-only><ion-icon name="pause-outline"></ion-icon></button>&ndash;&gt;-->
         </ion-col>
 

@@ -30,11 +30,13 @@
         by <strong>{{ track.album.artists[0].name }}</strong>
         on <em>{{ track.album.name }}</em>
       </p>
+
+      <button ion-button color="secondary" (click)="addSong(user, league, track)">Add</button> <button ion-button color="secondary" (click)="songPick(track)">Preview</button>
     </ion-item>
   </ion-list>
 
   <ion-list *ngIf="results && results.tracks" id="tracks" class="results">
-    <ion-item *ngFor="let track of results.tracks.items" >
+    <ion-item *ngFor="let track of results.tracks.items" padding color="dark">
       <ion-thumbnail item-left>
         <img src="{{ track.album.images[0].url }}"
              alt="album artwork for {{ track.name }}">

@@ -1,6 +1,6 @@
 <!--
    Generated template for the League page.
-   
+
    See http://ionicframework.com/docs/v2/components/#navigation for more info on
    Ionic pages and navigation.
    -->
@@ -118,7 +118,9 @@
                      <ion-row>
                         <ion-col width-85>
                            <ion-thumbnail>
-                              <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
+                             <img src="{{ song.artwork }}"
+                                  alt="album artwork for {{ song.name }}"
+                                  onerror="this.src='/img/default-artwork.jpg'">
                            </ion-thumbnail>
                         </ion-col>
                      </ion-row>
@@ -146,7 +148,9 @@
                      <ion-row>
                         <ion-col width-85>
                            <ion-thumbnail>
-                              <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
+                              <img src="{{ song.artwork }}"
+                                   alt="album artwork for {{ song.name }}"
+                                   onerror="this.src='/img/default-artwork.jpg'">
                            </ion-thumbnail>
                         </ion-col>
                      </ion-row>

@@ -1,7 +1,11 @@
 page-search {
 
+  h5 {
+    color: #fff;
+  }
 
-h5{
-	color: #fff;
-}
+  ion-thumbnail img {
+    background-image: url('../img/default-artwork.jpg');
+    background-size: contain;
+  }
 }

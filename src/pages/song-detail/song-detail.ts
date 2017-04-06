@@ -66,7 +66,6 @@ export class SongDetailPage {
     }
 
 
-
   play() {
     console.log("song ID ", this.songFire)
     this.stream.play();

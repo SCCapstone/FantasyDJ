@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AlertController } from 'ionic-angular';
 import { Auth, User, Push, PushToken, AuthLoginOptions } from '@ionic/cloud-angular';
 import { SpotifyProvider } from './spotify-provider';
 import { Http, Request, RequestOptions, Headers } from '@angular/http';
@@ -23,6 +24,7 @@ export class IonicCloud {
   constructor(private auth: Auth,
               private user: User,
               private push: Push,
+              private alertCtrl: AlertController,
               private spotify: SpotifyProvider,
               private http: Http) {}
 
@@ -59,7 +61,11 @@ export class IonicCloud {
             this.push.rx.notification()
               .subscribe(msg => {
                 console.log('should be displaying message: ' + msg.text);
-                alert(msg.title + ': ' + msg.text);
+                this.alertCtrl.create({
+                  title: msg.title,
+                  subTitle: msg.text,
+                  buttons: ['OK']
+                });
               });
             this.subscribed = true;
           }

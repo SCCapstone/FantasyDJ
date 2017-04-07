@@ -20,29 +20,31 @@
          <ion-list>
             <ion-item *ngFor="let league of pastLeagues | async" (click)="goToLeague(league, currentUser)">
             <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == true" item-left name="ribbon"></ion-icon>
-            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == false" item-left name="sad"></ion-icon>
+            <ion-icon item-left  *ngIf="(isWinner(league.id, currentUser.id) | async) == false">
+                              <img class="my_icon" src="/img/sad.svg">
+            </ion-icon>
             <div>
                <h3>{{ league.name }}</h3>
                <p class="players">{{ league.users.join(" &amp; ") }}</p>
             </div>
-            <span class="score" item-right>{{ (getScore(league.id, currentUser.id) | async) }}</span>
+            <span class="score" item-right><ion-badge color="secondary" class="badge">Score: {{ (getScore(league.id, currentUser.id) | async) }}</ion-badge></span>
             </ion-item>
          </ion-list>
       </ng-container>
       <ng-container *ngIf="flag=='current'">
          <ion-list>
             <ion-item *ngFor="let league of currentLeagues | async" (click)="goToLeague(league, currentUser)">
-            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == true && (getScore(league.id, currentUser.id) | async) > (getScore(league.id, league.users[1]) | async)" item-left name="arrow-round-up"></ion-icon>
-            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == true && (getScore(league.id, currentUser.id) | async) < (getScore(league.id, league.users[1]) | async)" item-left name="arrow-round-down"></ion-icon>
-            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == true && (getScore(league.id, currentUser.id) | async) == (getScore(league.id, league.users[1]) | async)" item-left name="arrow-round-back"></ion-icon>
-            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == false && (getScore(league.id, currentUser.id) | async) > (getScore(league.id, league.users[0]) | async)" item-left name="arrow-round-up"></ion-icon>
-            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == false && (getScore(league.id, currentUser.id) | async) < (getScore(league.id, league.users[0]) | async)" item-left name="arrow-round-down"></ion-icon>
-            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == false && (getScore(league.id, currentUser.id) | async) == (getScore(league.id, league.users[0]) | async)" item-left name="arrow-round-back"></ion-icon>
+            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == true && (getScore(league.id, currentUser.id) | async) > (getScore(league.id, league.users[1]) | async)" item-left ><img class="my_icon" src="/img/winning.svg"></ion-icon>
+            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == true && (getScore(league.id, currentUser.id) | async) < (getScore(league.id, league.users[1]) | async)" item-left><img class="my_icon" src="/img/losing.svg"></ion-icon>
+            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == true && (getScore(league.id, currentUser.id) | async) == (getScore(league.id, league.users[1]) | async)" item-left><img class="my_icon" src="/img/tied.svg"></ion-icon>
+            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == false && (getScore(league.id, currentUser.id) | async) > (getScore(league.id, league.users[0]) | async)" item-left><img class="my_icon" src="/img/winning.svg"></ion-icon>
+            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == false && (getScore(league.id, currentUser.id) | async) < (getScore(league.id, league.users[0]) | async)" item-left><img class="my_icon" src="/img/losing.svg"></ion-icon>
+            <ion-icon *ngIf="(isWinner(league.id, currentUser.id) | async) == null && (isCreator(league.id, currentUser.id) | async) == false && (getScore(league.id, currentUser.id) | async) == (getScore(league.id, league.users[0]) | async)" item-left ><img class="my_icon" src="/img/tied.svg"></ion-icon>
             <div>
                <h3>{{ league.name }}</h3>
                <p class="players">{{ league.users.join(" &amp; ") }}</p>
             </div>
-            <span class="score" item-right>{{ (getScore(league.id, currentUser.id) | async) }}</span>
+            <span class="score" item-right><ion-badge color="secondary" class="badge">Score: {{ (getScore(league.id, currentUser.id) | async) }}</ion-badge></span>
             </ion-item>
          </ion-list>
       </ng-container>

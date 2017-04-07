@@ -55,25 +55,9 @@
 
   <ion-footer >
 
-    <ion-grid>
+          <button id="pause" *ngIf="this.running && this.toggle_button == 'pause'" ion-button button-md button-block-md color="secondary" (click) = "pause()"><ion-icon name="pause"></ion-icon></button>
 
-      <ion-row>
-
-        <ion-col width="15" text-right>
-        </ion-col>
-
-        <ion-col width="70" text-center>
-          <button *ngIf="this.running === true" ion-button full color="secondary" (click)="pause()"><ion-icon name="pause"></ion-icon></button>
-          <!--<button *ngIf="currentTrack.playing" (click)="pauseTrack()" color="light" clear ion-button icon-only><ion-icon name="pause-outline"></ion-icon></button>&ndash;&gt;-->
-        </ion-col>
-
-
-        <ion-col width="15" text-left>
-        </ion-col>
-
-      </ion-row>
-
-    </ion-grid>
+          <button id="pause" *ngIf="this.running && this.toggle_button == 'play'" ion-button button-md button-block-md color="secondary" (click) = "play()"><ion-icon name="play"></ion-icon></button>
 
   </ion-footer>
 

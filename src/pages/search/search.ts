@@ -40,6 +40,7 @@ export class SearchPage {
   song:any;
   url:any;
   running:boolean;
+  toggle_button: string = 'pause';
 
 
 
@@ -112,8 +113,24 @@ export class SearchPage {
     });
   }
 
+  play() {
+    this.toggle_button = "pause";
+    this.stream.play();
+    this.promise = new Promise((resolve,reject) => {
+      this.stream.addEventListener('playing', () => {
+        resolve(true);
+      });
+
+      this.stream.addEventListener('error', () => {
+        reject(false);
+      });
+    });
+    return this.promise;
+  };
+
   pause() {
     this.stream.pause();
+    this.toggle_button = 'play';
   };
 
   addSong(user, league, track) {

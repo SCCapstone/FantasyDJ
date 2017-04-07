@@ -32,7 +32,7 @@ export class SongDetailPage {
   url:any;
   songFire:any;
   song:any;
-
+  toggle_button: string = 'play';
 
 
 
@@ -73,6 +73,7 @@ export class SongDetailPage {
 
   play() {
     console.log("song ID ", this.songFire)
+    this.toggle_button = "pause";
     this.stream.play();
     this.promise = new Promise((resolve,reject) => {
       this.stream.addEventListener('playing', () => {
@@ -89,6 +90,7 @@ export class SongDetailPage {
 
   pause() {
     this.stream.pause();
+    this.toggle_button = 'play';
   };
 
 }

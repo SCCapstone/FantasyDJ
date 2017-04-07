@@ -46,14 +46,13 @@ export class SearchPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              public alert: AlertController,
+              public alertCtrl: AlertController,
               private spotify: SpotifyProvider,
               private leagueData: LeagueData,
               private songData: SongData,
               private popularData: PopularData) {
     this.league = this.navParams.get('league');
     this.user = this.navParams.get('user');
-    this.alert = alert;
     this.popular_tracks = this.popularData.loadPopularTracks();
     this.stream = new Audio(this.url);
     this.url = "x";
@@ -151,9 +150,9 @@ export class SearchPage {
 
 
   showAlertPopup(message){
-    let popup = this.alert.create({
+    let popup = this.alertCtrl.create({
       title: message,
-      buttons: ['Okay']
+      buttons: ['OK']
     });
     popup.present();
   }

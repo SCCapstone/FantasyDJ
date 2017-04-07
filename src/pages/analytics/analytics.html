@@ -44,8 +44,17 @@
             <ion-col *ngFor="let label of lineChartLabels"><strong>{{label}}</strong>
             </ion-col>
          </ion-row>
-         <ion-row *ngFor="let d of tableData">
-            <ion-col *ngFor="let label of lineChartLabels; let j=index">{{d && d.data[j]}}</ion-col>
+         <!--<ion-row class="data_row" *ngFor="let d of tableData">
+            <ion-col class="data_col" *ngFor="let label of lineChartLabels; let j=index">{{d && d.data[j]}}</ion-col>
+         </ion-row>-->
+         <ion-row class="row_1">
+            <ion-col *ngFor="let label of lineChartLabels; let j=index">{{tableData[0] && tableData[0].data[j]}}</ion-col>
+         </ion-row>
+         <ion-row class="row_2">
+            <ion-col *ngFor="let label of lineChartLabels; let j=index">{{tableData[1] && tableData[1].data[j]}}</ion-col>
+         </ion-row>
+          <ion-row class="row_3">
+            <ion-col *ngFor="let label of lineChartLabels; let j=index">{{tableData[2] && tableData[2].data[j]}}</ion-col>
          </ion-row>
       </ion-grid>
    </div>

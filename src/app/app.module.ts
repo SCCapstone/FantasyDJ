@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { FantasyDjApp } from './app.component';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
-//
+import { IntroPage } from '../pages/intro/intro';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
@@ -59,6 +59,7 @@ export const firebaseConfig = {
     ContactPage,
     HomePage,
     TabsPage,
+    IntroPage,
     LeaguePage,
     PlayerDetailsPage,
     OpponentDetailsPage,
@@ -80,6 +81,7 @@ export const firebaseConfig = {
     ContactPage,
     HomePage,
     TabsPage,
+    IntroPage,
     LeaguePage,
     PlayerDetailsPage,
     OpponentDetailsPage,

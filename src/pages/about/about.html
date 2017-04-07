@@ -12,16 +12,12 @@
 
     <ion-card-title> Welcome to FantasyDJ!</ion-card-title>
 
-    <p>
-      FantasyDJ is a mobile application that allows users to team up and create playlists to compete each week. Using a
-      user's Spotify account, playlists are scored based on plays worldwide.
-    </p>
+    <p>FantasyDJ is a mobile app that allows users to team up and create playlists to compete each week. Using a user's Spotify account, playlists are scored based on daily changes in song popularity.</p>
 
-    <ion-card-title>Learning to play is simple!</ion-card-title>
-
-    <p>
-      To start a league, find the "Create New League" button on the leagues home page. Give your league a title and choose an opponent. From there, you can pick a song that you think will increase in popularity over the coming week. You and your opponent will alternate to choose three songs each. Each league lasts a week, and whoever has a higher cumulative score at the end wins.
-    </p>
+    <button ion-button large clear icon-right color="secondary" (click)="goToTutorial()">
+      View Tutorial
+      <ion-icon name="arrow-forward"></ion-icon>
+    </button>
 
   </ion-card>
 

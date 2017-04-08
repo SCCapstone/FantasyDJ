@@ -1,35 +1,45 @@
-# fantasyDJ
-# README #
+# FantasyDJ
+## README
 
-Welcome to fantasyDJ
+FantasyDJ is a mobile game where the user chooses songs they believe will increase in popularity, based
+on Spotify's algorithm for determining the popularity of a song. The winner is determined by accumulating
+the daily change in popularity of the songs in a playlist.
 
-### What is this repository for? ###
-
-* A mobile application that allows Users to team up and create playlists to
-  compete each week much like fantasy football. Utilizing a users Spotify
-  account Playlists are scored players are ranked based upon plays worldwide.
 * Repo: https://github.com/SCCapstone2/FantasyDJ
 
 ### How to use FantasyDJ
 
-* Requirements: You will need a spotify account, either premium or free license will work. 
+* **Requirements:** You will need a Spotify account, either premium or free. 
 
-* Starting out: After signing in you will land on the league page, which shows you the current leagues that you are in. As of now, you aren't in any, but that's an easy fix! Find the button that says "Create New League" and give it a click. After this you will be on the league creation page, with the parameters of a league name and the name of an opponent which can be one of your friends spotify ID's. Creating a league will send a push notification to your opponent, which will invite him to join the game. The object of FantasyDJ is essentially pick the three songs that you think are going to get more popular over the coming days or weeks. 
-* Picking songs: Initially you will choose a song by navigating to the search page and adding it to your playlist. Then wait for your opponent to choose one, and once you both have 3 songs, your brand new league will begin. Over the next few days you will be able to see how you are doing in comparison to your opponent, both in the league page and the analytics page which has a graph of how your songs have been performing popularity wise.  
+* **Starting out:** After signing in you will land on the league page, which will show you the leagues that you
+  are currently in (which will be none at first). Use the button that says "Start New League" to go to the league
+  creation page. Choose a league name and the Spotify username of your opponent. If your opponent has installed
+  FantasyDJ, they will receive a push notification saying they have been added to your league. The object of the
+  game, essentially, is to pick the three songs that you believe will get more popular over the next week.
+  
+* **Picking songs:** When it is your turn to choose a song, click the "New Song" button in the league page.
+  You will be presented with a page containing a list of the day's most popular songs according to Spotify plays.
+  You can choose one of these or use the search box to find the song you want. Then you wait for your opponent
+  to choose a song, and this will go back and forth until both players have 3 songs. At this point, your league
+  is active. 
+  
+* **Waiting:** Over the next few days you will be able to see how you are doing in comparison to your opponent,
+  both in the league page, and in another page for analytics, which shows a graph of how your songs have been 
+  increased or decreased in popularity.  
 
 ### How do I get set up? ###
 
-* Requires: NodeJS, Cordova, Ionic 2
-* Plugins Required: Whitelist, in-app browser
-* Uses Firebase database
-* Deployment instructions: see [BUILDING.md](./BUILDING.md)
+* **Requires:** NodeJS, Cordova, Ionic 2
+* **Cordova Plugins Required:** Whitelist, InAppBrowser
+* **Uses Firebase**
+* **Deployment instructions:** see [BUILDING.md](./BUILDING.md)
 
 ### Who do I talk to? ###
 #### Designers:
-*   Julia Strout jstrout@email.sc.edu
-*   Philip Oliver-Paull: oliverpa@email.sc.edu
-*   Tom Brower: browert2@email.sc.edu
+*   **Julia Strout:** jstrout@email.sc.edu
+*   **Philip Oliver-Paull:** oliverpa@email.sc.edu
+*   **Tom Brower:** browert2@email.sc.edu
 
 #### Client: 
-*   Steve Rubin: KonstantinRubin@engineer.com
+*   **Steve Rubin:** KonstantinRubin@engineer.com
 

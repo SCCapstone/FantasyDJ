@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromPromise';
 
 import { IonicCloud } from '../../providers/ionic-cloud-provider';
 import { SpotifyProvider } from '../../providers/spotify-provider';

@@ -75,6 +75,10 @@ export class IonicCloud {
     });
   }
 
+  public logout(): void {
+    this.auth.logout();
+  }
+
   private get headers(): Headers {
     if (! this._headers) {
       this._headers = new Headers({

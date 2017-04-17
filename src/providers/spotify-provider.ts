@@ -172,6 +172,11 @@ export class SpotifyProvider {
     return new Request(reqOpts);
   }
 
+  public logout(): void {
+    localStorage.removeItem(KEY_ACCESSTOKEN);
+    localStorage.removeItem(KEY_REFRESHTOKEN);
+  }
+
   get accessToken(): string {
     return localStorage.getItem(KEY_ACCESSTOKEN);
   }

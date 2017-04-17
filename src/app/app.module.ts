@@ -13,6 +13,7 @@ import { OpponentDetailsPage } from '../pages/opponent-details/opponent-details'
 import { CreateLeaguePage } from '../pages/create-league/create-league';
 import { SearchPage } from '../pages/search/search';
 import { AnalyticsPage } from '../pages/analytics/analytics';
+import { ProfilePage } from '../pages/profile/profile';
 
 import { AngularFireModule } from 'angularfire2';
 
@@ -66,7 +67,8 @@ export const firebaseConfig = {
     CreateLeaguePage,
     SearchPage,
     SongDetailPage,
-    AnalyticsPage
+    AnalyticsPage,
+    ProfilePage
   ],
   imports: [
     IonicModule.forRoot(FantasyDjApp),
@@ -88,7 +90,8 @@ export const firebaseConfig = {
     CreateLeaguePage,
     SearchPage,
     SongDetailPage,
-    AnalyticsPage
+    AnalyticsPage,
+    ProfilePage
   ],
   providers: [
     SpotifyProvider,

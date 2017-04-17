@@ -12,7 +12,7 @@ import { SongData } from '../providers/song-provider';
 @Injectable()
 export class UserData {
 
-  constructor(private db: AngularFireDatabase, 
+  constructor(private db: AngularFireDatabase,
               private spotify: SpotifyProvider,
               private songData: SongData) {}
 
@@ -98,7 +98,7 @@ export class UserData {
   encode(userId: string): string{
     let dict = {'.': '2E%', '/': '3E%', '$':'4E%', '[':'5E%', ']': '6E%', '#':'7E%'};
     let result: string = '';
-    for(var x = 0, c=''; c = userId.charAt(x); x++){ 
+    for(var x = 0, c=''; c = userId.charAt(x); x++){
       if(c in dict){
         result = result + dict[c];
       }

@@ -35,3 +35,12 @@ class SongStat(object):
         self.songId = songId
         self.date = date
         self.popularity = popularity
+
+
+class Request(object):
+
+    def __init__(self, id, user, created, fulfilled):
+        self.id = id
+        self.user = user
+        self.created = created
+        self.fulfilled = fulfilled

@@ -52,4 +52,5 @@
 </ion-content>
 <ion-footer>
    <button *ngIf="currentUser" id="create" ion-button button-md button-block-md (click) = "newLeague()">Start New League</button>
+   <button *ngIf="currentUser" id="random" ion-button button-md button-block-md (click) = "requestMatch()">Random Opponent</button>
 </ion-footer>

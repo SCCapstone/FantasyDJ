@@ -1,4 +1,6 @@
-# FantasyDJ
-## README
+# fantasyDJ
+# README #
 
-This is testing for using this readme as our website home page.
+Welcome to fantasyDJ
+
+### This is a test for github pages ###

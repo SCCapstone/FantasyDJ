@@ -1,3 +1,6 @@
+/**
+ * Provider for match (or "random" opponent) requests.
+ */
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 

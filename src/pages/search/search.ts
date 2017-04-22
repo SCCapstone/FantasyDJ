@@ -89,7 +89,7 @@ export class SearchPage {
     if(this.running){
       this.pause()
     }
-
+    this.toggle_button = "pause";
     this.currentTrack = track.id
     console.log("current track: ",this.currentTrack);
     this.spotify.loadTrack(this.currentTrack).then(song => {

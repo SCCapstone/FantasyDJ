@@ -3,11 +3,12 @@ node_js:
   - "7.6.0"
 
 before_install:
-  - npm install -g cordova ionic karma-cli
+  #- npm install -g cordova ionic karma-cli
+  - sudo apt-get install python-dev
 
 install:
-  - npm install
-  - cd housekeeper
+  #- npm install
+  #- cd housekeeper
   - sudo python setup.py develop
   - cd ..
 

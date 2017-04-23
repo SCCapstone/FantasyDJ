@@ -7,6 +7,9 @@ node_js:
 install:
   - npm install -g cordova ionic karma-cli
   - npm install
+  - cd housekeeper
+  - python setup.py install
+  - cd ..
 
 before_script:
   - export DISPLAY=:99.0
@@ -15,3 +18,5 @@ before_script:
 script:
   - node_modules/typescript/bin/tsc --noemit
   - karma start --single-run --browsers Firefox ./test-config/karma.conf.js
+  - cd housekeeper
+  - pytest

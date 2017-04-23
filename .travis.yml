@@ -4,15 +4,11 @@ node_js:
 
 before_install:
   - npm install -g cordova ionic karma-cli
-  - sudo apt-get install -y install python3-pip python-dev
-  - sudo pip3 install -U setuptools
-  - python3 -V
-  - pip3 -V
 
 install:
   - npm install
   - cd housekeeper
-  - sudo pip3 install
+  - sudo python setup.py develop
   - cd ..
 
 before_script:

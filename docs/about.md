@@ -1,1 +1,15 @@
-This is an about page for the team.
+# The Team
+
+### Philip Oliver-Paull
+Blurb about Philip
+##### Contact:
+
+### Julia Strout
+Julia is completing her B.S. in Computer Science at the University of South Carolina and will be attending the University of Texas at Austin in the Fall of 2017 to earn a masters degree in computer science.
+##### Contact:
+jstrout44 at gmail.com
+https://www.linkedin.com/in/julia-strout-a5423799
+
+### Tom Brower
+Blurb about Tom
+###### Contact:

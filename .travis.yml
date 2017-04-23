@@ -1,14 +1,18 @@
-sudo: false
-
 language: node_js
 node_js:
   - "7.6.0"
 
-install:
+before_install:
   - npm install -g cordova ionic karma-cli
+  - sudo apt-get install -y install python3-pip python-dev
+  - sudo pip3 install -U setuptools
+  - python3 -V
+  - pip3 -V
+
+install:
   - npm install
   - cd housekeeper
-  - python setup.py install
+  - sudo pip3 install
   - cd ..
 
 before_script:

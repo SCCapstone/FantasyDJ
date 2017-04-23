@@ -3,7 +3,7 @@ on Spotify's algorithm for determining the popularity of a song. The winner is d
 the daily change in popularity of the songs in a playlist.
 
 <center>
-<video src="FantasyDjDemoCut.mp4" align="center" poster="splash.png" width="600" height="400" controls preload></video>
+<video src="FantasyDjDemoCut.mp4" align="center" poster="poster.png" width="600" height="400" controls preload></video>
 </center>
 
 ### How to use FantasyDJ

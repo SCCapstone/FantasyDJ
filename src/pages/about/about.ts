@@ -4,7 +4,7 @@ import { IntroPage } from '../intro/intro';
 
 @Component({
   selector: 'page-about',
-  templateUrl: './about.html'
+  templateUrl: 'about.html'
 })
 export class AboutPage {
 

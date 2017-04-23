@@ -29,7 +29,7 @@ import { MatchRequestData } from '../providers/matchrequest-provider';
 import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
 import {SongDetailPage} from "../pages/song-detail/song-detail";
 
-const cloudSettings: CloudSettings = {
+export const cloudSettings: CloudSettings = {
   'core': {
      'app_id': '1001d482'
   },

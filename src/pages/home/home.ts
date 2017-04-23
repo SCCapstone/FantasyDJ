@@ -18,7 +18,7 @@ import { MatchRequestData } from '../../providers/matchrequest-provider';
 
 @Component({
   selector: 'page-home',
-  templateUrl: './home.html'
+  templateUrl: 'home.html'
 })
 export class HomePage {
 

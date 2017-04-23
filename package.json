@@ -8,8 +8,7 @@
     "build": "ionic-app-scripts build",
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
-    "test-coveraage": "ng test --code-coverage",
-    "test": "ng test"
+    "test": "karma start ./test-config/karma.conf.js"
   },
   "dependencies": {
     "@angular/common": "2.2.1",
@@ -41,17 +40,21 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "1.0.0",
-    "@types/jasmine": "2.5.41",
-    "@types/node": "^7.0.4",
-    "@angular/cli": "^1.0.0-beta.26",
-    "jasmine-core": "^2.5.2",
-    "karma": "^1.4.1",
+    "@types/jasmine": "^2.5.41",
+    "@types/node": "^7.0.13",
+    "angular2-template-loader": "^0.6.2",
+    "html-loader": "^0.4.5",
+    "jasmine": "^2.5.3",
+    "karma": "^1.6.0",
     "karma-chrome-launcher": "^2.0.0",
-    "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.1.0",
-    "karma-mocha-reporter": "^2.2.2",
-    "karma-remap-istanbul": "^0.4.0",
-    "typescript": "2.0.9"
+    "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^2.0.3",
+    "null-loader": "^0.1.1",
+    "ts-loader": "^2.0.3",
+    "typescript": "2.0.9",
+    "webpack": "^2.4.1"
   },
   "cordovaPlugins": [
     "cordova-plugin-device",

@@ -8,8 +8,8 @@ Blurb about Philip
 Julia is completing her B.S. in Computer Science at the University of South Carolina and will be attending the University of Texas at Austin in the Fall of 2017 to earn a masters degree in computer science.
 ##### Contact:
 jstrout44 at gmail.com
-https://www.linkedin.com/in/julia-strout-a5423799
+[LinkedIn](https://www.linkedin.com/in/julia-strout-a5423799)
 
 ### Tom Brower
 Blurb about Tom
-###### Contact:
+##### Contact:

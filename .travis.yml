@@ -1,0 +1,13 @@
+sudo: false
+
+language: node_js
+node_js:
+  - "5.1"
+
+install:
+  - npm install -g cordova ionic karma-cli
+  - npm install
+
+script:
+  - node_modules/typescript/bin/tsc
+  - npm test

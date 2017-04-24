@@ -26,4 +26,4 @@ the daily change in popularity of the songs in a playlist.
   both in the league page, and in another page for analytics, which shows a graph of how your songs have been 
   increased or decreased in popularity.
   
-[## Meet the team behind FantasyDJ](about.md)
+[Meet the team behind FantasyDJ](about.md)

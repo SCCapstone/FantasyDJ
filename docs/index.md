@@ -6,14 +6,7 @@ FantasyDJ is a mobile game where users compete to predict songs that are going t
 
 ### Screenshots
 
-{% slider %}
-  ![The home page shows all your leagues.](screenshots/screen-01-home-page.png)
-  ![The league page shows songs and scores.](screenshots/screen-02-league-page.png)
-  ![Songs can be previewed.](screenshots/screen-03-preview.png)
-  ![View charts and graphs about your songs' progress.](screenshots/screen-04-analytics.png)
-  ![You can pick songs from Spotify's top hits.](screenshots/screen-05-search-top-hits.png)
-  ![You can also pick songs by searching.](screenshots/screen-06-search.png)
-{% endslider %}
+{% include slider.html selector="screenshots-slider" %}
 
 ### How to use FantasyDJ
 
@@ -36,3 +29,5 @@ FantasyDJ is a mobile game where users compete to predict songs that are going t
   increased or decreased in popularity.
   
 [Meet the team behind FantasyDJ](about.md)
+
+{% include slider_scripts.html %}

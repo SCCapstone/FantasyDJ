@@ -13,5 +13,7 @@ jstrout44 at gmail.com
 [LinkedIn](https://www.linkedin.com/in/julia-strout-a5423799)
 
 ### Tom Brower
-Blurb about Tom
+Tom is completing his B.S. in Conputer Information Systems at the University of South Carolina and interning at Swampfox Inc. 
+
 ##### Contact:
+Browert2 at email.sc.edu

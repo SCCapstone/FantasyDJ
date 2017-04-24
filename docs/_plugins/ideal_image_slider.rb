@@ -1,0 +1,1 @@
+<html><body>You are being <a href="https://raw.githubusercontent.com/jekylltools/jekyll-ideal-image-slider/master/_plugins/ideal_image_slider.rb">redirected</a>.</body></html>

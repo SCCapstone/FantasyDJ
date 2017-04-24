@@ -34,18 +34,19 @@ class NavParamsMock {
 describe('Analytics Page', () => {
 
   beforeEach(async(() => TestUtils.beforeEachCompiler(
-    [AnalyticsPage],[
-      {provide: NavParams, useClass: NavParamsMock}
-    ]).then(compiled => {
-      fixture = compiled.fixture;
-      instance = compiled.instance;
-    })));
+    [AnalyticsPage],
+    [{provide: NavParams, useClass: NavParamsMock}]
+  ).then(compiled => {
+    fixture = compiled.fixture;
+    instance = compiled.instance;
+  })));
 
   afterEach(() => {
     fixture.destroy();
   });
 
   it('initializes', () => {
+
     expect(instance instanceof AnalyticsPage).toBe(true);
   });
 });

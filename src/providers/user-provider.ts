@@ -21,7 +21,7 @@ export class UserData {
       this.spotify.loadCurrentUser().then(spotifyUser => {
         // since we have a spotify user, try to load
         // fantasy-dj user
-        let encoded_id = this.encode(spotifyUser.id);
+        let encoded_id = UserData.encodeUsername(spotifyUser.id);
         this.loadUser(encoded_id)
           .then(user => resolve(user))
           .catch(error => {
@@ -43,7 +43,7 @@ export class UserData {
         reject('no spotify user. unable to create user.');
         return;
       }
-      let encoded_id = this.encode(spotifyUser.id);
+      let encoded_id = UserData.encodeUsername(spotifyUser.id);
       console.log('/UserProfiles/'+ encoded_id);
       this.db.object('/UserProfiles/' + encoded_id).update({
         dateCreated: new Date(),
@@ -62,9 +62,9 @@ export class UserData {
           reject('user ' + userId + ' does not exist');
           return;
         }
-        console.log(this.decode(fbuser.$key));
+        console.log(UserData.decodeUsername(fbuser.$key));
         let user = <User>{
-          id: this.decode(fbuser.$key),
+          id: UserData.decodeUsername(fbuser.$key),
           email: fbuser.userEmail,
           leagues: [],
           dateCreated: fbuser.dateCreated
@@ -95,7 +95,7 @@ export class UserData {
       });
   }
 
-  encode(userId: string): string{
+  public static encodeUsername(userId: string): string{
     let dict = {'.': '2E%', '/': '3E%', '$':'4E%', '[':'5E%', ']': '6E%', '#':'7E%'};
     let result: string = '';
     for(var x = 0, c=''; c = userId.charAt(x); x++){
@@ -107,7 +107,7 @@ export class UserData {
     return result;
   }
 
-  decode(userId: string): string{
+  public static decodeUsername(userId: string): string{
     userId= userId.replace(/2E%/g, '.');
     userId= userId.replace(/3E%/g, '/');
     userId= userId.replace(/4E%/g, '$');

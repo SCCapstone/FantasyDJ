@@ -44,9 +44,9 @@ export class AnalyticsPage {
             {data: [], label: 'Song B'},
             {data: [], label: 'Song C'}
   ];
- 
+
   public lineChartLabels:Array<any> = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
-  
+
   public lineChartOptions:any = {
     legend: {labels:{fontColor:"white", fontSize: 15}},
     scales: {
@@ -76,7 +76,7 @@ export class AnalyticsPage {
 
   // initialize the colors for the chart
   public lineChartColors:Array<any> = [
-    { 
+    {
       // light green
       backgroundColor: 'rgba(153, 230, 172, 0.2)',
       borderColor: 'rgba(153, 230, 172, 1)',
@@ -118,12 +118,12 @@ export class AnalyticsPage {
     this.opponent = this.navParams.get('opponent');
     this.users = this.userData.loadUsers(this.league.id);
     this.data_flag = 'user';
-    
+
     // get the days that the league ran during
     this.leagueData.getDates(this.league.id).then(dates => {
       this.lineChartLabels = dates.map(this.dateToDay);
       this.chart.chart.update();
-    });
+    }).catch(error => console.log(error));
 
     // get song scores, reduce them, and then add them and their
     // names to the array that draws the chart

@@ -1,31 +1,16 @@
-import { async, TestBed } from '@angular/core/testing';
-import { IonicModule } from 'ionic-angular';
 import { FantasyDjApp } from './app.component';
+import { PlatformMock } from '../mocks';
 
-describe('FantasyDjApp Component', () => {
-  let fixture;
-  let component;
+let instance: FantasyDjApp = null;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [FantasyDjApp],
-      imports: [
-        IonicModule.forRoot(FantasyDjApp)
-      ]
-    });
-  }));
-
+describe('FantasyDjApp', () => {
   beforeEach(() => {
-    fixture = TestBed.createComponent(FantasyDjApp);
-    component = fixture.componentInstance;
+    instance = new FantasyDjApp((<any> new PlatformMock))
   });
 
-  it ('should be created', () => {
-    expect(component instanceof FantasyDjApp).toBe(true);
-  });
-
-  it ('should have rootPage', () => {
-    expect((<FantasyDjApp>component).rootPage).toBeTruthy();
+  it ('initalizes with a root page', () => {
+    expect(instance.rootPage).not.toBeNull();
   });
 
 });
+

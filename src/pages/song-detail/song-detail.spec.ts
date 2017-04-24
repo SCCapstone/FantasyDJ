@@ -1,13 +1,14 @@
 import { ComponentFixture, async } from '@angular/core/testing';
 import { NavParams } from 'ionic-angular';
 import { TestUtils } from '../../test';
-import { LeaguePage } from './league';
+import { SongDetailPage } from './song-detail';
+import { User, League, Song } from '../../models/fantasydj-models';
 
-let fixture: ComponentFixture<LeaguePage> = null;
+let fixture: ComponentFixture<SongDetailPage> = null;
 let instance: any = null;
 
 let navParamsData: any = {
-  currentUser: <User>{
+  user: <User>{
     id: '-Kuser',
     dateCreated: new Date(),
     email: 'a@b.c'
@@ -15,10 +16,8 @@ let navParamsData: any = {
   league: <League>{
     id: '-Kleague'
   },
-  opponent: <User>{
-    id: '-Kopponent',
-    dateCreated: new Date(),
-    email: 'a@b.c'
+  song: <Song>{
+    id: '-Ksong'
   }
 }
 
@@ -29,10 +28,10 @@ class NavParamsMock {
   }
 
 }
-describe('League Page', () => {
+describe('Song Detail Page', () => {
 
   beforeEach(async(() => TestUtils.beforeEachCompiler(
-    [LeaguePage],
+    [SongDetailPage],
     [{provide: NavParams, useClass: NavParamsMock}]
   ).then(compiled => {
     fixture = compiled.fixture;
@@ -44,6 +43,6 @@ describe('League Page', () => {
   });
 
   it('initializes', () => {
-    expect(instance instanceof LeaguePage).toBe(true);
+    expect(instance instanceof SongDetailPage).toBe(true);
   });
 });

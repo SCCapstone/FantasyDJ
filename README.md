@@ -1,3 +1,5 @@
+![travis-ci build status](https://travis-ci.org/SCCapstone2/FantasyDJ.svg?branch=master)
+
 # FantasyDJ
 ## README
 

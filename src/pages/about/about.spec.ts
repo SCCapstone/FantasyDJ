@@ -1,34 +1,22 @@
-import { async, TestBed } from '@angular/core/testing';
-import { IonicModule, NavController } from 'ionic-angular';
-import { FantasyDjApp } from '../../app/app.component';
+import { ComponentFixture, async } from '@angular/core/testing';
+import { TestUtils } from '../../test';
 import { AboutPage } from './about';
 
-describe('FantasyDjApp Component', () => {
-  let fixture;
-  let component;
+let fixture: ComponentFixture<AboutPage> = null;
+let instance: any = null;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        FantasyDjApp,
-        AboutPage
-      ],
-      imports: [
-        IonicModule.forRoot(FantasyDjApp),
-      ],
-      providers: [
-        NavController
-      ]
-    });
-  }));
+describe('About Page', () => {
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AboutPage);
-    component = fixture.componentInstance;
+  beforeEach(async(() => TestUtils.beforeEachCompiler([AboutPage]).then(compiled => {
+    fixture = compiled.fixture;
+    instance = compiled.instance;
+  })));
+
+  afterEach(() => {
+    fixture.destroy();
   });
 
-  it ('should be created', () => {
-    expect(component instanceof AboutPage).toBe(true);
+  it('initializes', () => {
+    expect(instance instanceof AboutPage).toBe(true);
   });
-
 });

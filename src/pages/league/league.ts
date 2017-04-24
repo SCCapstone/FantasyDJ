@@ -5,7 +5,6 @@ import { League, User, Score, Song } from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
 import { UserData } from '../../providers/user-provider';
 import { SongData } from '../../providers/song-provider';
-import {OpponentDetailsPage} from "../opponent-details/opponent-details";
 import { AnalyticsPage } from '../analytics/analytics';
 import { SearchPage } from '../search/search';
 import {SongDetailPage} from "../song-detail/song-detail";

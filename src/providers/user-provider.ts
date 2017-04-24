@@ -1,3 +1,6 @@
+/**
+* Provider for users
+*/
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
@@ -36,6 +39,9 @@ export class UserData {
     });
   }
 
+  /** 
+  * Create a new user from their spotify account
+  */
   createUser(spotifyUser: SpotifyUser): Promise<User> {
     return new Promise<User>((resolve, reject) => {
 
@@ -54,6 +60,11 @@ export class UserData {
     });
   }
 
+  /** 
+  * Load a user from the database given their id
+  * It is neccessary to encode/decode usernames to prevent
+  * symbols such as "/" which aren't allowed in firebase
+  */
   loadUser(userId: string): Promise<User> {
     return new Promise<User>((resolve, reject) => {
       this.db.object('/UserProfiles/' + userId).map(fbuser => {
@@ -78,6 +89,9 @@ export class UserData {
     });
   }
 
+  /** 
+  * Load both users in a league
+  */
   loadUsers(leagueId: string): Observable<User[]> {
     return this.db.list('/Leagues/' + leagueId + '/users')
       .map(items => {
@@ -95,6 +109,10 @@ export class UserData {
       });
   }
 
+  /**
+  * Encode and decode functions are neccessary to prevent 
+  * the symbols that aren't allowed as firebase keys
+  */
   public static encodeUsername(userId: string): string{
     let dict = {'.': '2E%', '/': '3E%', '$':'4E%', '[':'5E%', ']': '6E%', '#':'7E%'};
     let result: string = '';

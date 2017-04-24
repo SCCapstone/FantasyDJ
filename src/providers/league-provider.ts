@@ -1,3 +1,6 @@
+/**
+* Provider for leagues
+*/
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase,
   FirebaseListObservable,
@@ -25,8 +28,10 @@ export class LeagueData {
     this.fbLeagues = this.db.list('/Leagues');
   }
 
-  /** load a league from its key, map the untyped json object 
-      from firebase to a league object, and return */
+  /** 
+  * load a league given its key, map the untyped json object 
+  * from firebase to a league object, and return 
+  */
   loadLeague(leagueId: string): Promise<League> {
     return new Promise<League>((resolve, reject) => {
       this.db.object('/Leagues/' + leagueId)
@@ -40,9 +45,11 @@ export class LeagueData {
     });
   }
 
-  /** load all of the leagues that a user is a member of,
-      each league is mapped to a league object,
-      and an observable array of league objects is returned */
+  /** 
+  * load all of the leagues that a user is a member of,
+  * each league is mapped to a league object,
+  * and an observable array of league objects is returned 
+  */
   loadLeagues(userId: string): Observable<League[]> {
     return this.db.list(this.fbUserLeaguesUrl(userId))
       .map(items => {
@@ -58,8 +65,10 @@ export class LeagueData {
       });
   }
 
-  /** load all the leagues that a user is a member of that
-      are currently ongoing */
+  /** 
+  * load all the leagues that a user is a member of that
+  * are currently ongoing 
+  */
   loadCurrentLeagues(userId: string): Observable<League[]> {
     return this.db.list(this.fbUserLeaguesUrl(userId))
       .map(items => {
@@ -78,8 +87,10 @@ export class LeagueData {
       });
   }
 
-  /** load all the leagues that a user is a member of that
-      have ended */
+  /** 
+  * load all the leagues that a user is a member of that
+  * have ended 
+  */
   loadPastLeagues(userId: string): Observable<League[]> {
     return this.db.list(this.fbUserLeaguesUrl(userId))
       .map(items => {
@@ -98,7 +109,9 @@ export class LeagueData {
       });
   }
 
-  /** create a new league from the name and and two players */
+  /** 
+  * create a new league from the name and and two players 
+  */
   createLeague(name: string,
                creatorId: string,
                opponentId: string): Promise<League> {
@@ -155,7 +168,9 @@ export class LeagueData {
     return this.db.object('/' + pathElems.join('/'));
   }
 
-  /** create a league object from a untyped json object from firebase */
+  /** 
+  * create a league object from a untyped json object from firebase 
+  */
   private mapFBLeague(fbleague): League {
     console.log('start mapFBLeague');
     if ('$value' in fbleague && ! fbleague.$value) {
@@ -179,7 +194,9 @@ export class LeagueData {
     return league;
   }
 
-  /** test whether a song has already been chosen in a league */
+  /** 
+  * test whether a song has already been chosen in a league 
+  */
   private leagueHasSong(leagueId: string, songId:string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       this.dbObj('Songs', songId, 'leagues', leagueId)
@@ -195,7 +212,9 @@ export class LeagueData {
     });
   }
 
-  /** test if a league has 6 songs already chosen */
+  /** 
+  * test if a league has 6 songs already chosen 
+  */
   private leagueIsFull(leagueId: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       let size: number = 0;
@@ -218,10 +237,12 @@ export class LeagueData {
     });
   }
 
-  /** called when a user chooses a new song for their playlist, 
-      calls createSong, checks if song is already in the league, 
-      and add it to league if not. Also checks if league is full, 
-      and sends appropriate message to other player. */
+  /** 
+  * called when a user chooses a new song for their playlist, 
+  * calls createSong, checks if song is already in the league, 
+  * and add it to league if not. Also checks if league is full, 
+  * and sends appropriate message to other player. 
+  */
   public updatePlaylist(userId: string,
                         leagueId: string,
                         spotifyTrack: SpotifyTrack): Promise<Song> {
@@ -289,7 +310,9 @@ export class LeagueData {
     });
   }
 
-  /** if the league is full, set the start and end times for the league*/
+  /** 
+  * if the league is full, set the start and end times for the league
+  */
   private setLeagueDatesIfFull(leagueId: string, full: boolean): Promise<League> {
     if (full) {
       return new Promise<League>((resolve, reject) => {
@@ -317,9 +340,11 @@ export class LeagueData {
     }
   }
 
-  /** delete a league by removing the league from the db,
-      and removing it from songs' leagues lists and users'
-      leagues lists */
+  /** 
+  * delete a league by removing the league from the db,
+  * and removing it from songs' leagues lists and users'
+  * leagues lists 
+  */
   deleteLeague(leagueId: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       console.log('removing league ' + leagueId);
@@ -373,7 +398,9 @@ export class LeagueData {
     });
   }
 
-  /** given a user and a league, return the opponent */
+  /** 
+  * given a user and a league, return the opponent 
+  */
   getOpponent(userId: string, leagueId: string): Promise<User> {
     return new Promise<User>((resolve, reject) => {
       this.db.list('/Leagues/'+leagueId+'/users/').subscribe(user=>{
@@ -391,7 +418,9 @@ export class LeagueData {
     });
   }
 
-  /** return the creator of the league */
+  /** 
+  * return the creator of the league 
+  */
   getCreator(leagueId: string): Promise<User> {
     return new Promise<User>((resolve, reject) => {
       this.db.object('/Leagues/' + leagueId + '/creator',
@@ -403,7 +432,9 @@ export class LeagueData {
     });
   }
 
-  /** return the winner of a league, if league isn't over returns null */
+  /** 
+  * return the winner of a league, if league isn't over returns null 
+  */
   getWinner(leagueId: string): Promise<User> {
     return new Promise<User>((resolve, reject) => {
       this.db.object('/Leagues/' + leagueId + '/winner',
@@ -415,7 +446,9 @@ export class LeagueData {
     });
   }
 
-  /** get the time the league started */
+  /** 
+  * get the time the league started 
+  */
   getStartDate(leagueId: string): Promise<string>{
     return new Promise<string>((resolve, reject) => {
       this.db.object('/Leagues/' + leagueId + '/startTime').take(1).subscribe(
@@ -425,7 +458,9 @@ export class LeagueData {
     });
   }
 
-  /** get the time the league will end */
+  /** 
+  * get the time the league will end 
+  */
   getEndDate(leagueId: string): Promise<string>{
     return new Promise<string>((resolve, reject) => {
       this.db.object('/Leagues/' + leagueId + '/endTime').take(1).subscribe(
@@ -435,7 +470,9 @@ export class LeagueData {
      });
   }
 
-/** test whether a user is the creator of a league */ 
+/** 
+* test whether a user is the creator of a league 
+*/ 
 public isCreator(leagueId: string, userId: string): Observable<boolean>{
   return this.dbObj('Leagues', leagueId, 'creator')
           .take(1)
@@ -447,7 +484,9 @@ public isCreator(leagueId: string, userId: string): Observable<boolean>{
           });
 }
 
-/** test whether a user is the winner of a league */
+/** 
+* test whether a user is the winner of a league 
+*/
 isWinner(leagueId: string, userId: string): Observable<boolean>{
   return this.dbObj('Leagues', leagueId, 'winner')
           .take(1)
@@ -460,7 +499,9 @@ isWinner(leagueId: string, userId: string): Observable<boolean>{
           });
 }
 
-  /** returns the array of dates during which the league is ongoing */
+  /** 
+  * returns the array of dates during which the league is ongoing 
+  */
   getDates(leagueId: string): Promise<Date[]> {
     return new Promise<Date[]>((resolve, reject) => {
       this.getStartDate(leagueId).then(date => {
@@ -475,7 +516,9 @@ isWinner(leagueId: string, userId: string): Observable<boolean>{
     });
   }
 
-  /** iterate through start and stop dates */
+  /** 
+  * iterate through start and stop dates 
+  */
   getDatesInner(startDate: Date, stopDate:Date): Promise<Date[]> {
     return new Promise<Date[]>((resolve, reject) => {
       let dateArray: Date[] = [];
@@ -488,7 +531,9 @@ isWinner(leagueId: string, userId: string): Observable<boolean>{
     });
   }
 
-  /** return the cummulative score for all of a user's songs in a league */
+  /** 
+  * return the cummulative score for all of a user's songs in a league 
+  */
   public getPlaylistScore(leagueId: string, userId: string): Observable<number> {
     return this.dbObj('Leagues', leagueId, 'users', userId)
       .take(1)
@@ -505,7 +550,9 @@ isWinner(leagueId: string, userId: string): Observable<boolean>{
       });
   }
 
-  /** return the score for a single song in a league */
+  /** 
+  * return the score for a single song in a league 
+  */
   public getSongScore(leagueId: string, userId: string, songId: string): Observable<number> {
     return this.dbObj('Leagues', leagueId, 'users', userId, songId)
       .take(1)
@@ -520,7 +567,9 @@ isWinner(leagueId: string, userId: string): Observable<boolean>{
       });
   }
 
-  /** get all the scores of each song in a user's playlist in a league */
+  /** 
+  * get all the scores of each song in a user's playlist in a league 
+  */
   getLeagueData(leagueId: string, userId: string): Promise<any[]> {
     return new Promise<any[]>((resolve, reject) => {
       let songArray: any[] = [];
@@ -551,7 +600,9 @@ isWinner(leagueId: string, userId: string): Observable<boolean>{
     });
   }
 
-  /** return an array of the names of songs in a user's playlist */
+  /** 
+  * return an array of the names of songs in a user's playlist 
+  */
   getSongNames(leagueId: string, userId: string): Promise<any[]>{
     return new Promise<any[]>((resolve, reject) => {
       let nameArray: any[] = [];

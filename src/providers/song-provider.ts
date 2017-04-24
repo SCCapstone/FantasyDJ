@@ -1,3 +1,6 @@
+/**
+* Provider for songs
+*/
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
@@ -21,8 +24,9 @@ export class SongData {
   }
 
   /** load a song from db based on key and
-      map the untyped json object from firebase
-      to a song object */
+  * map the untyped json object from firebase
+  * to a song object 
+  */
   public loadSong(songId: string): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
       this.db.object('/Songs/' + songId)
@@ -47,7 +51,9 @@ export class SongData {
     });
   }
 
-  /** load an observable song array of all of a user's songs in a league */
+  /** 
+  * load an observable song array of all of a user's songs in a league 
+  */
   public loadSongs(leagueId: string,
                    userId: string): Observable<Song[]> {
     return this.db.list('/Leagues/' + leagueId + '/users/' + userId)
@@ -62,9 +68,11 @@ export class SongData {
       });
   }
 
-  /** load a song from spotify id
-     uses angularfire query to search songs for one that has 
-     correct spotify id */
+  /** 
+  * load a song from spotify id
+  * uses angularfire query to search songs for one that has 
+  * correct spotify id 
+  */
   public loadSongBySpotifyId(spotifyTrackId: string): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
       console.log("loadSongBySpotifyId called");
@@ -104,7 +112,9 @@ export class SongData {
     });
   }
 
-  /** create a new song in the db from a spotify track */
+  /** 
+  * create a new song in the db from a spotify track 
+  */
   public createSong(track: SpotifyTrack): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
       this.loadSongBySpotifyId(track.id).then(song => {
@@ -140,7 +150,9 @@ export class SongData {
     });
   }
 
-  /** create a song object from a untyped json object from firebase */
+  /** 
+  * create a song object from a untyped json object from firebase 
+  */
   private mapFBSong(fbsong: any): Song {
     if ('$value' in fbsong && ! fbsong.$value) {
       console.log(fbsong, 'returning null');
@@ -162,7 +174,9 @@ export class SongData {
     return song;
   }
 
-  /** return the name of a song from its key */
+  /** 
+  * return the name of a song from its key 
+  */
   getSongName(songId: string): Promise<string>{
     return new Promise<string>((resolve, reject) => {
       this.loadSong(songId).then(song => {

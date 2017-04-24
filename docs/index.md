@@ -34,5 +34,3 @@ FantasyDJ is a mobile game where users compete to predict songs that are going t
   increased or decreased in popularity.
   
 [Meet the team behind FantasyDJ](about.md)
-
-{% include slider_scripts.html %}

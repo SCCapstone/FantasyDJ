@@ -1,6 +1,4 @@
-FantasyDJ is a mobile game where the user chooses songs they believe will increase in popularity, based
-on Spotify's algorithm for determining the popularity of a song. The winner is determined by accumulating
-the daily change in popularity of the songs in a playlist.
+FantasyDJ is a mobile game where users compete to predict songs that are going to rise in popularity over a week. Each player's chosen songs receive daily scores based on Spotify's algorithm for determining the popularity of a song. Whoever's playlist of song increases the most by the end of a week wins! Check out the video and instructions below for more details.
 
 <center>
 <video src="FantasyDJ.mp4" align="center" poster="poster.png" width="600" height="400" controls preload></video>

@@ -2,6 +2,7 @@ import { ComponentFixture, async } from '@angular/core/testing';
 import { NavParams } from 'ionic-angular';
 import { TestUtils } from '../../test';
 import { LeaguePage } from './league';
+import { User, League } from '../../models/fantasydj-models';
 
 let fixture: ComponentFixture<LeaguePage> = null;
 let instance: any = null;

@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { PlayerDetailsPage } from '../player-details/player-details';
-//import 'rxjs/add/Observable/zipArray';
 import { League, User, Score, Song } from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
 import { UserData } from '../../providers/user-provider';
@@ -25,7 +23,6 @@ import {SongDetailPage} from "../song-detail/song-detail";
 export class LeaguePage {
 
   league: League;
-  playerDetailsPage = PlayerDetailsPage;
   users: Observable<User[]>;
   creator: boolean;
   current: User = null;
@@ -92,23 +89,6 @@ export class LeaguePage {
     console.log('Hello League page');
 
   }
-
-  goToPlayer(user, league) {
-    console.log("user: " + user.id);
-    if(this.current.id == user.id){
-      this.navCtrl.push(PlayerDetailsPage, {
-        user: user,
-        league: league
-      });
-    }
-    else {
-      this.navCtrl.push(OpponentDetailsPage, {
-        user: user,
-        league: league
-      });
-    }
-  }
-
 
   goToSong(user, league, song) {
     console.log("This is the instance of song" ,song)

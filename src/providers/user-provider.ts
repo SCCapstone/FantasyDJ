@@ -1,3 +1,6 @@
+/**
+ * Provider for FantasyDJ users
+ */
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
@@ -12,7 +15,7 @@ import { SongData } from '../providers/song-provider';
 @Injectable()
 export class UserData {
 
-  constructor(private db: AngularFireDatabase, 
+  constructor(private db: AngularFireDatabase,
               private spotify: SpotifyProvider,
               private songData: SongData) {}
 
@@ -21,7 +24,7 @@ export class UserData {
       this.spotify.loadCurrentUser().then(spotifyUser => {
         // since we have a spotify user, try to load
         // fantasy-dj user
-        let encoded_id = this.encode(spotifyUser.id);
+        let encoded_id = UserData.encodeUsername(spotifyUser.id);
         this.loadUser(encoded_id)
           .then(user => resolve(user))
           .catch(error => {
@@ -36,6 +39,9 @@ export class UserData {
     });
   }
 
+  /**
+   * Create a new user from their spotify account
+   */
   createUser(spotifyUser: SpotifyUser): Promise<User> {
     return new Promise<User>((resolve, reject) => {
 
@@ -43,7 +49,7 @@ export class UserData {
         reject('no spotify user. unable to create user.');
         return;
       }
-      let encoded_id = this.encode(spotifyUser.id);
+      let encoded_id = UserData.encodeUsername(spotifyUser.id);
       console.log('/UserProfiles/'+ encoded_id);
       this.db.object('/UserProfiles/' + encoded_id).update({
         dateCreated: new Date(),
@@ -54,6 +60,11 @@ export class UserData {
     });
   }
 
+  /**
+   * Load a user from the database given their id
+   * It is neccessary to encode/decode usernames to prevent
+   * symbols such as "/" which aren't allowed in firebase
+   */
   loadUser(userId: string): Promise<User> {
     return new Promise<User>((resolve, reject) => {
       this.db.object('/UserProfiles/' + userId).map(fbuser => {
@@ -62,9 +73,9 @@ export class UserData {
           reject('user ' + userId + ' does not exist');
           return;
         }
-        console.log(this.decode(fbuser.$key));
+        console.log(UserData.decodeUsername(fbuser.$key));
         let user = <User>{
-          id: this.decode(fbuser.$key),
+          id: UserData.decodeUsername(fbuser.$key),
           email: fbuser.userEmail,
           leagues: [],
           dateCreated: fbuser.dateCreated
@@ -78,6 +89,9 @@ export class UserData {
     });
   }
 
+  /**
+   * Load both users in a league
+   */
   loadUsers(leagueId: string): Observable<User[]> {
     return this.db.list('/Leagues/' + leagueId + '/users')
       .map(items => {
@@ -95,10 +109,14 @@ export class UserData {
       });
   }
 
-  encode(userId: string): string{
+  /**
+   * Encode and decode functions are neccessary to prevent
+   * the symbols that aren't allowed as firebase keys
+   */
+  public static encodeUsername(userId: string): string{
     let dict = {'.': '2E%', '/': '3E%', '$':'4E%', '[':'5E%', ']': '6E%', '#':'7E%'};
     let result: string = '';
-    for(var x = 0, c=''; c = userId.charAt(x); x++){ 
+    for(var x = 0, c=''; c = userId.charAt(x); x++){
       if(c in dict){
         result = result + dict[c];
       }
@@ -107,7 +125,7 @@ export class UserData {
     return result;
   }
 
-  decode(userId: string): string{
+  public static decodeUsername(userId: string): string{
     userId= userId.replace(/2E%/g, '.');
     userId= userId.replace(/3E%/g, '/');
     userId= userId.replace(/4E%/g, '$');

@@ -15,6 +15,22 @@ ion-icon {
 #vs-row{
 }
 
+#vs-image{
+  transform:rotate(-45deg);
+  -ms-transform:rotate(-45deg);
+  -webkit-transform:rotate(-45deg);
+  height: 20px;
+}
+
+.badge{
+	font-size: 11px;
+	background-color: #4d4d4d;
+}
+
+.right{
+	margin: auto;
+}
+
 .artist{
 	font-size: 10px;
 	opacity: 0.6;
@@ -80,6 +96,13 @@ ion-icon {
 
 #col_1{
 	border-right-style: solid;
+	border-width: thin;
+	border-color: grey;
+}
+
+#col_2{
+	border-left-style: solid;
+	border-width: thin;
 	border-color: grey;
 }
 

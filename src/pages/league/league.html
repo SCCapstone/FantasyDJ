@@ -29,7 +29,7 @@
                         <ion-col>{{ current.id }}</ion-col>
                      </ion-row>
                      <ion-row>
-                        <ion-col class="score">Score: {{ getScore(league.id, current.id) | async }}
+                        <ion-col class="score"><ion-badge>Score: {{ getScore(league.id, current.id) | async }}</ion-badge>
                         </ion-col>
                      </ion-row>
                   </ion-col>
@@ -38,9 +38,7 @@
             <ion-col id="vs" text-center>
                <ion-row text-center ="vs-row">
                   <span id="testspan">
-                     <div class="diamond">
-                        <div class="diamond-inner"> vs. </div>
-                     </div>
+                     <img id="vs-image" src="assets/images/vs.png">
                   </span>
                </ion-row>
             </ion-col>
@@ -54,7 +52,7 @@
                         <ion-col>{{ opponent.id }}</ion-col>
                      </ion-row>
                      <ion-row>
-                        <ion-col class="score">Score: {{ getScore(league.id, opponent.id) | async }}
+                        <ion-col class="score"><ion-badge>Score: {{ getScore(league.id, opponent.id) | async }}</ion-badge>
                         </ion-col>
                      </ion-row>
                   </ion-col>
@@ -118,13 +116,21 @@
                      <ion-row>
                         <ion-col width-85>
                            <ion-thumbnail (click)="goToSong(user, league, song)">
-                              <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
+                             <img src="{{ song.artwork }}"
+                                  alt="album artwork for {{ song.name }}"
+                                  onerror="this.src='assets/images/default-artwork.jpg'">
                            </ion-thumbnail>
                         </ion-col>
                      </ion-row>
+                     <ion-row>
+                     <ion-col>
                      <ion-row class ="name">{{ song.name }}</ion-row>
                      <ion-row class="artist">{{ song.artist }}</ion-row>
-                     <ion-row class="score">Score: {{getSongScore(league.id, current.id, song.id) | async }}</ion-row>
+                  </ion-col>
+                  <ion-col>
+                     <ion-row class="score"><ion-badge class="right">Score: {{getSongScore(league.id, current.id, song.id) | async }}</ion-badge></ion-row>
+                  </ion-col>
+               </ion-row>
                   </ion-col>
                </ion-row>
                <div *ngIf="(songs | async)?.length < 3">
@@ -140,19 +146,27 @@
                   </div>
                </div>
             </ion-col>
-            <ion-col width-50>
+            <ion-col id="col_2" width-50>
                <ion-row *ngFor="let song of opp_songs | async">
-                  <ion-col>
+                  <ion-col width-85>
                      <ion-row>
-                        <ion-col width-85>
-                           <ion-thumbnail>
-                              <img src="{{ song.artwork }}" alt="album artwork for {{ song.name }}">
+                        <ion-col >
+                           <ion-thumbnail (click)="goToSong(user, league, song)">
+                              <img src="{{ song.artwork }}"
+                                   alt="album artwork for {{ song.name }}"
+                                   onerror="this.src='assets/images/default-artwork.jpg'">
                            </ion-thumbnail>
                         </ion-col>
                      </ion-row>
+                     <ion-row>
+                     <ion-col width-50>
                      <ion-row class ="name">{{ song.name }}</ion-row>
                      <ion-row class="artist">{{ song.artist }}</ion-row>
-                     <ion-row class="score">Score: {{getSongScore(league.id, opponent.id, song.id) | async }}</ion-row>
+                  </ion-col>
+                  <ion-col>
+                     <ion-row class="score"><ion-badge item-right class="right" >Score: {{getSongScore(league.id, opponent.id, song.id) | async }}</ion-badge></ion-row>
+                  </ion-col>
+               </ion-row>
                   </ion-col>
                </ion-row>
             </ion-col>

@@ -1,11 +1,15 @@
+/**
+ * Provider for Ionic Cloud services
+ */
 import { Injectable } from '@angular/core';
-import { Auth, User, Push, PushToken } from '@ionic/cloud-angular';
+import { AlertController } from 'ionic-angular';
+import { Auth, User, Push, PushToken, AuthLoginOptions } from '@ionic/cloud-angular';
 import { SpotifyProvider } from './spotify-provider';
 import { Http, Request, RequestOptions, Headers } from '@angular/http';
 
-const authOptions = {
-  inAppBrowserSettings: {
-    hidden: true
+const authOptions = <AuthLoginOptions>{
+  'inAppBrowserOptions': {
+    'hidden': true
   }
 };
 
@@ -23,9 +27,13 @@ export class IonicCloud {
   constructor(private auth: Auth,
               private user: User,
               private push: Push,
+              private alertCtrl: AlertController,
               private spotify: SpotifyProvider,
               private http: Http) {}
 
+  /**
+   * login to Ionic Cloud
+   */
   public login(): Promise<User> {
     return new Promise<User>((resolve, reject) => {
       this.spotify.loadCurrentUser()
@@ -46,6 +54,9 @@ export class IonicCloud {
     });
   }
 
+  /**
+   * register device for push notifications and set up alert listener
+   */
   public initializePush(): Promise<PushToken> {
     return new Promise<PushToken>((resolve, reject) => {
       this.push.register()
@@ -59,7 +70,11 @@ export class IonicCloud {
             this.push.rx.notification()
               .subscribe(msg => {
                 console.log('should be displaying message: ' + msg.text);
-                alert(msg.title + ': ' + msg.text);
+                this.alertCtrl.create({
+                  title: msg.title,
+                  subTitle: msg.text,
+                  buttons: ['OK']
+                });
               });
             this.subscribed = true;
           }
@@ -69,6 +84,16 @@ export class IonicCloud {
     });
   }
 
+  /**
+   * logout from Ionic Cloud
+   */
+  public logout(): void {
+    this.auth.logout();
+  }
+
+  /**
+   * build headers for sending push notifications
+   */
   private get headers(): Headers {
     if (! this._headers) {
       this._headers = new Headers({
@@ -79,6 +104,9 @@ export class IonicCloud {
     return this._headers;
   }
 
+  /**
+   * Send a push notification. externalId is user's spotify id.
+   */
   public sendPush(externalId: string,
                   message: string): Promise<any> {
     let data = {

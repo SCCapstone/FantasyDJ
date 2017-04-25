@@ -1,3 +1,6 @@
+/**
+ * All interfaces for objects coming from Spotify API queries
+ */
 export interface SpotifyImage {
   url: string,
   width: number,

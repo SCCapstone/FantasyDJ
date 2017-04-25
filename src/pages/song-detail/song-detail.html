@@ -29,14 +29,12 @@
       <ion-row >
 
         <ion-col width="10"></ion-col>
-        <ion-col width="40">
-          <button ion-button icon-only color="dark" (click)='play()'>
+        <ion-col width="80" class="flexcontainer">
+          <button *ngIf="this.toggle_button == 'play'" ion-button icon-only color="dark" (click)='play()'>
             <ion-icon name="play" color="white"></ion-icon>
           </button>
-        </ion-col>
 
-        <ion-col width="40">
-          <button ion-button icon-only color="dark" (click)="pause()">
+          <button *ngIf="this.toggle_button == 'pause'" ion-button icon-only color="dark" (click)="pause()">
             <ion-icon name="pause" color="white"></ion-icon>
           </button>
         </ion-col>

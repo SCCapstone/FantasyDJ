@@ -1,58 +1,32 @@
-// This file is required by karma.conf.js and loads recursively all the .spec and framework files
-
-import './polyfills.ts';
-
-import 'zone.js/dist/long-stack-trace-zone';
-import 'zone.js/dist/proxy.js';
-import 'zone.js/dist/sync-test';
-import 'zone.js/dist/jasmine-patch';
-import 'zone.js/dist/async-test';
-import 'zone.js/dist/fake-async-test';
-
+/**
+ * Utilities for building Angular components for Jasmine tests
+ */
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
-import { App, Config, Form, IonicModule, Keyboard, DomController, MenuController, NavController, Platform } from 'ionic-angular';
+import { App, Config, Form, IonicModule, Keyboard, AlertController, DeepLinker, DomController, GestureController, MenuController, NavController, Platform } from 'ionic-angular';
 import { ConfigMock, PlatformMock } from './mocks';
 
-import { LeagueDataMock } from './providers/league-provider.mock';
+import { IonicCloud } from './providers/ionic-cloud-provider';
+import { IonicCloudMock } from './providers/ionic-cloud-provider.mock';
 import { LeagueData } from './providers/league-provider';
-
-import { SongDataMock } from './providers/song-provider.mock';
+import { LeagueDataMock } from './providers/league-provider.mock';
+import { MatchRequestData } from './providers/matchrequest-provider';
+import { MatchRequestDataMock } from './providers/matchrequest-provider.mock';
+import { PopularData } from './providers/popular-provider';
+import { PopularDataMock } from './providers/popular-provider.mock';
 import { SongData } from './providers/song-provider';
-
-import { UserDataMock } from './providers/user-provider.mock';
-import { UserData } from './providers/user-provider';
-
-import { SpotifyProviderMock } from './providers/spotify-provider.mock';
+import { SongDataMock } from './providers/song-provider.mock';
 import { SpotifyProvider } from './providers/spotify-provider';
-
-// Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
-declare var __karma__: any;
-declare var require: any;
-
-// Prevent Karma from running prematurely.
-__karma__.loaded = function (): void {
-  // noop
-};
-
-// First, initialize the Angular testing environment.
-getTestBed().initTestEnvironment(
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting(),
-);
-// Then we find all the tests.
-const context: any = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
-context.keys().map(context);
-
-// Finally, start Karma to run the tests.
-__karma__.start();
+import { SpotifyProviderMock } from './providers/spotify-provider.mock';
+import { UserData } from './providers/user-provider';
+import { UserDataMock } from './providers/user-provider.mock';
 
 export class TestUtils {
 
-  public static beforeEachCompiler(components: Array<any>): Promise<{fixture: any, instance: any}> {
-    return TestUtils.configureIonicTestingModule(components)
+  public static beforeEachCompiler(components: Array<any>, providers?: Array<any>): Promise<{fixture: any, instance: any}> {
+    return TestUtils.configureIonicTestingModule(components, providers)
       .compileComponents().then(() => {
         let fixture: any = TestBed.createComponent(components[0]);
         return {
@@ -62,7 +36,22 @@ export class TestUtils {
       });
   }
 
-  public static configureIonicTestingModule(components: Array<any>): typeof TestBed {
+  public static configureIonicTestingModule(components: Array<any>, providers?: Array<any>): typeof TestBed {
+    let provs = [
+      App, Form, Keyboard, AlertController, DomController, GestureController, MenuController, NavController,
+      {provide: Platform, useClass: PlatformMock},
+      {provide: Config, useClass: ConfigMock},
+      {provide: IonicCloud, useClass: IonicCloudMock},
+      {provide: LeagueData, useClass: LeagueDataMock},
+      {provide: MatchRequestData, useClass: MatchRequestDataMock},
+      {provide: PopularData, useClass: PopularDataMock},
+      {provide: SongData, useClass: SongDataMock},
+      {provide: SpotifyProvider, useClass: SpotifyProviderMock},
+      {provide: UserData, useClass: UserDataMock}
+    ];
+    if (providers) {
+      provs = provs.concat(providers);
+    }
     return TestBed.configureTestingModule({
       declarations: [
         ...components,
@@ -71,16 +60,9 @@ export class TestUtils {
         FormsModule,
         IonicModule,
         ReactiveFormsModule,
+        ChartsModule
       ],
-      providers: [
-        App, Form, Keyboard, DomController, MenuController, NavController,
-        {provide: Platform, useClass: PlatformMock},
-        {provide: Config, useClass: ConfigMock},
-        {provide: SpotifyProvider, useClass: SpotifyProviderMock},
-        {provide: LeagueData, useClass: LeagueDataMock},
-        {provide: SongData, useClass: SongDataMock},
-        {provide: UserData, useClass: UserDataMock},
-      ],
+      providers: provs,
     });
   }
 

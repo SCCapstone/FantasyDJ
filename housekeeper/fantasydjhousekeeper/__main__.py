@@ -6,6 +6,12 @@ parser = argparse.ArgumentParser(
     description='FantasyDJ nightly housekeeping process'
 )
 parser.add_argument(
+    '-m',
+    '--match',
+    action='store_true',
+    help='create leagues for people who want to be randomly matched'
+)
+parser.add_argument(
     '-P',
     '--popular',
     action='store_true',
@@ -60,6 +66,9 @@ elif args.testdata:
 
 elif args.popular:
     fantasydj.update_popular_tracks()
+
+elif args.match:
+    fantasydj.create_matched_leagues()
 
 else:
     fantasydj.update_active_leagues()

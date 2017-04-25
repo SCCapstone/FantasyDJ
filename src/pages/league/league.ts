@@ -1,17 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { PlayerDetailsPage } from '../player-details/player-details';
-//import 'rxjs/add/Observable/zipArray';
 import { League, User, Score, Song } from '../../models/fantasydj-models';
 import { LeagueData } from '../../providers/league-provider';
 import { UserData } from '../../providers/user-provider';
 import { SongData } from '../../providers/song-provider';
-import {OpponentDetailsPage} from "../opponent-details/opponent-details";
 import { AnalyticsPage } from '../analytics/analytics';
 import { SearchPage } from '../search/search';
 import {SongDetailPage} from "../song-detail/song-detail";
-
 
 
 /*
@@ -26,7 +22,6 @@ import {SongDetailPage} from "../song-detail/song-detail";
 export class LeaguePage {
 
   league: League;
-  playerDetailsPage = PlayerDetailsPage;
   users: Observable<User[]>;
   creator: boolean;
   current: User = null;
@@ -42,10 +37,13 @@ export class LeaguePage {
               public alertCtrl: AlertController,
               private userData: UserData,
               private songData: SongData) {
+
     this.league = this.navParams.get('league');
     this.current = this.navParams.get('currentUser');
     this.opponent = this.navParams.get('opponent');
-    //this.users = this.userData.loadUsers(this.league.id);
+
+    // load current user, their songs, and set flag for if they won or not
+    // if league hasn't ended, winner flag is null
     this.userData.loadCurrentUser().then(user => {
       this.current = user;
       this.songs = this.songData.loadSongs(this.league.id, this.current.id);
@@ -58,6 +56,9 @@ export class LeaguePage {
         else this.winner_flag = false;
       }
     });
+
+    // get the creator of the league
+    // this determines who chooses a song first
     this.leagueData.getCreator(this.league.id).then(user => {
       if(user.id == this.current.id) {
         this.creator = true;
@@ -66,12 +67,15 @@ export class LeaguePage {
         this.creator = false;
       }
     });
+
+    // get the opponent and their songs
     this.leagueData.getOpponent(user.id, this.league.id).then(opp =>{
         this.opponent = opp;
         this.opp_songs = this.songData.loadSongs(this.league.id, this.opponent.id);
       }).catch(error => console.log(error));
     }).catch(error => console.log(error));
 
+    // check if their is enough data to begin drawing analytics
     this.leagueData.getLeagueData(this.league.id, this.current.id).then(data => {
       if( data.length > 0 ){
         this.analytics_flag = true;
@@ -166,6 +170,7 @@ export class LeaguePage {
     });
   }
 
+  // transform the date from ISO 8601 format
   transformDate(date){
     var year = date.slice(0,4);
     var month = this.monthDict[date.slice(5,7)];

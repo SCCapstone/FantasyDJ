@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content padding>
-
+<div class="search">
   <ion-searchbar
     [(ngModel)]="query"
     (ionInput)="search()"
@@ -15,8 +15,12 @@
     placeholder="Ex. Guns 'N Roses">
   </ion-searchbar>
 
-  <ion-list *ngIf="results && results.tracks" id="tracks" class="results">
-    <ion-item *ngFor="let track of results.tracks.items" >
+    <h5 *ngIf="!results">
+       Top Hits
+    </h5>
+
+  <ion-list *ngIf="!results">
+    <ion-item *ngFor="let track of popular_tracks | async" padding color="dark">
       <ion-thumbnail item-left>
         <img src="{{ track.album.images[0].url }}"
              alt="album artwork for {{ track.name }}">
@@ -31,29 +35,29 @@
     </ion-item>
   </ion-list>
 
+  <ion-list *ngIf="results && results.tracks" id="tracks" class="results">
+    <ion-item *ngFor="let track of results.tracks.items" padding color="dark">
+      <ion-thumbnail item-left>
+        <img src="{{ track.album.images[0].url }}"
+             alt="album artwork for {{ track.name }}">
+      </ion-thumbnail>
+      <h2 text-wrap>{{ track.name }}</h2>
+      <p>
+        by <strong>{{ track.album.artists[0].name }}</strong>
+        on <em>{{ track.album.name }}</em>
+      </p>
+
+      <button ion-button color="secondary" (click)="addSong(user, league, track)">Add</button> <button ion-button color="secondary" (click)="songPick(track)">Preview</button>
+    </ion-item>
+  </ion-list>
+</div>
 </ion-content>
 
   <ion-footer >
 
-    <ion-grid>
+          <button id="pause" *ngIf="this.running && this.toggle_button == 'pause'" ion-button button-md button-block-md color="secondary" (click) = "pause()"><ion-icon name="pause"></ion-icon></button>
 
-      <ion-row>
-
-        <ion-col width="15" text-right>
-        </ion-col>
-
-        <ion-col width="70" text-center>
-          <button *ngIf="this.running === true" ion-button full color="secondary" (click)="pause()"><ion-icon name="pause"></ion-icon></button>
-          <!--<button *ngIf="currentTrack.playing" (click)="pauseTrack()" color="light" clear ion-button icon-only><ion-icon name="pause-outline"></ion-icon></button>&ndash;&gt;-->
-        </ion-col>
-
-
-        <ion-col width="15" text-left>
-        </ion-col>
-
-      </ion-row>
-
-    </ion-grid>
+          <button id="pause" *ngIf="this.running && this.toggle_button == 'play'" ion-button button-md button-block-md color="secondary" (click) = "play()"><ion-icon name="play"></ion-icon></button>
 
   </ion-footer>
 

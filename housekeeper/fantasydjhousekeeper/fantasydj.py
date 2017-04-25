@@ -2,6 +2,7 @@ import pyrebase
 from .config import firebase_config
 import logging
 from .leagues import LeagueModel, calc_points, calc_winner
+from .matchrequests import MatchRequestModel
 from .songs import SongModel
 from .songstats import SongStatModel, generate_fake_stats
 from .popular import PopularModel
@@ -19,6 +20,7 @@ class FantasyDJ(object):
 
     def __init__(self):
         self.league_model = LeagueModel(db)
+        self.reqest_model = MatchRequestModel(db)
         self.song_model = SongModel(db)
         self.stat_model = SongStatModel(db)
         self.popular_model = PopularModel(db)
@@ -140,3 +142,6 @@ class FantasyDJ(object):
 
     def update_popular_tracks(self):
         self.popular_model.update_popular()
+
+    def create_matched_leagues(self):
+        self.reqest_model.create_matched_leagues()

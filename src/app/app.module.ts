@@ -1,20 +1,21 @@
 import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
-import { FantasyDjApp } from './app.component';
+import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+import { AngularFireModule } from 'angularfire2';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
-//
+
+import { FantasyDjApp } from './app.component';
+
+import { IntroPage } from '../pages/intro/intro';
 import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LeaguePage } from '../pages/league/league';
-import { PlayerDetailsPage } from '../pages/player-details/player-details';
-import { OpponentDetailsPage } from '../pages/opponent-details/opponent-details';
 import { CreateLeaguePage } from '../pages/create-league/create-league';
 import { SearchPage } from '../pages/search/search';
 import { AnalyticsPage } from '../pages/analytics/analytics';
-
-import { AngularFireModule } from 'angularfire2';
+import { ProfilePage } from '../pages/profile/profile';
+import { SongDetailPage } from "../pages/song-detail/song-detail";
 
 import { IonicCloud } from '../providers/ionic-cloud-provider';
 import { SpotifyProvider } from '../providers/spotify-provider';
@@ -22,11 +23,10 @@ import { UserData } from '../providers/user-provider';
 import { LeagueData } from '../providers/league-provider';
 import { SongData } from '../providers/song-provider';
 import { SongStatData } from '../providers/songstat-provider';
+import { PopularData } from '../providers/popular-provider';
+import { MatchRequestData } from '../providers/matchrequest-provider';
 
-import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
-import {SongDetailPage} from "../pages/song-detail/song-detail";
-
-const cloudSettings: CloudSettings = {
+export const cloudSettings: CloudSettings = {
   'core': {
      'app_id': '1001d482'
   },
@@ -55,16 +55,15 @@ export const firebaseConfig = {
   declarations: [
     FantasyDjApp,
     AboutPage,
-    ContactPage,
     HomePage,
     TabsPage,
+    IntroPage,
     LeaguePage,
-    PlayerDetailsPage,
-    OpponentDetailsPage,
     CreateLeaguePage,
     SearchPage,
     SongDetailPage,
-    AnalyticsPage
+    AnalyticsPage,
+    ProfilePage
   ],
   imports: [
     IonicModule.forRoot(FantasyDjApp),
@@ -76,16 +75,15 @@ export const firebaseConfig = {
   entryComponents: [
     FantasyDjApp,
     AboutPage,
-    ContactPage,
     HomePage,
     TabsPage,
+    IntroPage,
     LeaguePage,
-    PlayerDetailsPage,
-    OpponentDetailsPage,
     CreateLeaguePage,
     SearchPage,
     SongDetailPage,
-    AnalyticsPage
+    AnalyticsPage,
+    ProfilePage
   ],
   providers: [
     SpotifyProvider,
@@ -93,7 +91,9 @@ export const firebaseConfig = {
     UserData,
     LeagueData,
     SongData,
-    SongStatData
+    SongStatData,
+    PopularData,
+    MatchRequestData
   ]
 })
 export class AppModule {}

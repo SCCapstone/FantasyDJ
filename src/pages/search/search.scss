@@ -1,3 +1,21 @@
 page-search {
 
+  h5 {
+    color: #fff;
+  }
+
+  ion-thumbnail img {
+    background-image: url('../assets/images/default-artwork.jpg');
+    background-size: contain;
+  }
+
+
+  #pause{
+	background-color: #31c356;
+	text-align: center;
+	width: 100%;
+	color: #fff;
+	margin: 0px;
+}
+
 }

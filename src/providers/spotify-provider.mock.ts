@@ -1,3 +1,7 @@
+/**
+ * Mock SpotifyProvider for testing. Implements all public
+ * methods from spotify-provider.ts.
+ */
 import { Headers } from '@angular/http';
 
 import { SpotifyUser,

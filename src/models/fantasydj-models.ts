@@ -1,3 +1,6 @@
+/**
+ * All interfaces for FantasyDJ objects
+ */
 import { Observable } from 'rxjs/Observable';
 
 export interface User {

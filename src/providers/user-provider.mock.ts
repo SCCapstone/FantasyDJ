@@ -1,3 +1,7 @@
+/**
+ * Mock User Provider for testing. Implements all public
+ * methods user-provider.ts.
+ */
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 

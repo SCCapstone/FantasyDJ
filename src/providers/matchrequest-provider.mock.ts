@@ -1,3 +1,7 @@
+/**
+ * Mock MatchRequest provider for testing. Implements all public
+ * methods in matchrequest-provider.ts.
+ */
 import { MatchRequest, User } from '../models/fantasydj-models';
 
 export class MatchRequestDataMock {

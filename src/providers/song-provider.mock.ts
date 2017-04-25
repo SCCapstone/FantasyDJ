@@ -1,3 +1,7 @@
+/**
+ * Mock Song provider for testing. Implements all public
+ * methods from song-provider.ts.
+ */
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 

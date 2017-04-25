@@ -1,3 +1,6 @@
+/**
+ * Provider for Ionic Cloud services
+ */
 import { Injectable } from '@angular/core';
 import { AlertController } from 'ionic-angular';
 import { Auth, User, Push, PushToken, AuthLoginOptions } from '@ionic/cloud-angular';
@@ -28,6 +31,9 @@ export class IonicCloud {
               private spotify: SpotifyProvider,
               private http: Http) {}
 
+  /**
+   * login to Ionic Cloud
+   */
   public login(): Promise<User> {
     return new Promise<User>((resolve, reject) => {
       this.spotify.loadCurrentUser()
@@ -48,6 +54,9 @@ export class IonicCloud {
     });
   }
 
+  /**
+   * register device for push notifications and set up alert listener
+   */
   public initializePush(): Promise<PushToken> {
     return new Promise<PushToken>((resolve, reject) => {
       this.push.register()
@@ -75,10 +84,16 @@ export class IonicCloud {
     });
   }
 
+  /**
+   * logout from Ionic Cloud
+   */
   public logout(): void {
     this.auth.logout();
   }
 
+  /**
+   * build headers for sending push notifications
+   */
   private get headers(): Headers {
     if (! this._headers) {
       this._headers = new Headers({
@@ -89,6 +104,9 @@ export class IonicCloud {
     return this._headers;
   }
 
+  /**
+   * Send a push notification. externalId is user's spotify id.
+   */
   public sendPush(externalId: string,
                   message: string): Promise<any> {
     let data = {

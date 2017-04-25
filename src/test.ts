@@ -1,3 +1,6 @@
+/**
+ * Utilities for building Angular components for Jasmine tests
+ */
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { getTestBed, TestBed } from '@angular/core/testing';

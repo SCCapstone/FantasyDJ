@@ -1,3 +1,7 @@
+/**
+ * Mock League provider for testing. Implements all public
+ * methods from league-provider.ts.
+ */
 import { League, Song, User } from '../models/fantasydj-models';
 import { SpotifyTrack } from '../models/spotify-models';
 import { Observable } from 'rxjs/Observable';

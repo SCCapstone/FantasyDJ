@@ -1,3 +1,6 @@
+/**
+ * Provider for Spotify functions (login and API queries)
+ */
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Http, Request, Headers } from '@angular/http';
@@ -77,6 +80,9 @@ export class SpotifyProvider {
     ).toString('base64');
   }
 
+  /**
+   * check to determine proper authentication flow
+   */
   private get isImplicitGrant(): boolean {
     return this.platform.is('core') && !useAuthCodeInCore;
   }
@@ -249,22 +255,37 @@ export class SpotifyProvider {
     });
   }
 
+  /**
+   * Loads the SpotifyUser that is currently logged in
+   */
   loadCurrentUser(): Promise<SpotifyUser> {
     return this.api('/me');
   }
 
+  /**
+   * Load SpotifyArtist by ID
+   */
   loadArtist(artistId: string): Promise<SpotifyArtist> {
     return this.api('/artists/' + artistId);
   }
 
+  /**
+   * Load SpotifyAlbum by ID
+   */
   loadAlbum(albumId: string): Promise<SpotifyAlbum> {
     return this.api('/albums/' + albumId);
   }
 
+  /**
+   * Load SpotifyTrack by ID
+   */
   loadTrack(trackId: string): Promise<SpotifyTrack> {
     return this.api('/tracks/' + trackId);
   }
 
+  /**
+   * Search Spotify
+   */
   search(query: string,
          types?: SpotifySearchType[],
          limit?: number,

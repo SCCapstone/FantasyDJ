@@ -1,3 +1,7 @@
+/**
+ * Mock SongStat provider for testing. Implements all public
+ * methods from songstat-provider.ts.
+ */
 import { SongStat } from '../models/fantasydj-models';
 
 export class SongStatDataMock {

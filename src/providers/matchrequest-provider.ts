@@ -15,6 +15,9 @@ export class MatchRequestData {
     this.requestList = db.list('Requests');
   }
 
+  /**
+   * load MatchRequest by ID
+   */
   loadMatchRequest(requestId: string): Promise<MatchRequest> {
     return new Promise<MatchRequest>((resolve, reject) => {
       this.db.object('Requests/' + requestId).map(obj => {
@@ -39,6 +42,9 @@ export class MatchRequestData {
     });
   }
 
+  /**
+   * creates MatchRequest for user
+   */
   createRequest(user: User): Promise<MatchRequest> {
     return new Promise<MatchRequest>((resolve, reject) => {
       let requestId: string = this.requestList.push({

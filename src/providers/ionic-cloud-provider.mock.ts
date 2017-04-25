@@ -1,3 +1,7 @@
+/**
+ * Mock Ionic Cloud provider for testing. Implements all
+ * public methods from ioniccloud-provider.ts.
+ */
 import { User, PushToken } from '@ionic/cloud-angular';
 
 export class IonicCloudMock {

@@ -1,3 +1,6 @@
+/**
+ * Unit tests for encode and decode functions in User Provider
+ */
 import { UserData } from './user-provider';
 
 describe('User Provider', () => {

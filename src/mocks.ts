@@ -1,6 +1,10 @@
 /* tslint:disable */
 // IONIC:
 
+/**
+ * Various mocks of Angular and Ionic components for testing
+ */
+
 export class ConfigMock {
 
   public get(): any {

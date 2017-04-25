@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
-import { FantasyDjApp } from './app.component';
+import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+import { AngularFireModule } from 'angularfire2';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+
+import { FantasyDjApp } from './app.component';
+
 import { IntroPage } from '../pages/intro/intro';
 import { AboutPage } from '../pages/about/about';
 import { HomePage } from '../pages/home/home';
@@ -11,8 +15,7 @@ import { CreateLeaguePage } from '../pages/create-league/create-league';
 import { SearchPage } from '../pages/search/search';
 import { AnalyticsPage } from '../pages/analytics/analytics';
 import { ProfilePage } from '../pages/profile/profile';
-
-import { AngularFireModule } from 'angularfire2';
+import { SongDetailPage } from "../pages/song-detail/song-detail";
 
 import { IonicCloud } from '../providers/ionic-cloud-provider';
 import { SpotifyProvider } from '../providers/spotify-provider';
@@ -22,9 +25,6 @@ import { SongData } from '../providers/song-provider';
 import { SongStatData } from '../providers/songstat-provider';
 import { PopularData } from '../providers/popular-provider';
 import { MatchRequestData } from '../providers/matchrequest-provider';
-
-import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
-import {SongDetailPage} from "../pages/song-detail/song-detail";
 
 export const cloudSettings: CloudSettings = {
   'core': {

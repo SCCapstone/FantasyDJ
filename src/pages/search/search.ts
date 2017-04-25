@@ -58,11 +58,12 @@ export class SearchPage {
     console.log('Landed on Search Page');
   }
 
+  // if the user navigates away from this page it will pause the stream
   ionViewDidLeave() {
     this.stream.pause();
   }
 
-
+  // using the spotify provider, this will complete a search using the inputted text
   search() {
     if (this.query.length > 0) {
       this.spotify.search(this.query)
@@ -77,7 +78,7 @@ export class SearchPage {
     console.log('clicked card');
   }
 
-
+  // function to preview a song from within the search page
   songPick(track) {
     if(this.running){
       this.pause()
@@ -105,10 +106,12 @@ export class SearchPage {
     });
   }
 
+  // pauses the stream
   pause() {
     this.stream.pause();
   };
 
+  // adds a song to the users playlist
   addSong(user, league, track) {
     console.log(league);
     this.leagueData.updatePlaylist(
@@ -125,7 +128,7 @@ export class SearchPage {
     });
   }
 
-
+  // creates a popup alert for the user
   showAlertPopup(message){
     let popup = this.alert.create({
       title: message,

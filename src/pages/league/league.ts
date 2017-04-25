@@ -85,6 +85,7 @@ export class LeaguePage {
 
   }
 
+  // takes the user to the Player Details page
   goToPlayer(user, league) {
     console.log("user: " + user.id);
     if(this.current.id == user.id){
@@ -101,7 +102,7 @@ export class LeaguePage {
     }
   }
 
-
+  // takes the user to the song detail page
   goToSong(user, league, song) {
     console.log("This is the instance of song" ,song)
     console.log("Going to song", song.id)
@@ -112,6 +113,7 @@ export class LeaguePage {
     });
   }
 
+  // upon confirmation from the user this will delete a specific league
   deleteThisLeague() {
     let confirm = this.alertCtrl.create({
       title: 'Delete League',
@@ -137,14 +139,17 @@ export class LeaguePage {
     confirm.present();
   }
 
+  // returns the score of a particular playlist
   getScore(leagueId, userId){
     return this.leagueData.getPlaylistScore(leagueId, userId);
   }
 
+  // returns the score of a particular song
   getSongScore(leagueId, userId, songId) {
     return this.leagueData.getSongScore(leagueId, userId, songId);
   }
 
+  // takes the user to the analytics page
   goToAnalytics(user, league, opponent) {
     this.navCtrl.push(AnalyticsPage, {
       league: league,
@@ -153,6 +158,7 @@ export class LeaguePage {
     });
   }
 
+  // takes the user to the search page
   goToSearch(user, league) {
     this.navCtrl.push(SearchPage, {
       league: league,

@@ -13,9 +13,8 @@ import { LeagueData } from '../../providers/league-provider';
 import {SongDetailPage} from "../song-detail/song-detail";
 
 /*
- Generated class for the PlayerDetails page.
- See http://ionicframework.com/docs/v2/components/#navigation for more info on
- Ionic pages and navigation.
+ PlayerDetails page shows information about the playlist (songs selected) as well as information such
+  as who is winning or losing the match
  */
 @Component({
   selector: 'page-player-details',
@@ -72,6 +71,7 @@ export class PlayerDetailsPage {
     console.log(this.user);
   }
 
+  // takes the user to the search page
   goToSearch(user, league) {
     this.navCtrl.push(SearchPage, {
       league: league,
@@ -79,6 +79,7 @@ export class PlayerDetailsPage {
     });
   }
 
+  // takes user to the song detail page
   goToSong(user, league, song) {
     console.log("This is the instance of song" ,song)
     console.log("Going to song", song.id)
@@ -91,10 +92,12 @@ export class PlayerDetailsPage {
 
   }
 
+  // returns the score for a particular song
   getScore(leagueId, userId, songId) {
     return this.leagueData.getSongScore(leagueId, userId, songId);
   }
 
+  // takes user to the analytics page for the selected song
   goToAnalytics(user, league) {
     this.navCtrl.push(AnalyticsPage, {
       league: league,

@@ -13,10 +13,7 @@ import { User, League, Song } from '../../models/fantasydj-models';
 
 
 /*
-  Generated class for the SongDetail page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
+  Song Detail page, shows infor about the song and allows user to preview it
 */
 @Component({
   selector: 'page-song-detail',
@@ -45,7 +42,6 @@ export class SongDetailPage {
   {
     this.user = this.navParams.get('user');
     this.league = this.navParams.get('league');
-    //this.songs = this.songData.loadSongs(this.league.id, this.user.id);
     this.songFire = navParams.get("song");
     this.song = this.songData.loadSong(this.songFire);
     this.url = this.song.preview;
@@ -54,7 +50,7 @@ export class SongDetailPage {
   ionViewDidLoad() {
     console.log('SONG-DETAIL');
   }
-
+  // launches the spotify preview in a in-app web browser
   launchUrl(url) {
     this.platform.ready().then(() => {
       let ref = new InAppBrowser(url,
@@ -65,12 +61,12 @@ export class SongDetailPage {
     });
     }
 
-
+  // pauses the stream if user leaves page
   ionViewDidLeave() {
     this.stream.pause();
   }
 
-
+  // initiates playing of stream
   play() {
     console.log("song ID ", this.songFire)
     this.stream.play();

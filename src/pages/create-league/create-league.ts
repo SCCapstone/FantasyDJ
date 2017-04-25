@@ -47,6 +47,7 @@ export class CreateLeaguePage {
     console.log('Hello CreateLeague Page');
   }
 
+  // creates a league object
   createLeague(){
     this.leagueData.createLeague(
       this.leagueForm.value.name,

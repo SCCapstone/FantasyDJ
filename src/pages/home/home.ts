@@ -58,6 +58,7 @@ export class HomePage {
     }
   }
 
+  // used to log a user in
   login() {
     this.spotify.login().then(token => {
       this.init();
@@ -66,6 +67,7 @@ export class HomePage {
     });
   }
 
+  // takes user to a selected league
   goToLeague(league, currentUser) {
     this.leagueData.getOpponent(currentUser, league.id).then(opp =>{
       this.navCtrl.push(LeaguePage, {
@@ -76,18 +78,22 @@ export class HomePage {
       }).catch(error => console.log(error));
   }
 
+  // navigates the user to the page to create a new playlist
   newLeague(){
     this.navCtrl.push(CreateLeaguePage);
   }
 
+  // returns score for a particular playlist
   getScore(leagueId, userId){
     return this.leagueData.getPlaylistScore(leagueId, userId);
   }
 
+  // returns whether user is creator of league
   isCreator(leagueId, userId){
     return this.leagueData.isCreator(leagueId, userId);
   }
 
+  // used to return status of a particular league
   isWinner(leagueId, userId){
     return this.leagueData.isWinner(leagueId, userId);
   }

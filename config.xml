@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.fantasydj805335" version="1.0-beta" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ionicframework.fantasydj805335" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>FantasyDJ</name>
   <description>Like Fantasy Football, but with music.</description>
   <author email="jstrout@email.sc.edu" href="http://github.com/SCCapstone2/FantasyDJ">FantasyDJ Team</author>

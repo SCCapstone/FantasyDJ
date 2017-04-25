@@ -1,3 +1,6 @@
+/**
+ * All interfaces for FantasyDJ objects
+ */
 import { Observable } from 'rxjs/Observable';
 
 export interface User {
@@ -42,3 +45,10 @@ export interface Score {
   scores: any[],
   total: number
 };
+
+export interface MatchRequest {
+  id: string,
+  user: string,
+  created: Date,
+  fulfilled: Date|boolean
+}

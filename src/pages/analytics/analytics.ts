@@ -32,6 +32,7 @@ export class AnalyticsPage {
   song3: number[];
   data_flag: string;
 
+  // it is neccessary to initialize all data for the chart
   lineChartData: Array<any> = [
             {data: [], label: 'Song A'},
             {data: [], label: 'Song B'},
@@ -43,8 +44,9 @@ export class AnalyticsPage {
             {data: [], label: 'Song B'},
             {data: [], label: 'Song C'}
   ];
- 
+
   public lineChartLabels:Array<any> = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
+
   public lineChartOptions:any = {
     legend: {labels:{fontColor:"white", fontSize: 15}},
     scales: {
@@ -72,9 +74,10 @@ export class AnalyticsPage {
     responsive: true
   };
 
+  // initialize the colors for the chart
   public lineChartColors:Array<any> = [
-    { 
-      // light blue
+    {
+      // light green
       backgroundColor: 'rgba(153, 230, 172, 0.2)',
       borderColor: 'rgba(153, 230, 172, 1)',
       pointBackgroundColor: 'rgba(153, 230, 172, 0.2)',
@@ -91,7 +94,7 @@ export class AnalyticsPage {
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(49, 195, 86, 1)'
     },
-    { // darkest blue
+    { // darkest green
       backgroundColor: 'rgba(214, 245, 222, 0.2)',
       borderColor: 'rgba(214, 245, 222, 1)',
       pointBackgroundColor: 'rgba(214, 245, 222, 0.2)',
@@ -115,15 +118,15 @@ export class AnalyticsPage {
     this.opponent = this.navParams.get('opponent');
     this.users = this.userData.loadUsers(this.league.id);
     this.data_flag = 'user';
-    
-    this.leagueData.getDates(this.league.id).then(dates => {
-      console.log(dates);
-      console.log(dates.map(this.dateToDay));
-      this.lineChartLabels = dates.map(this.dateToDay);
-      console.log(this.lineChartLabels);
-      this.chart.chart.update();
-    });
 
+    // get the days that the league ran during
+    this.leagueData.getDates(this.league.id).then(dates => {
+      this.lineChartLabels = dates.map(this.dateToDay);
+      this.chart.chart.update();
+    }).catch(error => console.log(error));
+
+    // get song scores, reduce them, and then add them and their
+    // names to the array that draws the chart
   	this.leagueData.getLeagueData(this.league.id, this.user.id).then(scores => {
   		console.log(scores);
   		this.song1 = scores[0];
@@ -159,6 +162,7 @@ export class AnalyticsPage {
     console.log('Hello Analytics Page');
   }
 
+  // accumulate scores so that [0, 1, 1] becomes [0, 1, 2]
   accumulate(r, a){
         if (r.length > 0)
           a += r[r.length - 1];
@@ -179,6 +183,7 @@ export class AnalyticsPage {
     return(day);
   }
 
+  // function to redraw graph and chart for different user
   redraw(user, league, flag){
     this.data_flag = flag;
     this.leagueData.getLeagueData(league.id, user.id).then(scores => {

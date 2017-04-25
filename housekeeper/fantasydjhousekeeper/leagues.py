@@ -180,3 +180,21 @@ class LeagueModel(object):
         self.db.child('Leagues/{}/endTime'.format(league_id)).set(end_str)
 
         return self.get_league(league_id)
+
+    def create_league(self, name, user_ids):
+        users = {}
+        for user_id in user_ids:
+            users[user_id] = user_id == user_ids[0]
+
+        league_id = self.db.child('Leagues').push({
+            'name': name,
+            'creator': user_ids[0],
+            'users': users
+        })['name']
+
+        for user_id in user_ids:
+            self.db.child(
+                'UserProfiles/{}/leagues/{}'.format(user_id, league_id)
+            ).set(user_id == user_ids[0])
+
+        return league_id

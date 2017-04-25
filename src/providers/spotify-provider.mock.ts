@@ -1,99 +1,59 @@
-import {
-  SpotifyImage,
-  SpotifyUser,
-  SpotifySimplifiedArtist,
-  SpotifyArtist,
-  SpotifySimplifiedAlbum,
-  SpotifyAlbum,
-  SpotifySimplifiedTrack,
-  SpotifyTrack,
-  SpotifySearchResult,
-  SpotifySearchType,
-  SpotifyPagingObject} from '../models/spotify-models';
+/**
+ * Mock SpotifyProvider for testing. Implements all public
+ * methods from spotify-provider.ts.
+ */
+import { Headers } from '@angular/http';
+
+import { SpotifyUser,
+         SpotifyArtist,
+         SpotifyAlbum,
+         SpotifyTrack,
+         SpotifySearchType,
+         SpotifySearchResult } from '../models/spotify-models';
 
 export class SpotifyProviderMock {
 
+  public login(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  public logout(): void {
+    return;
+  }
+
+  get accessToken(): string {
+    return null;
+  }
+
+  get refreshToken(): string {
+    return null;
+  }
+
+  get headers(): Headers {
+    return null;
+  }
+
   loadCurrentUser(): Promise<SpotifyUser> {
-    return Promise.resolve(<SpotifyUser>{
-      href: '',
-      id: '0123456789',
-      name: 'Spotify User 1',
-      uri: '',
-      images: <Array<SpotifyImage>>[],
-      display_name: 'Spotify User 1 Display Name',
-      email: 'a@b.cd'
-    });
+    return Promise.resolve(null);
   }
 
   loadArtist(artistId: string): Promise<SpotifyArtist> {
-    return Promise.resolve(<SpotifyArtist>{
-      href: '',
-      id: '',
-      name: 'Spotify Artist 1',
-      uri: '',
-      images: <Array<SpotifyImage>>[],
-    });
+    return Promise.resolve(null);
   }
 
-  private static SIMPLIFIED_ARTIST_1: SpotifySimplifiedArtist =
-    <SpotifySimplifiedArtist>{
-      href: '',
-      id: '',
-      name: 'Spotify Artist 1',
-      uri: ''
-    };
-
-  private static TRACKS: SpotifyPagingObject<SpotifySimplifiedTrack> =
-    <SpotifyPagingObject<SpotifySimplifiedTrack>>{
-      href: '',
-      items: <Array<SpotifySimplifiedTrack>>[
-        <SpotifySimplifiedTrack>{
-          href: '',
-          id: '',
-          name: 'Spotify Artist 1',
-          uri: '',
-          artists: [SpotifyProviderMock.SIMPLIFIED_ARTIST_1]
-        }
-      ]
-    };
-
   loadAlbum(albumId: string): Promise<SpotifyAlbum> {
-    return Promise.resolve(<SpotifyAlbum>{
-      href: '',
-      id: '',
-      name: 'Spotify Album 1',
-      uri: '',
-      images: <Array<SpotifyImage>>[],
-      artists: [SpotifyProviderMock.SIMPLIFIED_ARTIST_1],
-      tracks: SpotifyProviderMock.TRACKS
-    });
+    return Promise.resolve(null);
   }
 
   loadTrack(trackId: string): Promise<SpotifyTrack> {
-    return Promise.resolve(<SpotifyTrack>{
-      href: '',
-      id: '',
-      name: 'Spotify Artist 1',
-      uri: '',
-      artists: [SpotifyProviderMock.SIMPLIFIED_ARTIST_1],
-      album: <SpotifySimplifiedAlbum> {
-        href: '',
-        id: '',
-        name: 'Spotify Album 1',
-        uri: '',
-        images: <Array<SpotifyImage>>[],
-        artists: [SpotifyProviderMock.SIMPLIFIED_ARTIST_1]
-      }
-    });
+    return Promise.resolve(null);
   }
 
   search(query: string,
          types?: SpotifySearchType[],
          limit?: number,
          offset?: number): Promise<SpotifySearchResult> {
-    return Promise.resolve(<SpotifySearchResult>{
-      tracks: SpotifyProviderMock.TRACKS
-    });
+    return Promise.resolve(null);
   }
 
 };

@@ -30,12 +30,20 @@ ion-toolbar{
 	text-align: center;
 }
 
-#create{
+.my_icon{
+	width: 27px;
+}
+
+#create, #random {
 	background-color: #31c356;
 	text-align: center;
 	width: 100%;
 	color: #fff;
-	margin: 0px;
+	margin: 0 0 2px 0;
+}
+
+.badge{
+	font-size: 10px;
 }
 
 

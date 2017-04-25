@@ -1,3 +1,6 @@
+/**
+ * Provider for Spotify functions (login and API queries)
+ */
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Http, Request, Headers } from '@angular/http';
@@ -77,10 +80,16 @@ export class SpotifyProvider {
     ).toString('base64');
   }
 
+  /**
+   * check to determine proper authentication flow
+   */
   private get isImplicitGrant(): boolean {
     return this.platform.is('core') && !useAuthCodeInCore;
   }
 
+  /**
+   * Login to Spotify and set the access token and possibly the refresh token
+   */
   public login(): Promise<void> {
     return new Promise((resolve, reject) =>  {
       this.platform.ready().then(() => {
@@ -104,6 +113,9 @@ export class SpotifyProvider {
     });
   }
 
+  /**
+   * Either refresh the access token or start the login flow anew
+   */
   private refreshOrLogin(): Promise<void> {
     let action: Promise<void>;
 
@@ -123,6 +135,9 @@ export class SpotifyProvider {
     return action;
   }
 
+  /**
+   * Use the refresh token to request a new access token
+   */
   private refreshAccessToken(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.requestTokens(GrantTypes.refresh_token).then(response => {
@@ -132,6 +147,9 @@ export class SpotifyProvider {
     });
   }
 
+  /**
+   * Make the request to Spotify for tokens
+   */
   private requestTokens(grantType: GrantType, code?: string): Promise<TokenResponse> {
     return new Promise<TokenResponse>((resolve, reject) => {
       this.http.request(this.getAuthRequest(grantType, code))
@@ -144,6 +162,9 @@ export class SpotifyProvider {
     });
   }
 
+  /**
+   * Build the request that goes to Spotify auth
+   */
   private getAuthRequest(grantType: GrantType, code?: string) {
     let body: TokenRequestBody = {
       grant_type: grantType,
@@ -172,20 +193,40 @@ export class SpotifyProvider {
     return new Request(reqOpts);
   }
 
+  /**
+   * Unsets tokens, which essentially logs user out of Spotify
+   */
+  public logout(): void {
+    localStorage.removeItem(KEY_ACCESSTOKEN);
+    localStorage.removeItem(KEY_REFRESHTOKEN);
+  }
+
+  /**
+   * Getter for access token
+   */
   get accessToken(): string {
     return localStorage.getItem(KEY_ACCESSTOKEN);
   }
 
+  /**
+   * Getter for refresh token
+   */
   get refreshToken(): string {
     return localStorage.getItem(KEY_REFRESHTOKEN);
   }
 
+  /**
+   * Builds headers for API requests
+   */
   get headers(): Headers {
     return new Headers({
       'Authorization': 'Bearer ' + this.accessToken
     });
   }
 
+  /**
+   * Method that does API request and returns results
+   */
   private api<T>(loc: string, retry: boolean = true): Promise<T> {
     let req = new Request({
       url: this._apiUrl + loc,
@@ -214,22 +255,37 @@ export class SpotifyProvider {
     });
   }
 
+  /**
+   * Loads the SpotifyUser that is currently logged in
+   */
   loadCurrentUser(): Promise<SpotifyUser> {
     return this.api('/me');
   }
 
+  /**
+   * Load SpotifyArtist by ID
+   */
   loadArtist(artistId: string): Promise<SpotifyArtist> {
     return this.api('/artists/' + artistId);
   }
 
+  /**
+   * Load SpotifyAlbum by ID
+   */
   loadAlbum(albumId: string): Promise<SpotifyAlbum> {
     return this.api('/albums/' + albumId);
   }
 
+  /**
+   * Load SpotifyTrack by ID
+   */
   loadTrack(trackId: string): Promise<SpotifyTrack> {
     return this.api('/tracks/' + trackId);
   }
 
+  /**
+   * Search Spotify
+   */
   search(query: string,
          types?: SpotifySearchType[],
          limit?: number,

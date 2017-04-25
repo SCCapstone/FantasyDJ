@@ -8,9 +8,7 @@ import { InAppBrowser } from 'ionic-native';
 declare var window: any;
 declare var cordova: any;
 
-
 import { User, League, Song } from '../../models/fantasydj-models';
-
 
 /*
   Song Detail page, shows infor about the song and allows user to preview it
@@ -21,6 +19,7 @@ import { User, League, Song } from '../../models/fantasydj-models';
 
 })
 export class SongDetailPage {
+
   user: User;
   league: League;
   songs: Observable<Song[]>;
@@ -29,10 +28,7 @@ export class SongDetailPage {
   url:any;
   songFire:any;
   song:any;
-
-
-
-
+  toggle_button: string = 'play';
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -69,6 +65,7 @@ export class SongDetailPage {
   // initiates playing of stream
   play() {
     console.log("song ID ", this.songFire)
+    this.toggle_button = "pause";
     this.stream.play();
     this.promise = new Promise((resolve,reject) => {
       this.stream.addEventListener('playing', () => {
@@ -85,6 +82,7 @@ export class SongDetailPage {
 
   pause() {
     this.stream.pause();
+    this.toggle_button = 'play';
   };
 
 }

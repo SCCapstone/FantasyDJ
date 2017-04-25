@@ -1,64 +1,96 @@
+/**
+ * Mock League provider for testing. Implements all public
+ * methods from league-provider.ts.
+ */
+import { League, Song, User } from '../models/fantasydj-models';
+import { SpotifyTrack } from '../models/spotify-models';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import { League } from '../models/fantasydj-models';
 
 export class LeagueDataMock {
 
-  public static LEAGUES: Array<League> = [
-    <League>{
-      id: '-KbmR7uWBQKMzbRSyeN5',
-      name: 'Test League 1',
-      users: <Array<string>>[],
-      draftDate: null,
-      endTime: null,
-      winner: null
-    },
-    <League>{
-      id: '-KbmRcx2VDzbUbujLSYZ',
-      name: 'Test League 2',
-      users: <Array<string>>[],
-      draftDate: null,
-      endTime: null,
-      winner: null
-    },
-    <League>{
-      id: '-KbmRgI3WVFkNexx0fr3',
-      name: 'Test League 3',
-      users: <Array<string>>[],
-      draftDate: null,
-      endTime: null,
-      winner: null
-    }
-  ];
-
-  private getMock(key: number): Promise<League> {
-    return Promise.resolve(LeagueDataMock.LEAGUES[0]);
+  loadLeague(leagueId: string): Promise<League> {
+    return Promise.resolve(null);
   }
 
-  public loadLeague(leagueId: string): Promise<League> {
-    return this.getMock(0);
+  loadLeagues(userId: string): Observable<League[]> {
+    let leagues: League[] = [];
+    return Observable.of(leagues);
   }
 
-  public loadLeagues(userId: string): Observable<League[]> {
-    return Observable.of(LeagueDataMock.LEAGUES);
+  loadCurrentLeagues(userId: string): Observable<League[]> {
+    return this.loadLeagues(null);
   }
 
-  public createLeague(name: string,
-                      creatorId: string,
-                      opponentId: string): Promise<League> {
-    return this.getMock(0);
+  loadPastLeagues(userId: string): Observable<League[]> {
+    return this.loadLeagues(null);
   }
 
-  public addSong(userId: string,
-                 leagueId: string,
-                 songId: string,
-                 songName: string,
-                 songArtist: string): Promise<League> {
-    return this.getMock(0);
+  public updatePlaylist(userId: string,
+                        leagueId: string,
+                        spotifyTrack: SpotifyTrack): Promise<Song> {
+    return Promise.resolve(null);
   }
 
-  public deleteLeague(leagueId: string): Promise<boolean> {
+  deleteLeague(leagueId): Promise<boolean> {
     return Promise.resolve(true);
   }
 
+  getOpponent(userId: string, leagueId: string): Promise<User> {
+    return Promise.resolve(null);
+  }
+
+  getCreator(leagueId: string): Promise<User> {
+    return Promise.resolve(null);
+  }
+
+  getWinner(leagueId: string): Promise<User> {
+    return Promise.resolve(null);
+  }
+
+  getStartDate(leagueId: string): Promise<string> {
+    return Promise.resolve(null);
+  }
+
+  getEndDate(leagueId: string): Promise<string> {
+    return Promise.resolve(null);
+  }
+
+  public isCreator(leagueId: string, userId: string): Observable<boolean> {
+    return Observable.of(true);
+  }
+
+  isWinner(leagueId: string): Observable<boolean> {
+    return Observable.of(true);
+  }
+
+  getDates(leagueId: string): Promise<Date[]> {
+    let dates: Date[] = [];
+    return Promise.resolve(dates);
+  }
+
+  getDatesInner(startDate: Date, stopDate: Date): Promise<Date[]> {
+    let dates: Date[] = [];
+    return Promise.resolve(dates);
+  }
+
+  public getPlaylistScore(leagueId: string, userId: string): Observable<number> {
+    return Observable.of(1);
+  }
+
+  public getSongScore(leagueId: string, userId: string, songId: string): Observable<number> {
+    return Observable.of(1);
+  }
+
+  getLeagueData(leagueId: string, userId: string): Promise<any[]> {
+    let songs: any[] = [
+      [1], [1], [1]
+    ];
+    return Promise.resolve(songs);
+  }
+
+  getSongNames(leagueId: string, userId: string): Promise<any[]> {
+    let names: any[] = [];
+    return Promise.resolve(names);
+  }
 };

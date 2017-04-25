@@ -1,0 +1,25 @@
+dist: trusty
+sudo: false
+
+language: python
+python:
+  - "2.7"
+
+before_install:
+  - npm install -g cordova ionic karma-cli
+
+install:
+  - npm install
+  - cd housekeeper
+  - pip install .
+  - cd ..
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
+script:
+  - node_modules/typescript/bin/tsc --noemit
+  - karma start --single-run --browsers Firefox ./test-config/karma.conf.js
+  - cd housekeeper
+  - pytest

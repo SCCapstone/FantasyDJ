@@ -1,6 +1,10 @@
 /* tslint:disable */
 // IONIC:
 
+/**
+ * Various mocks of Angular and Ionic components for testing
+ */
+
 export class ConfigMock {
 
   public get(): any {
@@ -46,6 +50,12 @@ export class NavMock {
 
   public setRoot(): any {
     return true;
+  }
+}
+
+export class NavParamsMock {
+  public get(parameter: string): any {
+    return null;
   }
 }
 

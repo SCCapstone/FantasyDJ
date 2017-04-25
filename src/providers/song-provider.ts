@@ -1,3 +1,6 @@
+/**
+ * Provider for songs
+ */
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
@@ -20,6 +23,11 @@ export class SongData {
     this.fbSongs = this.db.list('/Songs');
   }
 
+  /**
+   * load a song from db based on key and
+   * map the untyped json object from firebase
+   * to a song object
+   */
   public loadSong(songId: string): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
       this.db.object('/Songs/' + songId)
@@ -44,7 +52,9 @@ export class SongData {
     });
   }
 
-
+  /**
+   * load an observable song array of all of a user's songs in a league
+   */
   public loadSongs(leagueId: string,
                    userId: string): Observable<Song[]> {
     return this.db.list('/Leagues/' + leagueId + '/users/' + userId)
@@ -59,11 +69,17 @@ export class SongData {
       });
   }
 
+  /**
+   * load a song from spotify id
+   * uses angularfire query to search songs for one that has
+   * correct spotify id
+   */
   public loadSongBySpotifyId(spotifyTrackId: string): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
       console.log("loadSongBySpotifyId called");
 
       if (this.cachedSongs[spotifyTrackId]) {
+        // load the song from the list of cached song ids
         this.loadSong(this.cachedSongs[spotifyTrackId]).then(song => {
           console.log('song ' + song.id + ' loaded via cached id');
           resolve(song);
@@ -87,6 +103,8 @@ export class SongData {
           console.log(song);
           if (song) {
             console.log('song ' + song.id + ' loaded via spotifyId query');
+            // cache the song id since it will only be emitted through the firebase
+            // list observable once
             this.cachedSongs[spotifyTrackId] = song.id;
             resolve(song);
           }
@@ -98,6 +116,9 @@ export class SongData {
     });
   }
 
+  /**
+   * create a new song in the db from a spotify track
+   */
   public createSong(track: SpotifyTrack): Promise<Song> {
     return new Promise<Song>((resolve, reject) => {
       this.loadSongBySpotifyId(track.id).then(song => {
@@ -133,6 +154,9 @@ export class SongData {
     });
   }
 
+  /**
+   * create a song object from a untyped json object from firebase
+   */
   private mapFBSong(fbsong: any): Song {
     if ('$value' in fbsong && ! fbsong.$value) {
       console.log(fbsong, 'returning null');
@@ -154,6 +178,9 @@ export class SongData {
     return song;
   }
 
+  /**
+   * return the name of a song from its key
+   */
   getSongName(songId: string): Promise<string>{
     return new Promise<string>((resolve, reject) => {
       this.loadSong(songId).then(song => {

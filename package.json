@@ -27,7 +27,7 @@
     "@types/request": "0.0.33",
     "angularfire2": "2.0.0-beta.6",
     "chart.js": "^2.5.0",
-    "firebase": "^3.6.9",
+    "firebase": "^3.9.0",
     "firebase-encode": "0.0.5",
     "ionic-angular": "2.0.0",
     "ionic-native": "2.4.1",

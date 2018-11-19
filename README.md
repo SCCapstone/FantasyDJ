@@ -40,7 +40,7 @@ the daily change in popularity of the songs in a playlist.
 ### Who do I talk to? ###
 #### Designers:
 *   **Julia Strout:** jstrout@email.sc.edu
-*   **Philip Oliver-Paull:** oliverpa@email.sc.edu
+*   **Lane Oliver-Paull:** oliverpa@email.sc.edu
 *   **Tom Brower:** browert2@email.sc.edu
 
 #### Client: 
